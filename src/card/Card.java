@@ -1,8 +1,8 @@
 package card;
 
-public class Card implements Comparable<Card> {
-    public Suit Suit;
-    public Value Value;
+public final class Card implements Comparable<Card> {
+    public final Suit Suit;
+    public final Value Value;
 
     public Card(Suit suit, Value value) {
         this.Suit = suit;
