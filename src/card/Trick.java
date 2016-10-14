@@ -59,4 +59,17 @@ public class Trick {
         }
         return max;
     }
+
+    /**
+     * Returns the number of points this trick is worth
+     * @return the number of points this trick is worth
+     */
+    public int Points() {
+        List<Card> all = AllCards();
+        int sum = 0;
+        for (Card c : all) {
+            sum += c.PointValue();
+        }
+        return sum;
+    }
 }
