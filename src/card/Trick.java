@@ -72,4 +72,8 @@ public class Trick {
         }
         return sum;
     }
+
+    public Suit Suit() {
+        return _first != null ? _first.Suit : null;
+    }
 }
