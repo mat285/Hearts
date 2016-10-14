@@ -22,5 +22,13 @@ public class Main {
             }
             System.out.println();
         }
+
+        Trick t = new Trick();
+        t.Add(new Card(Suit.CLUBS,Value.TWO));
+        t.Add(new Card(Suit.CLUBS,Value.EIGHT));
+        t.Add(new Card(Suit.CLUBS,Value.SIX));
+        t.Add(new Card(Suit.HEARTS,Value.ACE));
+        System.out.println(t.IsComplete());
+        System.out.println(t.Highest());
     }
 }
