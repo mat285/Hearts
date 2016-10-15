@@ -37,10 +37,8 @@ public class Game {
                 break;
 
             case PLAYER_TURN:
-                while(!_info.IsTrickDone()) {
-                    _info.NextPlayerPlay();
-                }
-                _state = GameState.END_TRICK;
+                _info.NextPlayerPlay();
+                if (_info.IsTrickDone()) _state = GameState.END_TRICK;
                 break;
 
             case END_TRICK:

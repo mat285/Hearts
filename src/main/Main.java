@@ -1,6 +1,7 @@
 package main;
 
 import card.*;
+import game.*;
 
 public class Main {
     public static void main(String[] args) {
@@ -30,5 +31,7 @@ public class Main {
         t.Add(new Card(Suit.HEARTS,Value.ACE));
         System.out.println(t.IsComplete());
         System.out.println(t.Highest());
+
+        GameInfoTest.Run();
     }
 }

@@ -39,5 +39,4 @@ public abstract class AbstractPlayer implements IPlayer {
     protected void RemoveCardFromHand(Card c) {
         _hand.remove(c);
     }
-
 }
