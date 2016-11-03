@@ -46,6 +46,12 @@ public class Trick {
     }
 
     /**
+     * Returns true if no cards have been added to this trick yet
+     * @return true iff no cards are in this trick
+     */
+    public boolean IsEmpty() { return _first == null && _second == null && _third == null && _fourth == null; }
+
+    /**
      * Selects the highest card in this trick that is of the same suit as the first card
      * @return The highest card in this trick
      */
@@ -75,5 +81,9 @@ public class Trick {
 
     public Suit Suit() {
         return _first != null ? _first.Suit : null;
+    }
+
+    public String toString() {
+        return "[" + _first + ", " + _second + ", " + _third + ", " + _fourth + "]";
     }
 }

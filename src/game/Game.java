@@ -57,4 +57,12 @@ public class Game {
         }
     }
 
+    public GameInfo Info() {
+        return _info;
+    }
+
+    public GameState State() {
+        return _state;
+    }
+
 }
