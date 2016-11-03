@@ -13,18 +13,18 @@ public class Game {
         for (int i = 0; i < players.length; i++) {
             players[i].Initialize(i);
         }
-        _state = GameState.INITIALIZE;
+        _state = GameState.START_ROUND;
     }
 
     public void Step() {
         switch (_state) {
-            case INITIALIZE:
+            case START_ROUND:
                 _deck.Shuffle();
                 _info.NextRound(_deck.Deal());
-                _state = GameState.START_ROUND;
+                _state = GameState.PASS_CARDS;
                 break;
 
-            case START_ROUND:
+            case PASS_CARDS:
                 if (_info.PassDirection() != Direction.STAY) {
                     IPlayer[] players = _info.Players();
                     CardPassMove[] moves = new CardPassMove[players.length];
@@ -48,7 +48,9 @@ public class Game {
                 break;
 
             case END_ROUND:
-
+                _info.EndRound();
+                if (_info.IsGameOver()) _state = GameState.GAME_OVER;
+                else _state = GameState.START_ROUND;
                 break;
 
             case GAME_OVER:

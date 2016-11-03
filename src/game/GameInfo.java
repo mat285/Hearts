@@ -6,6 +6,7 @@ import java.util.*;
 public final class GameInfo {
     private final Card TWO_OF_CLUBS = new Card(Suit.CLUBS, Value.TWO);
     private final int SIZE_OF_HANDS = 13;
+    private final int MAX_GAME_SCORE = 100;
     private final Random RANDOM = new Random();
 
     private boolean _heartsBroken;
@@ -24,6 +25,9 @@ public final class GameInfo {
         _players = players;
         _playerHands = new HashMap<>();
         _scores = new HashMap<>();
+        for (IPlayer player : _players) {
+            _scores.put(player,0);
+        }
         _roundNumber = 0;
     }
 
@@ -71,6 +75,19 @@ public final class GameInfo {
         _plays = new HashMap<>();
     }
 
+    protected void EndRound() {
+        for (Map.Entry<IPlayer,Integer> entry : _roundScore.entrySet()) {
+            _scores.put(entry.getKey(),_scores.get(entry.getKey()) + entry.getValue());
+        }
+    }
+
+    protected boolean IsGameOver() {
+        for (Integer score : _scores.values()) {
+            if (score >= MAX_GAME_SCORE) return true;
+        }
+        return false;
+    }
+
     protected boolean IsRoundOver() {
         boolean roundOver = true;
         for (Set<Card> hand : _playerHands.values()) {
@@ -81,6 +98,19 @@ public final class GameInfo {
 
     protected boolean IsTrickDone() {
         return _currentTrick.IsComplete();
+    }
+
+    protected List<IPlayer> GetLosers() {
+        List<IPlayer> loosers = new ArrayList<>();
+        if (!IsGameOver()) return loosers;
+        int maxScore = Integer.MIN_VALUE;
+        for (Integer score : _scores.values()) {
+            if (score > maxScore) maxScore = score;
+        }
+        for (Map.Entry<IPlayer,Integer> entry : _scores.entrySet()) {
+            if (entry.getValue() == maxScore) loosers.add(entry.getKey());
+        }
+        return loosers;
     }
 
     protected IPlayer CurrentPlayer() {
@@ -174,12 +204,20 @@ public final class GameInfo {
         return _currentTrick.Suit();
     }
 
+    public Trick CurrentTrick() { return _currentTrick.Clone(); }
+
     public Direction PassDirection() {
         return _passDirection;
     }
 
     protected IPlayer[] Players() {
         return _players;
+    }
+
+    public List<Card> HandOfPlayer(IPlayer player) {
+        List<Card> hand = new ArrayList<>();
+        hand.addAll(_playerHands.get(player));
+        return hand;
     }
 
     protected CardPassMove[] ValidateCardPassMoves(CardPassMove[] moves) {
@@ -263,7 +301,7 @@ public final class GameInfo {
         System.out.println("Round: " + _roundNumber);
         System.out.println("Scores:");
         for (int i = 0; i < _players.length; i++) {
-            System.out.println("Player " + i + ": " +_scores.get(_players[i]));
+            System.out.println("Player " + i + ": Game: " +_scores.get(_players[i]) + " Round: " + _roundScore.get(_players[i]));
         }
         System.out.println("Hands:");
         for (int i = 0; i < _players.length; i++) {
@@ -272,11 +310,13 @@ public final class GameInfo {
             System.out.println("Player " + i + ": " +cards);
         }
         System.out.println("Played moves:");
-        for (int i = 0; i < _players.length; i++) {
-            for (Map.Entry<Card,IPlayer> entry : _plays.entrySet()) {
-                if (entry.getValue().equals(_players[i])) System.out.println("Player " + i + ": " + entry.getKey());
+        for (Card c : _currentTrick.AllCards()) {
+            for (int i = 0; i < _players.length; i++) {
+                if (_players[i].equals(_plays.get(c))) System.out.println("Player " + i + ": " + c);
             }
         }
         System.out.println("Current Trick: " + _currentTrick.toString());
+        System.out.println("Current Player: " + _currentPlayer);
+        System.out.println();
     }
 }

@@ -15,6 +15,7 @@ public class Trick {
     }
 
     public boolean Add(Card c) {
+        if (c == null) return false;
         if (_first == null) _first = c;
         else if (_second == null) _second = c;
         else if (_third == null) _third = c;
@@ -85,5 +86,13 @@ public class Trick {
 
     public String toString() {
         return "[" + _first + ", " + _second + ", " + _third + ", " + _fourth + "]";
+    }
+
+    public Trick Clone() {
+        Trick t = new Trick();
+        for (Card c : AllCards()) {
+            t.Add(c);
+        }
+        return t;
     }
 }
