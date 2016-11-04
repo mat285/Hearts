@@ -1,6 +1,10 @@
 package card;
 
+import java.util.*;
+
 public final class Card implements Comparable<Card> {
+
+    private static Map<Card,Card> _instances;
 
     public static final int QUEEN_OF_SPADES_POINTS = 13;
     public static final int HEARTS_POINTS = 1;
@@ -12,6 +16,12 @@ public final class Card implements Comparable<Card> {
     public Card(Suit suit, Value value) {
         this.Suit = suit;
         this.Value = value;
+    }
+
+    public static Card Instantiate(Suit suit, Value value) {
+        if (_instances == null) _instances = new HashMap<>();
+        Card possible = new Card(suit, value);
+        return _instances.putIfAbsent(possible,possible);
     }
 
     public @Override boolean equals(Object o) {

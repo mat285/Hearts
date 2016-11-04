@@ -15,6 +15,7 @@ public class Trick {
     }
 
     public boolean Add(Card c) {
+        if (c == null) return false;
         if (_first == null) _first = c;
         else if (_second == null) _second = c;
         else if (_third == null) _third = c;
@@ -46,6 +47,12 @@ public class Trick {
     }
 
     /**
+     * Returns true if no cards have been added to this trick yet
+     * @return true iff no cards are in this trick
+     */
+    public boolean IsEmpty() { return _first == null && _second == null && _third == null && _fourth == null; }
+
+    /**
      * Selects the highest card in this trick that is of the same suit as the first card
      * @return The highest card in this trick
      */
@@ -71,5 +78,29 @@ public class Trick {
             sum += c.PointValue();
         }
         return sum;
+    }
+
+    public Card LastCardAdded() {
+        if (_first == null) return null;
+        if (_second == null) return _first;
+        if (_third == null) return _second;
+        if (_fourth == null) return _third;
+        return _fourth;
+    }
+
+    public Suit Suit() {
+        return _first != null ? _first.Suit : null;
+    }
+
+    public String toString() {
+        return "[" + _first + ", " + _second + ", " + _third + ", " + _fourth + "]";
+    }
+
+    public Trick Clone() {
+        Trick t = new Trick();
+        for (Card c : AllCards()) {
+            t.Add(c);
+        }
+        return t;
     }
 }
