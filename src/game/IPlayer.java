@@ -7,5 +7,5 @@ public interface IPlayer {
     public void StartRound(Card[] hand);
     public CardPassMove PassCards();
     public void ReceiveCards(CardPassMove old, CardPassMove get);
-    public Move Play(GameInfo state);
+    public Move Play(SealedGameInfo state);
 }

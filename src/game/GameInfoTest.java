@@ -29,7 +29,7 @@ public class GameInfoTest {
                 }
 
                 @Override
-                public Move Play(GameInfo state) {
+                public Move Play(SealedGameInfo state) {
                     return null;
                 }
             };

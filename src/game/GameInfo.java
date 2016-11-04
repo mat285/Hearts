@@ -64,7 +64,7 @@ public final class GameInfo {
      * Calls the play move on the current player, validates and then executes the move
      */
     protected void NextPlayerPlay() {
-        Move move = CurrentPlayer().Play(this);
+        Move move = CurrentPlayer().Play(Seal());
         if (!ValidateMove(move, CurrentPlayer())) move = RandomMove(CurrentPlayer());
         ExecuteMove(move, CurrentPlayer());
         _currentPlayer = (_currentPlayer+1) % _players.length;
@@ -475,6 +475,26 @@ public final class GameInfo {
      */
     private boolean doesPlayerHaveCard(IPlayer player, Card c) {
         return _playerHands.get(player).contains(c);
+    }
+
+    public int[] GetRoundScores() {
+        int[] scores = new int[_players.length];
+        for (int i = 0; i < _players.length; i++) {
+            scores[i] = _roundScore.get(_players[i]);
+        }
+        return scores;
+    }
+
+    public int[] GetGameScores() {
+        int[] scores = new int[_players.length];
+        for (int i = 0; i < _players.length; i++) {
+            scores[i] = _scores.get(_players[i]);
+        }
+        return scores;
+    }
+
+    public SealedGameInfo Seal() {
+        return new SealedGameInfo(CurrentTrick(),GetRoundScores(), GetGameScores(), IsHeartsBroken(), RoundNumber(), isStartOfRound());
     }
 
     public void PrintDebugInfo() {
