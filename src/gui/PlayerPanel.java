@@ -1,6 +1,7 @@
 package gui;
 
 import card.Card;
+import game.*;
 
 import javax.swing.*;
 import java.io.IOException;

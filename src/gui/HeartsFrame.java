@@ -1,5 +1,7 @@
 package gui;
 
+import game.*;
+
 import javax.swing.*;
 import java.awt.*;
 
