@@ -42,4 +42,8 @@ public class Deck {
     public static void Sort(Card[] cards) {
         Arrays.sort(cards);
     }
+
+    public static void Sort(List<Card> cards) {
+        Collections.sort(cards);
+    }
 }
