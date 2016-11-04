@@ -7,6 +7,12 @@ public class GameUtils {
 
     private static final Random RANDOM = new Random();
 
+    /**
+     * Checks to see if the hand contains no cards of the given suit
+     * @param hand the hand to check
+     * @param s the suit to look for
+     * @return true iff hand contains no cards of suit s
+     */
     public static boolean ContainsNoneOfSuit(Iterable<Card> hand, Suit s) {
         for (Card c : hand) {
             if (c.Suit == s) return false;
@@ -14,6 +20,12 @@ public class GameUtils {
         return true;
     }
 
+    /**
+     * Checks if the hand contains only cards of the given suit
+     * @param hand the hand to check
+     * @param s the suit
+     * @return true if all cards in hand are of type s
+     */
     public static boolean ContainsOnlySuit(Iterable<Card> hand, Suit s) {
         for (Card c : hand) {
             if (c.Suit != s) return false;
@@ -72,6 +84,29 @@ public class GameUtils {
         }
         // Else play on suit, or if player has none then play anything
         return (c.Suit == curr || ContainsNoneOfSuit(info.GetHand(), curr));
+    }
 
+    /**
+     * Checks if the card pass move is okay for the given player
+     * @param move the move
+     * @param info The SealedGameInfo
+     * @return true iff the player can pass these cards
+     */
+    public static boolean IsValidCardPass(CardPassMove move, SealedGameInfo info) {
+        if (move == null) return false;
+        for (Card c : move.Cards()) {
+            if (info.GetHand().contains(c)) return false;
+        }
+        return true;
+    }
+
+    /**
+     * Creates a card pass move by randomly choosing three cards from the player
+     * @param info The SealedGameInfo
+     * @return a valid card pass move for this player
+     */
+    public static CardPassMove RandomCardPass(SealedGameInfo info) {
+        List<Card> cards = new ArrayList<>(info.GetHand());
+        return new CardPassMove(cards.remove(RANDOM.nextInt(cards.size())),cards.remove(RANDOM.nextInt(cards.size())),cards.remove(RANDOM.nextInt(cards.size())));
     }
 }

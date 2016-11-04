@@ -121,7 +121,7 @@ public final class GameInfo {
      * Checks if the game is over by seeing if any player has met or gone over MAX_GAME_SCORE
      * @return true iff this game is over
      */
-    protected boolean IsGameOver() {
+    public boolean IsGameOver() {
         for (Integer score : _scores.values()) {
             if (score >= MAX_GAME_SCORE) return true;
         }
@@ -132,7 +132,7 @@ public final class GameInfo {
      * Checks if the round is over by seeing if all players are out of cards
      * @return true iff the current round is over
      */
-    protected boolean IsRoundOver() {
+    public boolean IsRoundOver() {
         boolean roundOver = true;
         for (Set<Card> hand : _playerHands.values()) {
             roundOver = roundOver && hand.isEmpty();
@@ -144,7 +144,7 @@ public final class GameInfo {
      * Checks if the current trick is complete
      * @return true iff the current trick is complete
      */
-    protected boolean IsTrickDone() {
+    public boolean IsTrickDone() {
         return _currentTrick.IsComplete();
     }
 
@@ -166,7 +166,7 @@ public final class GameInfo {
      * Gets the player whose turn it is
      * @return The currently playing player
      */
-    protected IPlayer CurrentPlayer() {
+    public IPlayer CurrentPlayer() {
         return _players[_currentPlayer];
     }
 
@@ -345,10 +345,10 @@ public final class GameInfo {
      * @param moves the proposed card passing moves
      * @return the fixed card passing moves
      */
-    protected CardPassMove[] ValidateCardPassMoves(CardPassMove[] moves) {
+    public CardPassMove[] ValidateCardPassMoves(CardPassMove[] moves) {
         for (int i = 0; i < moves.length; i++) {
-            if (!IsValidCardPass(moves[i], _players[i])){
-                moves[i] = RandomCardPass(_players[i]);
+            if (!GameUtils.IsValidCardPass(moves[i], Seal(_players[i]))){
+                moves[i] = GameUtils.RandomCardPass(Seal(_players[i]));
             }
 
         }
@@ -356,48 +356,11 @@ public final class GameInfo {
     }
 
     /**
-     * Checks if the card pass move is okay for the given player
-     * @param move the move
-     * @param player the player
-     * @return true iff the player can pass these cards
-     */
-    protected boolean IsValidCardPass(CardPassMove move, IPlayer player) {
-        if (move == null) return false;
-        for (Card c : move.Cards()) {
-            if (!doesPlayerHaveCard(player, c)) return false;
-        }
-        return true;
-    }
-
-    /**
-     * Creates a card pass move by randomly choosing three cards from the player
-     * @param player the player
-     * @return a valid card pass move for this player
-     */
-    public CardPassMove RandomCardPass(IPlayer player) {
-        List<Card> cards = new ArrayList<>(_playerHands.get(player));
-        return new CardPassMove(cards.remove(RANDOM.nextInt(cards.size())),cards.remove(RANDOM.nextInt(cards.size())),cards.remove(RANDOM.nextInt(cards.size())));
-    }
-
-
-
-    /**
      * Checks if this is the start of a round
      * @return true if no moves have been played yet in this round
      */
     private boolean isStartOfRound() {
         return _currentTrick.IsEmpty() && _playerHands.get(CurrentPlayer()).size() == SIZE_OF_HANDS;
-    }
-
-
-    /**
-     * Checks if the player has the given card in their hand
-     * @param player the player
-     * @param c the card
-     * @return true iff this player has c in their hand
-     */
-    private boolean doesPlayerHaveCard(IPlayer player, Card c) {
-        return _playerHands.get(player).contains(c);
     }
 
     public int[] GetRoundScores() {
