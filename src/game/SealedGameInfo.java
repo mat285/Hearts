@@ -1,6 +1,7 @@
 package game;
 
 import card.*;
+import java.util.*;
 
 public class SealedGameInfo {
 
@@ -10,9 +11,16 @@ public class SealedGameInfo {
     private boolean _heartsBroken;
     private int _roundNumber;
     private boolean _isStartOfRound;
+    private Set<Card> _hand;
 
-    public SealedGameInfo(Trick currentTrick, int[] roundScores, int[] scores, boolean heartsBroken, int roundNumber, boolean isStartofRound) {
-
+    public SealedGameInfo(Trick currentTrick, int[] roundScores, int[] scores, boolean heartsBroken, int roundNumber, boolean isStartofRound, Set<Card> hand) {
+        _currentTrick = currentTrick;
+        _roundScores = roundScores;
+        _scores = scores;
+        _heartsBroken = heartsBroken;
+        _roundNumber = roundNumber;
+        _isStartOfRound = isStartofRound;
+        _hand = hand;
     }
 
     public Card LastCardPlayed() {
@@ -46,4 +54,6 @@ public class SealedGameInfo {
     public boolean IsStartOfRound() {
         return _isStartOfRound;
     }
+
+    public Set<Card> GetHand() { return _hand; }
 }
