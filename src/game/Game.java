@@ -9,12 +9,19 @@ public class Game {
     private IPlayer[] _players;
     private Deck _deck;
 
+    /**
+     * Creates a new Game object with the given players
+     * @param players The players of the game
+     */
     public Game(IPlayer[] players) {
         _deck = new Deck();
         _players = players;
         NewGame();
     }
 
+    /**
+     * Resets this Game object to start a new game
+     */
     public void NewGame() {
         _info = new GameInfo(_players);
         for (int i = 0; i < _players.length; i++) {
@@ -23,6 +30,10 @@ public class Game {
         _state = GameState.START_ROUND;
     }
 
+    /**
+     * Steps one more move through the current game based on the state
+     * @return List of ScoredPlayers from first to last place if the game is over, null otherwise
+     */
     public List<ScoredPlayer> Step() {
         switch (_state) {
             case START_ROUND:
@@ -67,10 +78,30 @@ public class Game {
         return null;
     }
 
+    /**
+     * Runs through the rest of the game until the game is over
+     * @return List of scored players from first to last
+     */
+    public List<ScoredPlayer> RunGame() {
+        List<ScoredPlayer> s = null;
+        while (s == null) {
+            s = Step();
+        }
+        return s;
+    }
+
+    /**
+     * Returns the GameInfo object maintained by this game
+     * @return the GameInfo object maintaining information about this game
+     */
     public GameInfo Info() {
         return _info;
     }
 
+    /**
+     * Returns the current state of the game
+     * @return the current Game State
+     */
     public GameState State() {
         return _state;
     }

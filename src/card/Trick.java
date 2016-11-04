@@ -80,6 +80,14 @@ public class Trick {
         return sum;
     }
 
+    public Card LastCardAdded() {
+        if (_first == null) return null;
+        if (_second == null) return _first;
+        if (_third == null) return _second;
+        if (_fourth == null) return _third;
+        return _fourth;
+    }
+
     public Suit Suit() {
         return _first != null ? _first.Suit : null;
     }

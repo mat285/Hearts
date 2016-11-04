@@ -48,9 +48,6 @@ public class GameInfoTest {
         assert !g.IsTrickDone();
         assert g.CurrentPlayer() != null;
         assert g.DoesPlayerHaveCard(new Card(Suit.CLUBS,Value.TEN), g.CurrentPlayer());
-        for (IPlayer p : g.Players()) {
-            assert g.ScoreOfPlayer(p) == 0;
-        }
     }
 
     public static void Run() {
