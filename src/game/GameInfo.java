@@ -5,8 +5,10 @@ import java.util.*;
 
 public final class GameInfo {
     private final Card TWO_OF_CLUBS = new Card(Suit.CLUBS, Value.TWO);
+    private final int MAX_POINTS_PER_ROUND = 26;
     private final int SIZE_OF_HANDS = 13;
     private final int MAX_GAME_SCORE = 100;
+
     private final Random RANDOM = new Random();
 
     private boolean _heartsBroken;
@@ -76,8 +78,18 @@ public final class GameInfo {
     }
 
     protected void EndRound() {
+        IPlayer moonShooter = null;
         for (Map.Entry<IPlayer,Integer> entry : _roundScore.entrySet()) {
-            _scores.put(entry.getKey(),_scores.get(entry.getKey()) + entry.getValue());
+            if (entry.getValue() == MAX_POINTS_PER_ROUND) moonShooter = entry.getKey();
+        }
+        if (moonShooter != null) {
+            for (IPlayer player : _players) {
+                if (player != moonShooter) _scores.put(player, _scores.get(player) + MAX_POINTS_PER_ROUND);
+            }
+        } else {
+            for (Map.Entry<IPlayer,Integer> entry : _roundScore.entrySet()) {
+                _scores.put(entry.getKey(),_scores.get(entry.getKey()) + entry.getValue());
+            }
         }
     }
 
@@ -100,17 +112,14 @@ public final class GameInfo {
         return _currentTrick.IsComplete();
     }
 
-    protected List<IPlayer> GetLosers() {
-        List<IPlayer> loosers = new ArrayList<>();
-        if (!IsGameOver()) return loosers;
-        int maxScore = Integer.MIN_VALUE;
-        for (Integer score : _scores.values()) {
-            if (score > maxScore) maxScore = score;
+    public List<ScoredPlayer> GetRanking() {
+        List<ScoredPlayer> sort = new ArrayList<>();
+        if (!IsGameOver()) return sort;
+        for (IPlayer player : _players) {
+            sort.add(new ScoredPlayer(player, _scores.get(player)));
         }
-        for (Map.Entry<IPlayer,Integer> entry : _scores.entrySet()) {
-            if (entry.getValue() == maxScore) loosers.add(entry.getKey());
-        }
-        return loosers;
+        Collections.sort(sort);
+        return sort;
     }
 
     protected IPlayer CurrentPlayer() {

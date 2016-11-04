@@ -15,6 +15,7 @@ public class GameTest {
             g.Step();
             g.Info().PrintDebugInfo();
         }
+        System.out.println("Ranking: " + g.Step());
     }
 
 
@@ -24,31 +25,23 @@ public class GameTest {
 
     public static IPlayer[] getPlayers() {
         IPlayer[] players = new IPlayer[4];
+        final String[] names = new String[]{"Elaine", "Michael", "Chase", "Alex"};
         for (int i = 0; i < players.length; i++) {
-            players[i] = new IPlayer() {
-                @Override
-                public void Initialize(int id) {
-
-                }
-
-                @Override
-                public void StartRound(Card[] hand) {
-
-                }
-
+            final int idx = i;
+            players[i] = new AbstractPlayer() {
+                String name = names[idx];
                 @Override
                 public CardPassMove PassCards() {
                     return null;
                 }
 
                 @Override
-                public void ReceiveCards(CardPassMove old, CardPassMove get) {
-
-                }
-
-                @Override
                 public Move Play(GameInfo state) {
                     return null;
+                }
+
+                public String toString() {
+                    return name;
                 }
             };
         }

@@ -1,22 +1,29 @@
 package game;
 
 import card.*;
+import java.util.*;
 
 public class Game {
     private GameInfo _info;
     private GameState _state;
+    private IPlayer[] _players;
     private Deck _deck;
 
     public Game(IPlayer[] players) {
         _deck = new Deck();
-        _info = new GameInfo(players);
-        for (int i = 0; i < players.length; i++) {
-            players[i].Initialize(i);
+        _players = players;
+        NewGame();
+    }
+
+    public void NewGame() {
+        _info = new GameInfo(_players);
+        for (int i = 0; i < _players.length; i++) {
+            _players[i].Initialize(i);
         }
         _state = GameState.START_ROUND;
     }
 
-    public void Step() {
+    public List<ScoredPlayer> Step() {
         switch (_state) {
             case START_ROUND:
                 _deck.Shuffle();
@@ -33,6 +40,7 @@ public class Game {
                     }
                     _info.PassCards(moves);
                 }
+                _info.FindAndSetFirstPlayer();
                 _state = GameState.PLAYER_TURN;
                 break;
 
@@ -54,9 +62,9 @@ public class Game {
                 break;
 
             case GAME_OVER:
-
-                break;
+                return _info.GetRanking();
         }
+        return null;
     }
 
     public GameInfo Info() {
