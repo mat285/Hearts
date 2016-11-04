@@ -1,6 +1,5 @@
 package game;
 
-import card.Card;
 import test.Assert;
 
 public class GameTest {
