@@ -47,7 +47,7 @@ public class Game {
                     IPlayer[] players = _info.Players();
                     CardPassMove[] moves = new CardPassMove[players.length];
                     for (int i = 0; i < players.length; i++) {
-                        moves[i] = players[i].PassCards();
+                        moves[i] = players[i].PassCards(_info.Seal(players[i]));
                     }
                     _info.PassCards(moves);
                 }

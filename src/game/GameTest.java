@@ -1,5 +1,7 @@
 package game;
 
+import player.RandomPlayer;
+import player.RuleBasedPlayer;
 import test.Assert;
 
 public class GameTest {
@@ -26,23 +28,8 @@ public class GameTest {
         IPlayer[] players = new IPlayer[4];
         final String[] names = new String[]{"Elaine", "Michael", "Chase", "Alex"};
         for (int i = 0; i < players.length; i++) {
-            final int idx = i;
-            players[i] = new AbstractPlayer() {
-                String name = names[idx];
-                @Override
-                public CardPassMove PassCards() {
-                    return null;
-                }
-
-                @Override
-                public Move Play(SealedGameInfo state) {
-                    return null;
-                }
-
-                public String toString() {
-                    return name;
-                }
-            };
+            if (i == 1) players[i] = new RuleBasedPlayer();
+            else players[i] = new RandomPlayer();
         }
         return players;
     }

@@ -33,6 +33,22 @@ public class GameUtils {
         return true;
     }
 
+    public static List<Card> CardsOfSuit(Iterable<Card> hand, Suit s) {
+        List<Card> cards = new ArrayList<>();
+        for (Card c : hand) {
+            if (c.Suit == s) cards.add(c);
+        }
+        return cards;
+    }
+
+    public static Card HighestOfSuit(Iterable<Card> hand, Suit s) {
+        Card max = null;
+        for (Card c : hand) {
+            if (max == null || (c.Suit == s && c.Value.compareTo(max.Value)>0)) max = c;
+        }
+        return max;
+    }
+
     /**
      * Checks that this move if legal for this player
      * @param move the proposed move
@@ -95,8 +111,9 @@ public class GameUtils {
     public static boolean IsValidCardPass(CardPassMove move, SealedGameInfo info) {
         if (move == null) return false;
         for (Card c : move.Cards()) {
-            if (info.GetHand().contains(c)) return false;
+            if (!info.GetHand().contains(c)) return false;
         }
+        if (move.Cards().get(0) == move.Cards().get(1) || move.Cards().get(0) == move.Cards().get(2) || move.Cards().get(1) == move.Cards().get(2)) return false;
         return true;
     }
 
