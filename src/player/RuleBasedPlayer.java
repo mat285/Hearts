@@ -63,6 +63,8 @@ public class RuleBasedPlayer extends AbstractPlayer implements IPlayer {
 
     @Override
     public Move Play(SealedGameInfo info) {
+        Card c = avoidTrick(info);
+        if (c != null) return new Move(c);
         List<Move> possible = GameUtils.GetAllValidMoves(info);
         Move min = possible.get(0);
         for (int i = 1; i < possible.size(); i++) {
@@ -72,6 +74,19 @@ public class RuleBasedPlayer extends AbstractPlayer implements IPlayer {
         }
         return min;
     }
+
+    private Card avoidTrick(SealedGameInfo info) {
+        Suit s = info.CurrentSuit();
+        Trick t = info.CurrentTrick();
+        Card high = t.Highest();
+        List<Card> possible = new ArrayList<>();
+        for (Card c : info.GetHand()) {
+            if (c.Suit == s && c.Value.compareTo(high.Value) < 0) possible.add(c);
+        }
+        return GameUtils.HighestOfSuit(possible, s);
+    }
+
+
 
     @Override
     public String toString() {
