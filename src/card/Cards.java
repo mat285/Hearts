@@ -56,4 +56,10 @@ public class Cards {
     public static final Card JACK_OF_HEARTS = new Card(Suit.HEARTS, Value.JACK);
     public static final Card QUEEN_OF_HEARTS = new Card(Suit.HEARTS, Value.QUEEN);
     public static final Card KING_OF_HEARTS = new Card(Suit.HEARTS, Value.KING);
+
+    public static Card Parse(String str) {
+        String[] parts = str.toUpperCase().split(" OF ");
+        if (parts.length != 2) return null;
+        return new Card(Suit.Parse(parts[1].trim()), Value.Parse(parts[0].trim()));
+    }
 }

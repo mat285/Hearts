@@ -13,4 +13,9 @@ public class RandomPlayer extends AbstractPlayer implements IPlayer{
     public Move Play(SealedGameInfo state) {
         return GameUtils.RandomMove(state);
     }
+
+    @Override
+    public String toString() {
+        return super.toString() + " (Rand)";
+    }
 }
