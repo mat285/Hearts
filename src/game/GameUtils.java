@@ -119,6 +119,8 @@ public class GameUtils {
         Suit curr = info.CurrentSuit();
         // If this is the start of a round then only the two of clubs is valid
         if (info.IsStartOfRound()) return c.equals(Cards.TWO_OF_CLUBS);
+        // If this is the first play of the round and has no clubs, play a not heart or queen of spades
+        if (info.GetHand().size() == SIZE_OF_HANDS && ContainsNoneOfSuit(info.GetHand(), info.CurrentSuit())) return c.PointValue() == 0;
         if (curr == null) {
             // If this is the first card, then either play a card that isn't hearts or hearts must be broken
             return (info.IsHeartsBroken() || c.Suit != Suit.HEARTS || ContainsOnlySuit(info.GetHand(), c.Suit));
