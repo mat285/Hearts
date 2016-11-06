@@ -171,6 +171,14 @@ public final class GameInfo {
     }
 
     /**
+     * Gets the player that started the current trick
+     * @return The player starting the current trick
+     */
+    public IPlayer PlayerStartingTrick() {
+        return _currentTrick.IsEmpty() ? CurrentPlayer() : _plays.get(_currentTrick.First());
+    }
+
+    /**
      * Checks if the player has the given card in their hand
      * @param c the card
      * @param p the player to check
