@@ -8,7 +8,6 @@ public class GameUtils {
     private static final Random RANDOM = new Random();
 
     public static final int SIZE_OF_HANDS = 13;
-    public static final Card TWO_OF_CLUBS = new Card(Suit.CLUBS, Value.TWO);
     public static final int MAX_POINTS_PER_ROUND = 26;
     public static final int MAX_GAME_SCORE = 100;
 
@@ -70,7 +69,7 @@ public class GameUtils {
      * @return true iff this player can make this move
      */
     public static boolean ValidateMove(Move move, SealedGameInfo info) {
-        return GetAllValidMoves(info).contains(move);
+        return IsCardValid(move.Card(), info);
     }
 
     /**
@@ -107,7 +106,7 @@ public class GameUtils {
         if (!info.GetHand().contains(c)) return false;
         Suit curr = info.CurrentSuit();
         // If this is the start of a round then only the two of clubs is valid
-        if (info.IsStartOfRound()) return c.equals(TWO_OF_CLUBS);
+        if (info.IsStartOfRound()) return c.equals(Cards.TWO_OF_CLUBS);
         if (curr == null) {
             // If this is the first card, then either play a card that isn't hearts or hearts must be broken
             return (info.IsHeartsBroken() || c.Suit != Suit.HEARTS || ContainsOnlySuit(info.GetHand(), c.Suit));

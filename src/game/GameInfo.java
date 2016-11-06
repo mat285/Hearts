@@ -196,7 +196,7 @@ public final class GameInfo {
      */
     protected IPlayer FindAndSetFirstPlayer() {
         for (int i = 0; i < _players.length; i++) {
-            if (_playerHands.get(_players[i]).contains(GameUtils.TWO_OF_CLUBS)) {
+            if (_playerHands.get(_players[i]).contains(Cards.TWO_OF_CLUBS)) {
                 _currentPlayer = i;
                 return _players[i];
             }

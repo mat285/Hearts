@@ -7,10 +7,6 @@ import java.util.*;
 
 public class RuleBasedPlayer extends AbstractPlayer implements IPlayer {
 
-    private static final Card QUEEN_OF_SPADES = new Card(Suit.SPADES, Value.QUEEN);
-    private static final Card KING_OF_SPADES = new Card(Suit.SPADES, Value.KING);
-    private static final Card ACE_OF_SPADES = new Card(Suit.SPADES, Value.ACE);
-
     @Override
     public CardPassMove PassCards(SealedGameInfo info) {
         CardPassMove move = getRidOfQueen(info);
@@ -31,9 +27,9 @@ public class RuleBasedPlayer extends AbstractPlayer implements IPlayer {
 
     private CardPassMove getRidOfQueen(SealedGameInfo info) {
         Card c1 = null, c2 = null, c3 = null;
-        if (info.GetHand().contains(QUEEN_OF_SPADES)) c1 = QUEEN_OF_SPADES;
-        if (info.GetHand().contains(KING_OF_SPADES)) c2 = KING_OF_SPADES;
-        if (info.GetHand().contains(ACE_OF_SPADES)) c3 = ACE_OF_SPADES;
+        if (info.GetHand().contains(Cards.QUEEN_OF_SPADES)) c1 = Cards.QUEEN_OF_SPADES;
+        if (info.GetHand().contains(Cards.KING_OF_SPADES)) c2 = Cards.KING_OF_SPADES;
+        if (info.GetHand().contains(Cards.ACE_OF_SPADES)) c3 = Cards.ACE_OF_SPADES;
         if (c1 == null) c1 = highestUndesirable(info);
         if (c2 == null) c2 = highestUndesirable(info);
         if (c3 == null) c3 = highestUndesirable(info);
@@ -70,23 +66,44 @@ public class RuleBasedPlayer extends AbstractPlayer implements IPlayer {
         return avoidTrick(info);
     }
 
+//    public Move Play(SealedGameInfo info) {
+//        Move m = play(info);
+//        System.out.println("Hand: " + info.GetHand());
+//        System.out.println("Trick: " + info.CurrentTrick().AllCards());
+//        System.out.println("Play: " + m.Card());
+//        System.out.println(GameUtils.ValidateMove(m, info));
+//        return m;
+//    }
+
     private Move playFirstMove(SealedGameInfo info) {
-        if (info.GetHand().contains(GameUtils.TWO_OF_CLUBS)) return new Move(GameUtils.TWO_OF_CLUBS);
+        if (info.GetHand().contains(Cards.TWO_OF_CLUBS)) return new Move(Cards.TWO_OF_CLUBS);
         Card highClub = GameUtils.HighestOfSuit(info.GetHand(), Suit.CLUBS);
         if (highClub != null) return new Move(highClub);
         return playOffSuit(info);
     }
 
     private Move playOffSuit(SealedGameInfo info) {
-        if (info.GetHand().contains(QUEEN_OF_SPADES)) return new Move(QUEEN_OF_SPADES);
+        if (info.CurrentSuit() != Suit.SPADES) {
+            if (info.GetHand().contains(Cards.QUEEN_OF_SPADES)) return new Move(Cards.QUEEN_OF_SPADES);
+            if (info.GetHand().contains(Cards.ACE_OF_SPADES)) return new Move(Cards.ACE_OF_SPADES);
+            if (info.GetHand().contains(Cards.KING_OF_SPADES)) return new Move(Cards.KING_OF_SPADES);
+        }
         Suit[] preferable = {Suit.SPADES, Suit.DIAMONDS, Suit.HEARTS, Suit.CLUBS};
+        List<Card> choices = new ArrayList<>();
         for (Suit s : preferable) {
             Card h = GameUtils.HighestOfSuit(info.GetHand(), s);
             if (h != null) {
-                return new Move(h);
+                choices.add(h);
             }
         }
-        return null;
+        Card max = null;
+        for (Card c : choices) {
+            if (max == null || c.Value.compareTo(max.Value) > 0) max = c;
+            if (c.Value.compareTo(Value.NINE) > 0) {
+                return new Move(c);
+            }
+        }
+        return new Move(max);
     }
 
     private Move takeTrick(SealedGameInfo info) {
