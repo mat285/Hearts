@@ -19,7 +19,7 @@ public class GameInfoTest {
                 }
 
                 @Override
-                public CardPassMove PassCards() {
+                public CardPassMove PassCards(SealedGameInfo info) {
                     return null;
                 }
 
@@ -29,7 +29,7 @@ public class GameInfoTest {
                 }
 
                 @Override
-                public Move Play(GameInfo state) {
+                public Move Play(SealedGameInfo state) {
                     return null;
                 }
             };

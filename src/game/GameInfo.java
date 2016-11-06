@@ -4,13 +4,6 @@ import card.*;
 import java.util.*;
 
 public final class GameInfo {
-    private final Card TWO_OF_CLUBS = new Card(Suit.CLUBS, Value.TWO);
-    private final int MAX_POINTS_PER_ROUND = 26;
-    private final int SIZE_OF_HANDS = 13;
-    private final int MAX_GAME_SCORE = 100;
-
-    private final Random RANDOM = new Random();
-
     private boolean _heartsBroken;
     private Trick _currentTrick;
     private int _roundNumber;
@@ -64,8 +57,8 @@ public final class GameInfo {
      * Calls the play move on the current player, validates and then executes the move
      */
     protected void NextPlayerPlay() {
-        Move move = CurrentPlayer().Play(this);
-        if (!ValidateMove(move, CurrentPlayer())) move = RandomMove(CurrentPlayer());
+        Move move = CurrentPlayer().Play(Seal(CurrentPlayer()));
+        if (!GameUtils.ValidateMove(move, Seal(CurrentPlayer()))) move = GameUtils.RandomMove(Seal(CurrentPlayer()));
         ExecuteMove(move, CurrentPlayer());
         _currentPlayer = (_currentPlayer+1) % _players.length;
     }
@@ -104,11 +97,11 @@ public final class GameInfo {
         if (!IsRoundOver()) return;
         IPlayer moonShooter = null;
         for (Map.Entry<IPlayer,Integer> entry : _roundScore.entrySet()) {
-            if (entry.getValue() == MAX_POINTS_PER_ROUND) moonShooter = entry.getKey();
+            if (entry.getValue() == GameUtils.MAX_POINTS_PER_ROUND) moonShooter = entry.getKey();
         }
         if (moonShooter != null) {
             for (IPlayer player : _players) {
-                if (player != moonShooter) _scores.put(player, _scores.get(player) + MAX_POINTS_PER_ROUND);
+                if (player != moonShooter) _scores.put(player, _scores.get(player) + GameUtils.MAX_POINTS_PER_ROUND);
             }
         } else {
             for (Map.Entry<IPlayer,Integer> entry : _roundScore.entrySet()) {
@@ -121,9 +114,9 @@ public final class GameInfo {
      * Checks if the game is over by seeing if any player has met or gone over MAX_GAME_SCORE
      * @return true iff this game is over
      */
-    protected boolean IsGameOver() {
+    public boolean IsGameOver() {
         for (Integer score : _scores.values()) {
-            if (score >= MAX_GAME_SCORE) return true;
+            if (score >= GameUtils.MAX_GAME_SCORE) return true;
         }
         return false;
     }
@@ -132,7 +125,7 @@ public final class GameInfo {
      * Checks if the round is over by seeing if all players are out of cards
      * @return true iff the current round is over
      */
-    protected boolean IsRoundOver() {
+    public boolean IsRoundOver() {
         boolean roundOver = true;
         for (Set<Card> hand : _playerHands.values()) {
             roundOver = roundOver && hand.isEmpty();
@@ -144,7 +137,7 @@ public final class GameInfo {
      * Checks if the current trick is complete
      * @return true iff the current trick is complete
      */
-    protected boolean IsTrickDone() {
+    public boolean IsTrickDone() {
         return _currentTrick.IsComplete();
     }
 
@@ -166,8 +159,16 @@ public final class GameInfo {
      * Gets the player whose turn it is
      * @return The currently playing player
      */
-    protected IPlayer CurrentPlayer() {
+    public IPlayer CurrentPlayer() {
         return _players[_currentPlayer];
+    }
+
+    /**
+     * Gets the player that started the current trick
+     * @return The player starting the current trick
+     */
+    public IPlayer PlayerStartingTrick() {
+        return _currentTrick.IsEmpty() ? CurrentPlayer() : _plays.get(_currentTrick.First());
     }
 
     /**
@@ -195,7 +196,7 @@ public final class GameInfo {
      */
     protected IPlayer FindAndSetFirstPlayer() {
         for (int i = 0; i < _players.length; i++) {
-            if (_playerHands.get(_players[i]).contains(TWO_OF_CLUBS)) {
+            if (_playerHands.get(_players[i]).contains(Cards.TWO_OF_CLUBS)) {
                 _currentPlayer = i;
                 return _players[i];
             }
@@ -345,10 +346,10 @@ public final class GameInfo {
      * @param moves the proposed card passing moves
      * @return the fixed card passing moves
      */
-    protected CardPassMove[] ValidateCardPassMoves(CardPassMove[] moves) {
+    public CardPassMove[] ValidateCardPassMoves(CardPassMove[] moves) {
         for (int i = 0; i < moves.length; i++) {
-            if (!IsValidCardPass(moves[i], _players[i])){
-                moves[i] = RandomCardPass(_players[i]);
+            if (!GameUtils.IsValidCardPass(moves[i], Seal(_players[i]))){
+                moves[i] = GameUtils.RandomCardPass(Seal(_players[i]));
             }
 
         }
@@ -356,125 +357,53 @@ public final class GameInfo {
     }
 
     /**
-     * Checks if the card pass move is okay for the given player
-     * @param move the move
-     * @param player the player
-     * @return true iff the player can pass these cards
-     */
-    protected boolean IsValidCardPass(CardPassMove move, IPlayer player) {
-        if (move == null) return false;
-        for (Card c : move.Cards()) {
-            if (!doesPlayerHaveCard(player, c)) return false;
-        }
-        return true;
-    }
-
-    /**
-     * Creates a card pass move by randomly choosing three cards from the player
-     * @param player the player
-     * @return a valid card pass move for this player
-     */
-    public CardPassMove RandomCardPass(IPlayer player) {
-        List<Card> cards = new ArrayList<>(_playerHands.get(player));
-        return new CardPassMove(cards.remove(RANDOM.nextInt(cards.size())),cards.remove(RANDOM.nextInt(cards.size())),cards.remove(RANDOM.nextInt(cards.size())));
-    }
-
-    /**
-     * Checks that this move if legal for this player
-     * @param move the proposed move
-     * @param player the player making the move
-     * @return true iff this player can make this move
-     */
-    protected boolean ValidateMove(Move move, IPlayer player) {
-        return GetAllValidMoves(player).contains(move);
-    }
-
-    /**
-     * Returns a valid random move for the given player
-     * @param player the player to get a valid move for
-     * @return A valid move for the player
-     */
-    public Move RandomMove(IPlayer player) {
-        List<Move> moves = GetAllValidMoves(player);
-        int idx = RANDOM.nextInt(moves.size());
-        return moves.get(idx);
-    }
-
-    /**
-     * Gets all valid moves for the given player
-     * @param player the player
-     * @return all valid moves for this player
-     */
-    public List<Move> GetAllValidMoves(IPlayer player) {
-        List<Move> valid = new ArrayList<>();
-        for (Card c : _playerHands.get(player)) {
-            if (IsCardValid(c,player)) valid.add(new Move(c));
-        }
-        return valid;
-    }
-
-    /**
-     * Checks if the card is a valid move for player
-     * @param c the card to play
-     * @param player the player
-     * @return true if player can play c
-     */
-    public boolean IsCardValid(Card c, IPlayer player) {
-        if (!doesPlayerHaveCard(player,c)) return false;
-        Suit curr = CurrentSuit();
-        // If this is the start of a round then only the two of clubs is valid
-        if (isStartOfRound()) return c.equals(TWO_OF_CLUBS);
-        if (curr == null) {
-            // If this is the first card, then either play a card that isn't hearts or hearts must be broken
-            return (IsHeartsBroken() || c.Suit != Suit.HEARTS || containsOnlySuit(player, c.Suit));
-        }
-        // Else play on suit, or if player has none then play anything
-        return (c.Suit == curr || containsNoneOfSuit(player, curr));
-
-    }
-
-    /**
      * Checks if this is the start of a round
      * @return true if no moves have been played yet in this round
      */
     private boolean isStartOfRound() {
-        return _currentTrick.IsEmpty() && _playerHands.get(CurrentPlayer()).size() == SIZE_OF_HANDS;
+        return _currentTrick.IsEmpty() && _playerHands.get(CurrentPlayer()).size() == GameUtils.SIZE_OF_HANDS;
     }
 
-    /**
-     * Checks if the player's hand contains only the given suit
-     * @param player The player
-     * @param s the suit to look for
-     * @return true iff this player's hand only contains cards of suit s
-     */
-    private boolean containsOnlySuit(IPlayer player, Suit s) {
-        for (Card c : _playerHands.get(player)) {
-            if (c.Suit != s) return false;
+    public int[] GetRoundScores() {
+        int[] scores = new int[_players.length];
+        for (int i = 0; i < _players.length; i++) {
+            scores[i] = _roundScore.get(_players[i]);
         }
-        return true;
+        return scores;
     }
 
-    /**
-     * Checks if this player has any cards of the given suit
-     * @param player the player
-     * @param s the suit
-     * @return true iff this player has no cards of suit s
-     */
-    private boolean containsNoneOfSuit(IPlayer player, Suit s) {
-        for (Card c : _playerHands.get(player)) {
-            if (c.Suit == s) return false;
+    public int[] GetGameScores() {
+        int[] scores = new int[_players.length];
+        for (int i = 0; i < _players.length; i++) {
+            scores[i] = _scores.get(_players[i]);
         }
-        return true;
+        return scores;
     }
 
-    /**
-     * Checks if the player has the given card in their hand
-     * @param player the player
-     * @param c the card
-     * @return true iff this player has c in their hand
-     */
-    private boolean doesPlayerHaveCard(IPlayer player, Card c) {
-        return _playerHands.get(player).contains(c);
+    public SealedGameInfo Seal(IPlayer player) {
+        return new SealedGameInfo(CurrentTrick(),GetRoundScores(), GetGameScores(), IsHeartsBroken(), RoundNumber(), isStartOfRound(), new HashSet<>(_playerHands.get(player)), RemainingCards());
+    }
+
+    public Set<Card> RemainingCards() {
+        Set<Card> remaining = new HashSet<>();
+        for (IPlayer p : _players) {
+            remaining.addAll(_playerHands.get(p));
+        }
+        return remaining;
+    }
+
+    public void SanityCheck() {
+        Set<Card> hand0 = _playerHands.get(_players[0]);
+        Set<Card> hand1 = _playerHands.get(_players[1]);
+        Set<Card> hand2 = _playerHands.get(_players[2]);
+        Set<Card> hand3 = _playerHands.get(_players[3]);
+        if (hand0.size() != hand1.size() || hand1.size() != hand2.size() || hand2.size() != hand3.size()) throw new RuntimeException();
+    }
+
+    public void PrintCardPass(CardPassMove[] moves) {
+        for (int i = 0; i < moves.length; i++) {
+            System.out.println("Player "+ i+ ": " + moves[i]);
+        }
     }
 
     public void PrintDebugInfo() {
@@ -487,7 +416,7 @@ public final class GameInfo {
         for (int i = 0; i < _players.length; i++) {
             List<Card> cards = new ArrayList<>(_playerHands.get(_players[i]));
             Deck.Sort(cards);
-            System.out.println("Player " + i + ": " +cards);
+            System.out.println("Player " + i + ": " +cards + " Size " + cards.size());
         }
         System.out.println("Played moves:");
         for (Card c : _currentTrick.AllCards()) {
