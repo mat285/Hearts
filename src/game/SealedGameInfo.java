@@ -12,8 +12,9 @@ public class SealedGameInfo {
     private int _roundNumber;
     private boolean _isStartOfRound;
     private Set<Card> _hand;
+    private Set<Card> _remaining;
 
-    public SealedGameInfo(Trick currentTrick, int[] roundScores, int[] scores, boolean heartsBroken, int roundNumber, boolean isStartofRound, Set<Card> hand) {
+    public SealedGameInfo(Trick currentTrick, int[] roundScores, int[] scores, boolean heartsBroken, int roundNumber, boolean isStartofRound, Set<Card> hand, Set<Card> remaining) {
         _currentTrick = currentTrick;
         _roundScores = roundScores;
         _scores = scores;
@@ -21,6 +22,7 @@ public class SealedGameInfo {
         _roundNumber = roundNumber;
         _isStartOfRound = isStartofRound;
         _hand = hand;
+        _remaining = remaining;
     }
 
     public Card LastCardPlayed() {
@@ -56,4 +58,6 @@ public class SealedGameInfo {
     }
 
     public Set<Card> GetHand() { return _hand; }
+
+    public Set<Card> RemainingCards() { return _remaining; }
 }

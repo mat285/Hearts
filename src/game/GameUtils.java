@@ -38,6 +38,12 @@ public class GameUtils {
         return true;
     }
 
+    /**
+     * Gets all cards in the hand of the given suit
+     * @param hand the hand
+     * @param s the suit
+     * @return all cards in hand with suit s
+     */
     public static List<Card> CardsOfSuit(Iterable<Card> hand, Suit s) {
         List<Card> cards = new ArrayList<>();
         for (Card c : hand) {
@@ -46,6 +52,12 @@ public class GameUtils {
         return cards;
     }
 
+    /**
+     * Gets all the highest card of the given suit, or null if there are no cards of this suit
+     * @param hand the hand
+     * @param s the suit
+     * @return the highest card of suit s or null
+     */
     public static Card HighestOfSuit(Iterable<Card> hand, Suit s) {
         Card max = null;
         for (Card c : hand) {

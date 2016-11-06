@@ -381,7 +381,15 @@ public final class GameInfo {
     }
 
     public SealedGameInfo Seal(IPlayer player) {
-        return new SealedGameInfo(CurrentTrick(),GetRoundScores(), GetGameScores(), IsHeartsBroken(), RoundNumber(), isStartOfRound(), new HashSet<>(_playerHands.get(player)));
+        return new SealedGameInfo(CurrentTrick(),GetRoundScores(), GetGameScores(), IsHeartsBroken(), RoundNumber(), isStartOfRound(), new HashSet<>(_playerHands.get(player)), RemainingCards());
+    }
+
+    public Set<Card> RemainingCards() {
+        Set<Card> remaining = new HashSet<>();
+        for (IPlayer p : _players) {
+            remaining.addAll(_playerHands.get(p));
+        }
+        return remaining;
     }
 
     public void SanityCheck() {
