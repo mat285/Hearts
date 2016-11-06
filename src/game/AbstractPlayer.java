@@ -7,8 +7,19 @@ import card.*;
 public abstract class AbstractPlayer implements IPlayer {
     private List<Card> _hand;
     private int _id;
+    private String _name;
+
+    private static final String[] _names = {"Michael", "Elaine", "Chase", "Alex"};
+    private static int _index = 0;
 
     public AbstractPlayer() {
+        this(_names[_index % _names.length]);
+        _index++;
+        _index = _index % _names.length;
+    }
+
+    public AbstractPlayer(String name) {
+        _name = name;
     }
 
     public @Override void Initialize(int id) {
@@ -38,5 +49,9 @@ public abstract class AbstractPlayer implements IPlayer {
 
     protected void RemoveCardFromHand(Card c) {
         _hand.remove(c);
+    }
+
+    public String toString() {
+        return _name;
     }
 }

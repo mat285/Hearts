@@ -7,6 +7,11 @@ public class GameUtils {
 
     private static final Random RANDOM = new Random();
 
+    public static final int SIZE_OF_HANDS = 13;
+    public static final int MAX_POINTS_PER_ROUND = 26;
+    public static final int MAX_GAME_SCORE = 100;
+
+
     /**
      * Checks to see if the hand contains no cards of the given suit
      * @param hand the hand to check
@@ -33,6 +38,30 @@ public class GameUtils {
         return true;
     }
 
+    public static List<Card> CardsOfSuit(Iterable<Card> hand, Suit s) {
+        List<Card> cards = new ArrayList<>();
+        for (Card c : hand) {
+            if (c.Suit == s) cards.add(c);
+        }
+        return cards;
+    }
+
+    public static Card HighestOfSuit(Iterable<Card> hand, Suit s) {
+        Card max = null;
+        for (Card c : hand) {
+            if (c.Suit == s && (max == null || c.Value.compareTo(max.Value)>0)) max = c;
+        }
+        return max;
+    }
+
+    public static Card LowestOfSuit(Iterable<Card> hand, Suit s) {
+        Card min = null;
+        for (Card c : hand) {
+            if (min == null || (c.Suit == s && c.Value.compareTo(min.Value)<0)) min = c;
+        }
+        return min;
+    }
+
     /**
      * Checks that this move if legal for this player
      * @param move the proposed move
@@ -40,7 +69,7 @@ public class GameUtils {
      * @return true iff this player can make this move
      */
     public static boolean ValidateMove(Move move, SealedGameInfo info) {
-        return GetAllValidMoves(info).contains(move);
+        return IsCardValid(move.Card(), info);
     }
 
     /**
@@ -77,7 +106,7 @@ public class GameUtils {
         if (!info.GetHand().contains(c)) return false;
         Suit curr = info.CurrentSuit();
         // If this is the start of a round then only the two of clubs is valid
-        if (info.IsStartOfRound()) return c.equals(GameInfo.TWO_OF_CLUBS);
+        if (info.IsStartOfRound()) return c.equals(Cards.TWO_OF_CLUBS);
         if (curr == null) {
             // If this is the first card, then either play a card that isn't hearts or hearts must be broken
             return (info.IsHeartsBroken() || c.Suit != Suit.HEARTS || ContainsOnlySuit(info.GetHand(), c.Suit));
@@ -95,8 +124,9 @@ public class GameUtils {
     public static boolean IsValidCardPass(CardPassMove move, SealedGameInfo info) {
         if (move == null) return false;
         for (Card c : move.Cards()) {
-            if (info.GetHand().contains(c)) return false;
+            if (!info.GetHand().contains(c)) return false;
         }
+        if (move.Cards().get(0).equals(move.Cards().get(1)) || move.Cards().get(0).equals(move.Cards().get(2)) || move.Cards().get(1).equals(move.Cards().get(2))) return false;
         return true;
     }
 

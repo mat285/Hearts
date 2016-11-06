@@ -4,13 +4,6 @@ import card.*;
 import java.util.*;
 
 public final class GameInfo {
-    protected static final Card TWO_OF_CLUBS = new Card(Suit.CLUBS, Value.TWO);
-    private final int MAX_POINTS_PER_ROUND = 26;
-    private final int SIZE_OF_HANDS = 13;
-    private final int MAX_GAME_SCORE = 100;
-
-    private final Random RANDOM = new Random();
-
     private boolean _heartsBroken;
     private Trick _currentTrick;
     private int _roundNumber;
@@ -104,11 +97,11 @@ public final class GameInfo {
         if (!IsRoundOver()) return;
         IPlayer moonShooter = null;
         for (Map.Entry<IPlayer,Integer> entry : _roundScore.entrySet()) {
-            if (entry.getValue() == MAX_POINTS_PER_ROUND) moonShooter = entry.getKey();
+            if (entry.getValue() == GameUtils.MAX_POINTS_PER_ROUND) moonShooter = entry.getKey();
         }
         if (moonShooter != null) {
             for (IPlayer player : _players) {
-                if (player != moonShooter) _scores.put(player, _scores.get(player) + MAX_POINTS_PER_ROUND);
+                if (player != moonShooter) _scores.put(player, _scores.get(player) + GameUtils.MAX_POINTS_PER_ROUND);
             }
         } else {
             for (Map.Entry<IPlayer,Integer> entry : _roundScore.entrySet()) {
@@ -123,7 +116,7 @@ public final class GameInfo {
      */
     public boolean IsGameOver() {
         for (Integer score : _scores.values()) {
-            if (score >= MAX_GAME_SCORE) return true;
+            if (score >= GameUtils.MAX_GAME_SCORE) return true;
         }
         return false;
     }
@@ -203,7 +196,7 @@ public final class GameInfo {
      */
     protected IPlayer FindAndSetFirstPlayer() {
         for (int i = 0; i < _players.length; i++) {
-            if (_playerHands.get(_players[i]).contains(TWO_OF_CLUBS)) {
+            if (_playerHands.get(_players[i]).contains(Cards.TWO_OF_CLUBS)) {
                 _currentPlayer = i;
                 return _players[i];
             }
@@ -368,7 +361,7 @@ public final class GameInfo {
      * @return true if no moves have been played yet in this round
      */
     private boolean isStartOfRound() {
-        return _currentTrick.IsEmpty() && _playerHands.get(CurrentPlayer()).size() == SIZE_OF_HANDS;
+        return _currentTrick.IsEmpty() && _playerHands.get(CurrentPlayer()).size() == GameUtils.SIZE_OF_HANDS;
     }
 
     public int[] GetRoundScores() {
@@ -391,6 +384,20 @@ public final class GameInfo {
         return new SealedGameInfo(CurrentTrick(),GetRoundScores(), GetGameScores(), IsHeartsBroken(), RoundNumber(), isStartOfRound(), new HashSet<>(_playerHands.get(player)));
     }
 
+    public void SanityCheck() {
+        Set<Card> hand0 = _playerHands.get(_players[0]);
+        Set<Card> hand1 = _playerHands.get(_players[1]);
+        Set<Card> hand2 = _playerHands.get(_players[2]);
+        Set<Card> hand3 = _playerHands.get(_players[3]);
+        if (hand0.size() != hand1.size() || hand1.size() != hand2.size() || hand2.size() != hand3.size()) throw new RuntimeException();
+    }
+
+    public void PrintCardPass(CardPassMove[] moves) {
+        for (int i = 0; i < moves.length; i++) {
+            System.out.println("Player "+ i+ ": " + moves[i]);
+        }
+    }
+
     public void PrintDebugInfo() {
         System.out.println("Round: " + _roundNumber);
         System.out.println("Scores:");
@@ -401,7 +408,7 @@ public final class GameInfo {
         for (int i = 0; i < _players.length; i++) {
             List<Card> cards = new ArrayList<>(_playerHands.get(_players[i]));
             Deck.Sort(cards);
-            System.out.println("Player " + i + ": " +cards);
+            System.out.println("Player " + i + ": " +cards + " Size " + cards.size());
         }
         System.out.println("Played moves:");
         for (Card c : _currentTrick.AllCards()) {

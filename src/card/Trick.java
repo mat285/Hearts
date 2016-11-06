@@ -38,6 +38,10 @@ public class Trick {
         return cards;
     }
 
+    public int Size() {
+        return AllCards().size();
+    }
+
     /**
      * Returns true if and only if all four cards have been added to this trick
      * @return true iff all four cards have been added to this trick

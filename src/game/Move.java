@@ -12,4 +12,12 @@ public class Move {
     public Card Card() {
         return _card;
     }
+
+    public boolean equals(Object o) {
+        return (o instanceof  Move) && ((Move) o).Card().equals(Card());
+    }
+
+    public int hashCode() {
+        return Card().hashCode();
+    }
 }

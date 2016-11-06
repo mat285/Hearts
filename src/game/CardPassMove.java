@@ -28,4 +28,7 @@ public class CardPassMove {
         return _cards;
     }
 
+    public String toString() {
+        return Cards().toString();
+    }
 }
