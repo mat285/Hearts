@@ -62,6 +62,7 @@ public class Game {
 
             case END_TRICK:
                 _info.NextTrick();
+                _info.SanityCheck();
                 if (_info.IsRoundOver()) _state = GameState.END_ROUND;
                 else _state = GameState.PLAYER_TURN;
                 break;

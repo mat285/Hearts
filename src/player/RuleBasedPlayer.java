@@ -63,19 +63,48 @@ public class RuleBasedPlayer extends AbstractPlayer implements IPlayer {
 
     @Override
     public Move Play(SealedGameInfo info) {
-        Card c = avoidTrick(info);
-        if (c != null) return new Move(c);
-        List<Move> possible = GameUtils.GetAllValidMoves(info);
-        Move min = possible.get(0);
-        for (int i = 1; i < possible.size(); i++) {
-            if (min.Card().Value.compareTo(possible.get(i).Card().Value) > 0) {
-                min = possible.get(i);
+        if (info.GetHand().size() == GameUtils.SIZE_OF_HANDS) return playFirstMove(info);
+        if (info.CurrentTrick().IsEmpty()) return playFirstInTrickMove(info);
+        if (GameUtils.ContainsNoneOfSuit(info.GetHand(), info.CurrentSuit())) return playOffSuit(info);
+        if (info.CurrentTrick().Points() == 0 && info.CurrentTrick().Size() == 3) return takeTrick(info);
+        return avoidTrick(info);
+    }
+
+    private Move playFirstMove(SealedGameInfo info) {
+        if (info.GetHand().contains(GameUtils.TWO_OF_CLUBS)) return new Move(GameUtils.TWO_OF_CLUBS);
+        Card highClub = GameUtils.HighestOfSuit(info.GetHand(), Suit.CLUBS);
+        if (highClub != null) return new Move(highClub);
+        return playOffSuit(info);
+    }
+
+    private Move playOffSuit(SealedGameInfo info) {
+        if (info.GetHand().contains(QUEEN_OF_SPADES)) return new Move(QUEEN_OF_SPADES);
+        Suit[] preferable = {Suit.SPADES, Suit.DIAMONDS, Suit.HEARTS, Suit.CLUBS};
+        for (Suit s : preferable) {
+            Card h = GameUtils.HighestOfSuit(info.GetHand(), s);
+            if (h != null) {
+                return new Move(h);
             }
+        }
+        return null;
+    }
+
+    private Move takeTrick(SealedGameInfo info) {
+        Card high = GameUtils.HighestOfSuit(info.GetHand(), info.CurrentSuit());
+        if (high != null) return new Move(high);
+        return playOffSuit(info);
+    }
+
+    private Move playFirstInTrickMove(SealedGameInfo info) {
+        List<Move> possible = GameUtils.GetAllValidMoves(info);
+        Move min = null;
+        for (Move m : possible) {
+            if (min == null || m.Card().PointValue() < min.Card().PointValue() || (min.Card().PointValue() == m.Card().PointValue() && m.Card().Value.compareTo(min.Card().Value) > 0)) min = m;
         }
         return min;
     }
 
-    private Card avoidTrick(SealedGameInfo info) {
+    private Move avoidTrick(SealedGameInfo info) {
         Suit s = info.CurrentSuit();
         Trick t = info.CurrentTrick();
         Card high = t.Highest();
@@ -83,10 +112,11 @@ public class RuleBasedPlayer extends AbstractPlayer implements IPlayer {
         for (Card c : info.GetHand()) {
             if (c.Suit == s && c.Value.compareTo(high.Value) < 0) possible.add(c);
         }
-        return GameUtils.HighestOfSuit(possible, s);
+        Card move = GameUtils.HighestOfSuit(possible, s);
+        if (move != null) return new Move(move);
+        if (t.AllCards().size() < 3) return new Move(GameUtils.LowestOfSuit(info.GetHand(), s));
+        return new Move(GameUtils.HighestOfSuit(info.GetHand(), s));
     }
-
-
 
     @Override
     public String toString() {

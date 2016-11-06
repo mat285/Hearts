@@ -7,6 +7,12 @@ public class GameUtils {
 
     private static final Random RANDOM = new Random();
 
+    public static final int SIZE_OF_HANDS = 13;
+    public static final Card TWO_OF_CLUBS = new Card(Suit.CLUBS, Value.TWO);
+    public static final int MAX_POINTS_PER_ROUND = 26;
+    public static final int MAX_GAME_SCORE = 100;
+
+
     /**
      * Checks to see if the hand contains no cards of the given suit
      * @param hand the hand to check
@@ -44,9 +50,17 @@ public class GameUtils {
     public static Card HighestOfSuit(Iterable<Card> hand, Suit s) {
         Card max = null;
         for (Card c : hand) {
-            if (max == null || (c.Suit == s && c.Value.compareTo(max.Value)>0)) max = c;
+            if (c.Suit == s && (max == null || c.Value.compareTo(max.Value)>0)) max = c;
         }
         return max;
+    }
+
+    public static Card LowestOfSuit(Iterable<Card> hand, Suit s) {
+        Card min = null;
+        for (Card c : hand) {
+            if (min == null || (c.Suit == s && c.Value.compareTo(min.Value)<0)) min = c;
+        }
+        return min;
     }
 
     /**
@@ -93,7 +107,7 @@ public class GameUtils {
         if (!info.GetHand().contains(c)) return false;
         Suit curr = info.CurrentSuit();
         // If this is the start of a round then only the two of clubs is valid
-        if (info.IsStartOfRound()) return c.equals(GameInfo.TWO_OF_CLUBS);
+        if (info.IsStartOfRound()) return c.equals(TWO_OF_CLUBS);
         if (curr == null) {
             // If this is the first card, then either play a card that isn't hearts or hearts must be broken
             return (info.IsHeartsBroken() || c.Suit != Suit.HEARTS || ContainsOnlySuit(info.GetHand(), c.Suit));
@@ -113,7 +127,7 @@ public class GameUtils {
         for (Card c : move.Cards()) {
             if (!info.GetHand().contains(c)) return false;
         }
-        if (move.Cards().get(0) == move.Cards().get(1) || move.Cards().get(0) == move.Cards().get(2) || move.Cards().get(1) == move.Cards().get(2)) return false;
+        if (move.Cards().get(0).equals(move.Cards().get(1)) || move.Cards().get(0).equals(move.Cards().get(2)) || move.Cards().get(1).equals(move.Cards().get(2))) return false;
         return true;
     }
 

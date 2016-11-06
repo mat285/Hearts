@@ -3,6 +3,8 @@ package game;
 import player.RandomPlayer;
 import player.RuleBasedPlayer;
 import test.Assert;
+import java.util.*;
+import card.*;
 
 public class GameTest {
 
@@ -17,10 +19,31 @@ public class GameTest {
             g.Info().PrintDebugInfo();
         }
         System.out.println("Ranking: " + g.Step());
+        List<Integer> places = new ArrayList<>();
+
+        for (int i = 0; i < 4; i++) {
+            places.add(0);
+        }
+
+        for (int i = 0; i < 1000; i++) {
+            g.NewGame();
+            List<ScoredPlayer> rankings = g.RunGame();
+            for (int j = 0; j < rankings.size(); j++) {
+                if (rankings.get(j).Player() instanceof RuleBasedPlayer) places.set(j, places.get(j) + 1);
+            }
+        }
+        System.out.println("Rule based performance: " + places);
     }
 
+    public static void TestHighestOfSuit() {
+        List<Card> hand = new ArrayList<>();
+        hand.add(new Card(Suit.CLUBS, Value.QUEEN));
+        hand.add(new Card(Suit.CLUBS, Value.FOUR));
+        Assert.Equal(GameUtils.HighestOfSuit(hand, Suit.CLUBS), hand.get(0));
+    }
 
     public static void Run() {
+        TestHighestOfSuit();
         Test();
     }
 
