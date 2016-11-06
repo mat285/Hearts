@@ -4,7 +4,9 @@ import card.Card;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -16,30 +18,44 @@ import java.util.Map;
  * Date: 11/3/2016
  * Time: 6:19 PM
  */
-public class CardImage extends JPanel {
+public class CardImage extends JPanel implements Cloneable{
     private static Map<Card, CardImage> _images = new HashMap<>();
     private static CardImage _emptyCard;
 
     private CardImage(Card card) throws IOException {
         super();
         BufferedImage image;
-
+        File file;
         if(card == null) {
-            image = ImageIO.read(this.getClass().getResource("assets/cards/blank.png"));
+            file = new File("src/assets/cards/blank.png");
         }else{
-            image = ImageIO.read(this.getClass().getResource("/assets/cards/"
-                    + card.toString()+".png"));
+            file = new File("src/assets/cards/" + card.toString()+".png");
         }
 
-        JLabel icon = new JLabel(new ImageIcon(image));
+        image = ImageIO.read(file);
+        int scaledWidth = (int) (0.2 * image.getWidth());
+        int scaledHeight = (int) (0.2 * image.getHeight());
+
+        BufferedImage outputImage = new BufferedImage(scaledWidth, scaledHeight, image.getType());
+        Graphics2D g2D = outputImage.createGraphics();
+        g2D.drawImage(image, 0, 0, scaledWidth, scaledHeight, null);
+        g2D.dispose();
+
+
+        JLabel icon = new JLabel(new ImageIcon(outputImage));
         add(icon);
+        //setIcon(new ImageIcon(outputImage));
+
     }
 
 
-    public static CardImage Card(Card card) throws IOException {
+
+
+
+    public static CardImage Card(Card card) throws IOException, CloneNotSupportedException {
         if(_emptyCard == null){ _emptyCard = new CardImage(null);}
 
-        if(card == null){return _emptyCard;}
+        if(card == null){return (CardImage) _emptyCard.clone();}
 
         if(_images.get(card) == null){
             _images.put(card, new CardImage(card));

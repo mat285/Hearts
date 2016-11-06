@@ -1,6 +1,10 @@
 package gui;
 
+import card.Card;
+import card.Suit;
 import card.Trick;
+import card.Value;
+
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
@@ -19,27 +23,46 @@ public class TrickPanel extends JPanel{
     public TrickPanel(){
         super();
         _cards = new CardImage[4];
-        setLayout(new BorderLayout());
+        setLayout(new GridBagLayout());
+        setBorder(BorderFactory.createLineBorder(Color.CYAN));
     }
 
-    public void Update(Trick trick) throws IOException {
+    public void Update(Trick trick) throws Exception {
         removeAll();
-
         _trick = trick;
-        _cards[0] = CardImage.Card(_trick.First());
-        _cards[1] = CardImage.Card(_trick.Second());
-        _cards[2] = CardImage.Card(_trick.Third());
-        _cards[3] = CardImage.Card(_trick.Fourth());
 
-        add(_cards[0], BorderLayout.SOUTH);
-        add(_cards[1], BorderLayout.EAST);
-        add(_cards[2], BorderLayout.NORTH);
-        add(_cards[3], BorderLayout.WEST);
+        //make this the starting player's index
+        int i = 0;
+        _cards[i] = CardImage.Card(_trick.First());
+        i = (i+1) % 4;
+        _cards[i] = CardImage.Card(_trick.Second());
+        i = (i+1) % 4;
+        _cards[i] = CardImage.Card(_trick.Third());
+        i = (i+1) % 4;
+        _cards[i] = CardImage.Card(_trick.Fourth());
 
+        add(_cards[0], 2, 1);
+        add(_cards[1], 1, 0);
+        add(_cards[2], 0, 1);
+        add(_cards[3], 1, 2);
+
+        GridBagConstraints c = new GridBagConstraints();
+        c.gridx = 1;
+        c.gridy = 1;
+        add(new JLabel("Adding " + trick.LastCardAdded()), c);
+
+
+        setPreferredSize(getPreferredSize());
         revalidate();
         repaint();
     }
 
+    private void add(CardImage card, int x, int y){
+        GridBagConstraints c = new GridBagConstraints();
+        c.gridx = x;
+        c.gridy = y;
+        add(card, c);
+    }
 
 
 }
