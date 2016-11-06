@@ -30,7 +30,7 @@ public class GameTest {
             players[i] = new AbstractPlayer() {
                 String name = names[idx];
                 @Override
-                public CardPassMove PassCards() {
+                public CardPassMove PassCards(SealedGameInfo info) {
                     return null;
                 }
 
