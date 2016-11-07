@@ -19,6 +19,10 @@ public class Game {
         NewGame();
     }
 
+    private Game() {
+        _deck = new Deck();
+    }
+
     /**
      * Resets this Game object to start a new game
      */
@@ -107,4 +111,16 @@ public class Game {
         return _state;
     }
 
+    /**
+     * Creates a new game starting the game from the current state
+     * @param info the GameInfo about the game
+     * @param state the current Game state
+     * @return
+     */
+    public static Game StartFromState(GameInfo info, GameState state) {
+        Game g = new Game();
+        g._info = info;
+        g._state = state;
+        return g;
+    }
 }

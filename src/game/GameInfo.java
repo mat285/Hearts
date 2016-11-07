@@ -68,7 +68,7 @@ public final class GameInfo {
      * @param move The move to play
      * @param player The player making the move
      */
-    protected void ExecuteMove(Move move, IPlayer player) {
+    public void ExecuteMove(Move move, IPlayer player) {
         RemoveCardFromPlayersHand(move.Card(), player);
         _currentTrick.Add(move.Card());
         if (move.Card().Suit == Suit.HEARTS) BreakHearts();
@@ -364,6 +364,10 @@ public final class GameInfo {
         return _currentTrick.IsEmpty() && _playerHands.get(CurrentPlayer()).size() == GameUtils.SIZE_OF_HANDS;
     }
 
+    /**
+     * Gets the scores for the current round
+     * @return int[] containing the scores of each player
+     */
     public int[] GetRoundScores() {
         int[] scores = new int[_players.length];
         for (int i = 0; i < _players.length; i++) {
@@ -372,6 +376,10 @@ public final class GameInfo {
         return scores;
     }
 
+    /**
+     * Gets the scores for the current round
+     * @return int[] containing the current game scores
+     */
     public int[] GetGameScores() {
         int[] scores = new int[_players.length];
         for (int i = 0; i < _players.length; i++) {
@@ -380,16 +388,91 @@ public final class GameInfo {
         return scores;
     }
 
+    /**
+     * Seals this GameInfo off in order to give players only the information they need
+     * @param player the player this SealedGameInfo goes too
+     * @return A SealedGameInfo for this player
+     */
     public SealedGameInfo Seal(IPlayer player) {
-        return new SealedGameInfo(CurrentTrick(),GetRoundScores(), GetGameScores(), IsHeartsBroken(), RoundNumber(), isStartOfRound(), new HashSet<>(_playerHands.get(player)), RemainingCards());
+        return new SealedGameInfo(CurrentTrick(),
+                GetRoundScores(),
+                GetGameScores(),
+                IsHeartsBroken(),
+                RoundNumber(),
+                isStartOfRound(),
+                new HashSet<>(_playerHands.get(player)),
+                RemainingCards(),
+                DistributionOfCards());
     }
 
+    /**
+     * Gets the remaining cards in this hand
+     * @return the cards remaining in the game
+     */
     public Set<Card> RemainingCards() {
         Set<Card> remaining = new HashSet<>();
         for (IPlayer p : _players) {
             remaining.addAll(_playerHands.get(p));
         }
         return remaining;
+    }
+
+    public int[] DistributionOfCards() {
+        int[] d = new int[_players.length];
+        for (int i = 0; i < _players.length; i++) {
+            d[i] = _playerHands.get(_players[i]).size();
+        }
+        return d;
+    }
+
+    /**
+     * Sets up a new GameInfo from the SealedGameInfo by distributing the remaining cards randomly amongst the players
+     * other than the current player
+     * @param info The sealed game info to parse into a game info
+     * @param players the players to set into the game
+     * @param currentPlayer the current requesting player
+     * @return a new GameInfo with the cards unknown to the player distributed randomly
+     */
+    public static GameInfo DistributeRandomly(SealedGameInfo info, IPlayer[] players, int currentPlayer) {
+        GameInfo g = new GameInfo(players); //Create a game info for the players
+        g._currentTrick = info.CurrentTrick(); // Set the current trick
+        g._heartsBroken = info.IsHeartsBroken(); // Set whether hearts is broken
+        g._roundNumber = info.RoundNumber(); // Set the round number
+        g._currentPlayer = currentPlayer; // Set current player
+
+        // Do weird stuff to figure out which player played what card
+        g._plays = new HashMap<>();
+        List<Card> trick = info.CurrentTrick().AllCards();
+        for (int i = 0; i < trick.size(); i++) {
+           g._plays.put(trick.get(i), players[(currentPlayer-trick.size()-i) % players.length]); //No idea if this works
+        }
+        // Set the round and game scores
+        int[] rs = info.RoundScore();
+        int[] gs = info.GameScores();
+        for (int i = 0; i < players.length; i++) {
+            g._scores.put(players[i], gs[i]);
+            g._roundScore.put(players[i], rs[i]);
+        }
+        // Distribute the remaining cards randomly among the other players
+        Set<Card> remaining = info.RemainingCards();
+        remaining.removeAll(info.GetHand());
+        List<Card> cards = new ArrayList<>(remaining);
+        Collections.shuffle(cards);
+        int[] distribution = info.CardDistribution();
+        for (int i = 0; i < players.length; i++) {
+            if (i == currentPlayer) g._playerHands.put(players[i], info.GetHand());
+            else g._playerHands.put(players[i],new HashSet<Card>());
+        }
+        int index = 0;
+        for (int i = 0; i < distribution.length; i++) {
+            if (i != currentPlayer) {
+                for (int j = 0; j < distribution[i]; j++) {
+                    g._playerHands.get(players[i]).add(cards.get(index+j));
+                }
+                index += distribution[i];
+            }
+        }
+        return g;
     }
 
     public void SanityCheck() {
