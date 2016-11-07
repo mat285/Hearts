@@ -21,9 +21,12 @@ import java.util.Map;
 public class CardImage extends JPanel implements Cloneable{
     private static Map<Card, CardImage> _images = new HashMap<>();
     private static CardImage _emptyCard;
+    private Card _card;
 
     private CardImage(Card card) throws IOException {
         super();
+
+        _card = card;
         BufferedImage image;
         File file;
         if(card == null) {
@@ -44,6 +47,8 @@ public class CardImage extends JPanel implements Cloneable{
 
         JLabel icon = new JLabel(new ImageIcon(outputImage));
         add(icon);
+
+        setBounds(0,0,scaledWidth, scaledHeight);
         //setIcon(new ImageIcon(outputImage));
 
     }
@@ -62,6 +67,11 @@ public class CardImage extends JPanel implements Cloneable{
         }
         return _images.get(card);
 
+    }
+
+    public String toString(){
+        if(_card == null) return "blank";
+        return _card.toString();
     }
 
 

@@ -4,6 +4,7 @@ import card.Card;
 import card.Suit;
 import card.Value;
 import game.*;
+import player.RuleBasedPlayer;
 
 import javax.swing.*;
 import java.awt.*;
@@ -38,32 +39,7 @@ public class HeartsFrame extends JFrame {
         _players = new IPlayer[4];
         _playerPanels = new PlayerPanel[4];
         for(int i = 0; i < _playerPanels.length; i++){
-            _players[i] = new IPlayer() {
-                @Override
-                public void Initialize(int id) {
-
-                }
-
-                @Override
-                public void StartRound(Card[] hand) {
-
-                }
-
-                @Override
-                public CardPassMove PassCards() {
-                    return null;
-                }
-
-                @Override
-                public void ReceiveCards(CardPassMove old, CardPassMove get) {
-
-                }
-
-                @Override
-                public Move Play(GameInfo state) {
-                    return null;
-                }
-            };
+            _players[i] = new RuleBasedPlayer();
         }
         _playerPanels[0] = new PlayerPanel("South", _players[0], BoxLayout.X_AXIS);
         _playerPanels[1] = new PlayerPanel("West", _players[1], BoxLayout.Y_AXIS);
@@ -75,6 +51,10 @@ public class HeartsFrame extends JFrame {
         add(_playerPanels[1], BorderLayout.WEST);
         add(_playerPanels[2], BorderLayout.NORTH);
         add(_playerPanels[3], BorderLayout.EAST);
+    }
+
+    private void add(Component component, int x, int y){
+
     }
 
     public void RunGame() throws Exception {
@@ -138,14 +118,14 @@ public class HeartsFrame extends JFrame {
 
 
         while(_game.State() != GameState.GAME_OVER){
-            Thread.sleep(500);
+            Thread.sleep(1000);
             switch (_game.State()){
                 case START_ROUND:
                     _game.Step();
                     for(PlayerPanel panel : _playerPanels){
                         panel.UpdateHand(info.HandOfPlayer(panel.Player()));
                     }
-                    _trickPanel.Update(info.CurrentTrick());
+                    _trickPanel.Update(info.CurrentTrick(), 0);
 
                     break;
                 case PASS_CARDS:
@@ -159,14 +139,14 @@ public class HeartsFrame extends JFrame {
                     for(PlayerPanel panel : _playerPanels){
                         panel.UpdateHand(info.HandOfPlayer(panel.Player()));
                     }
-                    _trickPanel.Update(info.CurrentTrick());
+                    _trickPanel.Update(info.CurrentTrick(), info.PlayerStartingTrick());
 
                     break;
                 case END_TRICK:
                     _game.Step();
-                    _trickPanel.Update(info.CurrentTrick());
+                    _trickPanel.Update(info.CurrentTrick(), 0);
                     for(int i = 0; i < _players.length; i++){
-                        _playerPanels[i].UpdateScore(info.ScoreOfPlayer(_players[i]));
+                        _playerPanels[i].UpdateScore(info.GetRoundScores()[i]);
                     }
                     break;
 

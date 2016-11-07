@@ -167,8 +167,12 @@ public final class GameInfo {
      * Gets the player that started the current trick
      * @return The player starting the current trick
      */
-    public IPlayer PlayerStartingTrick() {
-        return _currentTrick.IsEmpty() ? CurrentPlayer() : _plays.get(_currentTrick.First());
+    public int PlayerStartingTrick() {
+        IPlayer player =  _currentTrick.IsEmpty() ? CurrentPlayer() : _plays.get(_currentTrick.First());
+        for(int i = 0; i < _players.length; i++){
+            if(_players[i] == player) return i;
+        }
+        return -1;
     }
 
     /**
@@ -211,6 +215,8 @@ public final class GameInfo {
     public Card LastCardPlayed() {
         return _currentTrick.LastCardAdded();
     }
+
+
 
     /**
      * Sets HeartsBroken to True

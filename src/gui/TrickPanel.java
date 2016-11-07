@@ -8,6 +8,8 @@ import card.Value;
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * TBD
@@ -27,12 +29,12 @@ public class TrickPanel extends JPanel{
         setBorder(BorderFactory.createLineBorder(Color.CYAN));
     }
 
-    public void Update(Trick trick) throws Exception {
+    public void Update(Trick trick, int start) throws Exception {
         removeAll();
         _trick = trick;
 
         //make this the starting player's index
-        int i = 0;
+        int i = start % 4;
         _cards[i] = CardImage.Card(_trick.First());
         i = (i+1) % 4;
         _cards[i] = CardImage.Card(_trick.Second());
@@ -41,16 +43,10 @@ public class TrickPanel extends JPanel{
         i = (i+1) % 4;
         _cards[i] = CardImage.Card(_trick.Fourth());
 
-        add(_cards[0], 2, 1);
-        add(_cards[1], 1, 0);
-        add(_cards[2], 0, 1);
-        add(_cards[3], 1, 2);
-
-        GridBagConstraints c = new GridBagConstraints();
-        c.gridx = 1;
-        c.gridy = 1;
-        add(new JLabel("Adding " + trick.LastCardAdded()), c);
-
+        add(_cards[0], 1, 2);
+        add(_cards[1], 0, 1);
+        add(_cards[2], 1, 0);
+        add(_cards[3], 2, 1);
 
         setPreferredSize(getPreferredSize());
         revalidate();
