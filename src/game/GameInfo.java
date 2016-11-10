@@ -447,6 +447,7 @@ public final class GameInfo {
            g._plays.put(trick.get(i), players[(currentPlayer-trick.size()-i) % players.length]); //No idea if this works
         }
         // Set the round and game scores
+        g._roundScore = new HashMap<>();
         int[] rs = info.RoundScore();
         int[] gs = info.GameScores();
         for (int i = 0; i < players.length; i++) {

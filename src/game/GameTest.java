@@ -1,5 +1,6 @@
 package game;
 
+import ai.AIPlayer;
 import player.RandomPlayer;
 import player.RuleBasedPlayer;
 import player.TerminalPlayer;
@@ -57,8 +58,8 @@ public class GameTest {
     public static IPlayer[] getPlayers() {
         IPlayer[] players = new IPlayer[4];
         for (int i = 0; i < players.length; i++) {
-            if (i == 0) players[i] = new RuleBasedPlayer();
-            if (i == 1) players[i] = new TerminalPlayer();
+            if (i == 0) players[i] = new AIPlayer();
+            //if (i == 1) players[i] = new TerminalPlayer();
             else players[i] = new RandomPlayer();
         }
         return players;
