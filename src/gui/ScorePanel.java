@@ -43,5 +43,9 @@ public class ScorePanel extends JPanel{
         repaint();
     }
 
+    public void ClearScores(){
+        _rowData = new Vector<>();
+    }
+
 
 }
