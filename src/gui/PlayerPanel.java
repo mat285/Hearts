@@ -13,18 +13,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PlayerPanel extends JPanel {
-    private IPlayer _player;
+    private final String[] DEFAULT_NAMES = new String[]{"South","West","North","East"};
+    private int _id;
     private HandPanel _hand;
     private JLabel _name;
     private JLabel _score;
-    private static final Dimension VERT_DIMENSION = new Dimension(200,1000);
-    private static final Dimension HORI_DIMENSION = new Dimension(1000,200);
+    private static final Dimension VERT_DIMENSION = new Dimension(300,1000);
+    private static final Dimension HORI_DIMENSION = new Dimension(1000,300);
     private static final Font DEFAULT_FONT = new Font("Serif", Font.BOLD, 20);
 
 
-    public PlayerPanel(String name, IPlayer player, int orientation){
-        _player = player;
-
+    public PlayerPanel(String name, int id, int orientation){
+        assert(id > 0 && id < 4);
+        _id = id;
         _name = new JLabel(name);
         _score = new JLabel("0");
 
@@ -41,13 +42,17 @@ public class PlayerPanel extends JPanel {
         _score.setFont(DEFAULT_FONT);
         add(_name);
         add(_score);
-
-
     }
 
+    public PlayerPanel(int id, int orientation){
+        this("", id, orientation);
+        SetName(DEFAULT_NAMES[id]);
+    }
 
-    public IPlayer Player(){return _player;}
+    public int Id(){return _id;}
 
+    public String Name(){return _name.getText();}
+    public void SetName(String name){_name.setText(name);}
 
     public void UpdateHand(List<Card> hand) throws Exception {
         assert _hand != null;
@@ -66,7 +71,6 @@ public class PlayerPanel extends JPanel {
 
     public void UpdateScore(int score) throws Exception{
         _score.setText(score + "");
-        _score.paintImmediately(_score.getVisibleRect());
     }
 
     private class HandPanel extends JLayeredPane{
@@ -100,7 +104,7 @@ public class PlayerPanel extends JPanel {
             Point start = new Point(_origin);
             for(int i = 0; i < hand.size(); i++){
                 CardImage card = CardImage.Card(hand.get(i));
-                card.setBounds(start.x, start.y, card.getWidth(), card.getHeight());
+                card.setBounds(start.x, start.y, card.getWidth(), card.getHeight()+10);
                 //card.setBorder(BorderFactory.createLineBorder(Color.red, 10));
                 _cards.add(card);
                 add(card, new Integer(i));

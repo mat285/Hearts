@@ -36,8 +36,8 @@ public class CardImage extends JPanel implements Cloneable{
         }
 
         image = ImageIO.read(file);
-        int scaledWidth = (int) (0.2 * image.getWidth());
-        int scaledHeight = (int) (0.2 * image.getHeight());
+        int scaledWidth = (int) (0.35 * image.getWidth());
+        int scaledHeight = (int) (0.35 * image.getHeight());
 
         BufferedImage outputImage = new BufferedImage(scaledWidth, scaledHeight, image.getType());
         Graphics2D g2D = outputImage.createGraphics();
