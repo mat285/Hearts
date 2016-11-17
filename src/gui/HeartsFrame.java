@@ -68,6 +68,7 @@ public class HeartsFrame extends JFrame {
 
     private void switchMode(Mode mode){
         remove(_currentboard);
+
         switch (mode){
             case HOME:
                 break;
@@ -124,6 +125,7 @@ public class HeartsFrame extends JFrame {
             case END_ROUND:
                 _game.Step();
                 _scorePanel.AddRoundScores(info.RoundNumber(), info.GetRoundScores());
+                System.out.println(_scorePanel);
                 switchMode(Mode.SCORE);
                 break;
             case GAME_OVER:

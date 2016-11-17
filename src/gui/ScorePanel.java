@@ -47,5 +47,20 @@ public class ScorePanel extends JPanel{
         _rowData = new Vector<>();
     }
 
+    @Override
+    public String toString(){
+        String s = "";
+        for(String h : _colNames){
+            s += h + "\t";
+        }
+        for(Vector row : _rowData){
+            s += "\n";
+            for(Object r : row){
+                s += r + "\t";
+            }
+        }
+        return s;
+    }
+
 
 }
