@@ -160,8 +160,14 @@ public final class GameInfo {
      * @return The currently playing player
      */
     public IPlayer CurrentPlayer() {
-        return _players[_currentPlayer];
+        return _players[CurrentPlayerNumber()];
     }
+
+    /**
+     * Gets the number of the player whose turn it is;
+     * @return The number of the current player
+     */
+    public int CurrentPlayerNumber() { return _currentPlayer; }
 
     /**
      * Gets the player that started the current trick
@@ -417,12 +423,59 @@ public final class GameInfo {
         return remaining;
     }
 
+    /**
+     * Gets the distribution of cards in the game
+     * @return array containing the size of the hands of the players
+     */
     public int[] DistributionOfCards() {
         int[] d = new int[_players.length];
         for (int i = 0; i < _players.length; i++) {
             d[i] = _playerHands.get(_players[i]).size();
         }
         return d;
+    }
+
+    /**
+     * Copies the GameInfo object for use
+     * @return a deep copy of this GameInfo object
+     */
+    public GameInfo Clone() {
+        GameInfo g = new GameInfo(_players);
+        g._currentPlayer = _currentPlayer;
+        g._heartsBroken = _heartsBroken;
+        g._currentTrick = CurrentTrick();
+        g._roundScore = _roundScore;
+        g._passDirection = PassDirection();
+        g._playerHands = cloneHands();
+        g._roundScore = cloneScores(_roundScore);
+        g._scores = cloneScores(_scores);
+        return g;
+    }
+
+    /**
+     * Copies the hands of the players
+     * @return the cloned hands of the players
+     */
+    private Map<IPlayer,Set<Card>> cloneHands() {
+        Map<IPlayer, Set<Card>> hands = new HashMap<>();
+        for (Map.Entry<IPlayer,Set<Card>> entry : _playerHands.entrySet()) {
+            Set<Card> h = new HashSet<>(entry.getValue());
+            hands.put(entry.getKey(), h);
+        }
+        return hands;
+    }
+
+    /**
+     * Clones the map of scores
+     * @param scs the score map
+     * @return the copied map
+     */
+    private Map<IPlayer,Integer> cloneScores(Map<IPlayer,Integer> scs) {
+        Map<IPlayer,Integer> map = new HashMap<>();
+        for (Map.Entry<IPlayer, Integer> entry : scs.entrySet()) {
+            map.put(entry.getKey(), entry.getValue());
+        }
+        return map;
     }
 
     /**
@@ -444,7 +497,7 @@ public final class GameInfo {
         g._plays = new HashMap<>();
         List<Card> trick = info.CurrentTrick().AllCards();
         for (int i = 0; i < trick.size(); i++) {
-           g._plays.put(trick.get(i), players[(currentPlayer-trick.size()-i) % players.length]); //No idea if this works
+           g._plays.put(trick.get(i), players[(((currentPlayer-i-1) % players.length) + players.length) % players.length]); //No idea if this works
         }
         // Set the round and game scores
         g._roundScore = new HashMap<>();
@@ -481,7 +534,9 @@ public final class GameInfo {
         Set<Card> hand1 = _playerHands.get(_players[1]);
         Set<Card> hand2 = _playerHands.get(_players[2]);
         Set<Card> hand3 = _playerHands.get(_players[3]);
-        if (hand0.size() != hand1.size() || hand1.size() != hand2.size() || hand2.size() != hand3.size()) throw new RuntimeException();
+        if (hand0.size() != hand1.size() || hand1.size() != hand2.size() || hand2.size() != hand3.size()) {
+            throw new RuntimeException();
+        }
     }
 
     public void PrintCardPass(CardPassMove[] moves) {
