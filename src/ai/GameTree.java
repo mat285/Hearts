@@ -15,10 +15,11 @@ public class GameTree {
         _info = info;
         if (depth < 1) return;
         List<Move> moves = GameUtils.GetAllValidMoves(_info.Info());
-        List<GameTree> children = new ArrayList<>();
+        if (moves.size() == 1) depth = 0;
+        _children = new ArrayList<>();
         for (Move m : moves) {
             GameTree child = new GameTree(info.PlayMove(m), depth-1,m);
-            children.add(child);
+            _children.add(child);
         }
     }
 
@@ -46,9 +47,15 @@ public class GameTree {
     }
 
     public Move BestMove() {
+        if (_children == null) return null;
         for (GameTree child : _children) {
             if (child._values.equals(this._values)) return child._move;
         }
         return null;
+    }
+
+    public Move BestMove(HeuristicFunction fn) {
+        Minimax(fn);
+        return BestMove();
     }
 }

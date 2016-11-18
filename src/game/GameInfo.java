@@ -1,6 +1,8 @@
 package game;
 
 import card.*;
+import sun.security.x509.IPAddressName;
+
 import java.util.*;
 
 public final class GameInfo {
@@ -56,10 +58,17 @@ public final class GameInfo {
     /**
      * Calls the play move on the current player, validates and then executes the move
      */
-    protected void NextPlayerPlay() {
+    public void NextPlayerPlay() {
         Move move = CurrentPlayer().Play(Seal(CurrentPlayer()));
         if (!GameUtils.ValidateMove(move, Seal(CurrentPlayer()))) move = GameUtils.RandomMove(Seal(CurrentPlayer()));
         ExecuteMove(move, CurrentPlayer());
+        NextPlayer();
+    }
+
+    /**
+     * Sets the current player to the next player
+     */
+    public void NextPlayer() {
         _currentPlayer = (_currentPlayer+1) % _players.length;
     }
 
@@ -78,7 +87,7 @@ public final class GameInfo {
     /**
      * Initializes the next trick and scores the winner of the current trick
      */
-    protected void NextTrick() {
+    public void NextTrick() {
         Card high = _currentTrick.Highest();
         IPlayer winner = _plays.get(high);
         int newScore = _roundScore.get(winner) + _currentTrick.Points();
@@ -278,7 +287,7 @@ public final class GameInfo {
         IPlayer pj = _players[j];
         _playerHands.get(pi).removeAll(ci.Cards());
         _playerHands.get(pj).addAll(ci.Cards());
-        pj.ReceiveCards(cj,ci);
+        pj.ReceiveCards(cj, ci);
     }
 
     /**
@@ -449,6 +458,7 @@ public final class GameInfo {
         g._playerHands = cloneHands();
         g._roundScore = cloneScores(_roundScore);
         g._scores = cloneScores(_scores);
+        g._plays = clonePlays();
         return g;
     }
 
@@ -473,6 +483,14 @@ public final class GameInfo {
     private Map<IPlayer,Integer> cloneScores(Map<IPlayer,Integer> scs) {
         Map<IPlayer,Integer> map = new HashMap<>();
         for (Map.Entry<IPlayer, Integer> entry : scs.entrySet()) {
+            map.put(entry.getKey(), entry.getValue());
+        }
+        return map;
+    }
+
+    private Map<Card, IPlayer> clonePlays() {
+        Map<Card, IPlayer> map = new HashMap<>();
+        for (Map.Entry<Card, IPlayer> entry : _plays.entrySet()) {
             map.put(entry.getKey(), entry.getValue());
         }
         return map;

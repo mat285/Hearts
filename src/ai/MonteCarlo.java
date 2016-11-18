@@ -1,38 +1,29 @@
 package ai;
 
 import game.*;
-import card.*;
 
-import java.util.List;
+import java.util.*;
 
 public class MonteCarlo {
 
     public static Move Simulate(SealedGameInfo info, IPlayer[] players, int currentPlayer, HeuristicFunction fn) {
-        GameInfo g = GameInfo.DistributeRandomly(info,players,currentPlayer);
-        List<Move> valid = GameUtils.GetAllValidMoves(info);
-        double min = 100;
-        Move minCard = null;
-        for (Move m : valid) {
-            double score = simulateMove(g, m, fn);
-            if (score < min) {
-                minCard = m;
-                min = score;
-            }
-        }
-        return minCard;
+        return Simulate(info,players,currentPlayer,fn,20,8);
     }
 
-    private static double simulateMove(GameInfo info, Move m, HeuristicFunction fn) {
-        IPlayer current = info.CurrentPlayer();
-        info.ExecuteMove(m,info.CurrentPlayer());
-        if (info.IsRoundOver()); // return the evaluation here i guess
-        GameState state = GameState.PLAYER_TURN;
-        if (info.IsTrickDone()) state = GameState.END_TRICK;
-        Game g = Game.StartFromState(info, state);
-        List<ScoredPlayer> ranking = g.RunGame();
-        for (ScoredPlayer p : ranking) {
-            if (p.Player() == current) return p.Score();
+    public static Move Simulate(SealedGameInfo info, IPlayer[] players, int currentPlayer, HeuristicFunction fn, int times, int depth) {
+        if (times < 1 || depth < 1) return null;
+        Map<Move,Integer> map = new HashMap<>();
+        Move max = null;
+        for (int i = 0; i < times; i++) {
+            GameInfo g = GameInfo.DistributeRandomly(info, players, currentPlayer);
+            GameTree tree = new GameTree(new GameTreeInfo(g), depth);
+            Move m = tree.BestMove(fn);
+            if (!map.containsKey(m)) map.put(m,0);
+            map.put(m,map.get(m)+1);
+            if (max == null || map.get(max) < map.get(m)) max = m;
         }
-        return 100;
+        System.out.println(map.get(max));
+        return max;
     }
+
 }

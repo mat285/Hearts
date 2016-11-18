@@ -29,7 +29,7 @@ public class GameTest {
             places.add(0.0);
         }
 
-        int trials = 1000;
+        int trials = 10;
         for (int i = 0; i < trials; i++) {
             g.NewGame();
             List<ScoredPlayer> rankings = g.RunGame();
