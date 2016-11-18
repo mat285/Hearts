@@ -15,6 +15,7 @@ public class HeartsFrame extends JFrame {
     private JPanel _gameboard;
     private JPanel _scoreboard;
     private JPanel _currentboard;
+    private JMenuBar _menu;
 
     private Game _game;
 
@@ -29,7 +30,11 @@ public class HeartsFrame extends JFrame {
         setVisible(true);
     }
 
+
+
     private void init(){
+        _menu = new JMenuBar();
+        add(_menu);
 
         _gameboard = new JPanel();
         _scoreboard = new JPanel();
