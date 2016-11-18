@@ -35,7 +35,6 @@ public class GameTree {
             _values = fn.Evaluate(_info.Info());
             return;
         }
-        int size = _children.size();
         for (GameTree child : _children) {
             child.Minimax(fn, depth-1);
         }
@@ -51,6 +50,7 @@ public class GameTree {
 
     private Move bestMove() {
         if (_children == null) return null;
+        Collections.shuffle(_children);
         for (GameTree child : _children) {
             if (child._values.equals(this._values)) return child._move;
         }

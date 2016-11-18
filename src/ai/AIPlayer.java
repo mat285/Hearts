@@ -1,29 +1,26 @@
 package ai;
 
 import game.*;
-import player.RandomPlayer;
+import player.*;
 
 public class AIPlayer extends AbstractPlayer implements IPlayer {
+
+    private RuleBasedPlayer _rule;
+
+    public AIPlayer() {
+        super();
+        _rule = new RuleBasedPlayer();
+    }
+
     @Override
     public CardPassMove PassCards(SealedGameInfo info) {
-        return GameUtils.RandomCardPass(info);
+        return _rule.PassCards(info);
     }
 
     @Override
     public Move Play(SealedGameInfo info) {
-        Move m = MonteCarlo.Simulate(info,getPlayers(),ID(),getHeuristic());
-        System.out.println(GameUtils.ValidateMove(m,info));
-        System.out.println(m);
+        Move m = MonteCarlo.Simulate(info, ID(),getHeuristic());
         return m;
-    }
-
-    private IPlayer[] getPlayers() {
-        IPlayer[] players = new IPlayer[4];
-        for (int i = 0; i < players.length; i++) {
-            if (i == ID()) players[i] = this;
-            else players[i] = new RandomPlayer();
-        }
-        return players;
     }
 
     private HeuristicFunction getHeuristic() {
@@ -38,5 +35,9 @@ public class AIPlayer extends AbstractPlayer implements IPlayer {
                 return v;
             }
         };
+    }
+
+    public String toString() {
+        return super.toString() + " (AI)";
     }
 }
