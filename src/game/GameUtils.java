@@ -81,7 +81,7 @@ public class GameUtils {
      * @return true iff this player can make this move
      */
     public static boolean ValidateMove(Move move, SealedGameInfo info) {
-        return IsCardValid(move.Card(), info);
+        return move != null && IsCardValid(move.Card(), info);
     }
 
     /**
