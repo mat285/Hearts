@@ -20,4 +20,6 @@ public class Move {
     public int hashCode() {
         return Card().hashCode();
     }
+
+    public String toString() { return "Move: " + _card.toString(); }
 }
