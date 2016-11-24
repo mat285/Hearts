@@ -1,9 +1,9 @@
 package game;
 
-import ai.AIPlayer;
+import ai.FirstAIPlayer;
+import ai.SecondAIPlayer;
 import player.RandomPlayer;
 import player.RuleBasedPlayer;
-import player.TerminalPlayer;
 import test.Assert;
 import java.util.*;
 import card.*;
@@ -58,8 +58,9 @@ public class GameTest {
     public static IPlayer[] getPlayers() {
         IPlayer[] players = new IPlayer[4];
         for (int i = 0; i < players.length; i++) {
-            if (i == 0) players[i] = new AIPlayer();
-            else if (i == 1) players[i] = new RuleBasedPlayer();
+            if (i == 0) players[i] = new FirstAIPlayer();
+            else if (i == 1) players[i] = new SecondAIPlayer();
+            else if (i == 2) players[i] = new RuleBasedPlayer();
             else players[i] = new RandomPlayer();
         }
         return players;

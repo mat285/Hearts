@@ -7,9 +7,8 @@ import java.util.*;
 
 public class MonteCarlo {
 
-    public static Move Simulate(SealedGameInfo info, int currentPlayer, HeuristicFunction fn) {
-        return Simulate(info,currentPlayer,fn,20,5);
-    }
+    public static final int DEFAULT_SEARCH_DEPTH = 5;
+    public static final int DEFAULT_NUMBER_SIMULATIONS = 22;
 
     /**
      * Simulates many games and picks the move that won most of them by distributing the remaining cards randomly and
@@ -33,7 +32,6 @@ public class MonteCarlo {
             map.put(m,map.get(m)+1);
             if (max == null || map.get(max) < map.get(m)) max = m;
         }
-        System.out.println(map.get(max));
         return max;
     }
 
