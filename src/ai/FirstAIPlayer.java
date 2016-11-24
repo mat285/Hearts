@@ -21,8 +21,8 @@ public class FirstAIPlayer extends AbstractAIPlayer implements IPlayer {
     }
 
     @Override
-    public int SearchDepth(SealedGameInfo info) {
-        return MonteCarlo.DEFAULT_SEARCH_DEPTH;
+    public ExpansionFunction GetExpansionFunction(SealedGameInfo info) {
+        return DepthLimitedExpansionFunction(MonteCarlo.DEFAULT_SEARCH_DEPTH);
     }
 
     @Override

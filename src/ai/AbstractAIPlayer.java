@@ -21,12 +21,31 @@ public abstract class AbstractAIPlayer extends AbstractPlayer implements IPlayer
 
     @Override
     public Move Play(SealedGameInfo info) {
-        Move m = MonteCarlo.Simulate(info, ID(),GetHeuristic(info), NumberOfSimulations(info), SearchDepth(info));
+        Move m = MonteCarlo.Simulate(info, ID(),GetHeuristic(info), GetExpansionFunction(info), NumberOfSimulations(info));
         return m;
     }
+    /**
+     * Creates an expansion function that stops search after the specified depth
+     * @param depth the depth to halt search after
+     * @return an expansion function limiting depth of the search tree
+     */
+    public ExpansionFunction DepthLimitedExpansionFunction(final int depth) {
+        return new ExpansionFunction() {
+            @Override
+            public boolean ExpandMove(Move m, SealedGameInfo info) {
+                return true;
+            }
+
+            @Override
+            public boolean DepthLimit(int d) {
+                return d == depth;
+            }
+        };
+    }
+
 
     public abstract HeuristicFunction GetHeuristic(SealedGameInfo info);
-    public abstract int SearchDepth(SealedGameInfo info);
+    public abstract ExpansionFunction GetExpansionFunction(SealedGameInfo info);
     public abstract int NumberOfSimulations(SealedGameInfo info);
 
     public String toString() {

@@ -1,6 +1,9 @@
 package ai;
 
+import card.*;
 import game.*;
+import player.RuleBasedPlayer;
+import java.util.*;
 
 public class SecondAIPlayer extends AbstractAIPlayer implements IPlayer {
 
@@ -19,8 +22,26 @@ public class SecondAIPlayer extends AbstractAIPlayer implements IPlayer {
     }
 
     @Override
-    public int SearchDepth(SealedGameInfo info) {
-        return MonteCarlo.DEFAULT_SEARCH_DEPTH+1;
+    public ExpansionFunction GetExpansionFunction(SealedGameInfo info) {
+        return new ExpansionFunction() {
+            @Override
+            public boolean ExpandMove(Move m, SealedGameInfo info) {
+                RuleBasedPlayer r = RulePlayer();
+                SealedGameInfo s = info.Clone();
+                for (int i = 0; i < 2; i++) {
+                    Move b = r.Play(s);
+                    if (b == null) return true;
+                    if (b.equals(m)) return true;
+                    s.GetHand().remove(b.Card());
+                }
+                return false;
+            }
+
+            @Override
+            public boolean DepthLimit(int depth) {
+                return depth > 8;
+            }
+        };
     }
 
     @Override

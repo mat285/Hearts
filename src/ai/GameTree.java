@@ -16,27 +16,28 @@ public class GameTree {
         _move = move;
     }
 
-    public void Expand() {
+    public void Expand(ExpansionFunction exp) {
         List<Move> moves = GameUtils.GetAllValidMoves(_info.Info());
         _children = new ArrayList<>();
         for (Move m : moves) {
+            if (!exp.ExpandMove(m,_info.Info())) continue;
             GameTree child = new GameTree(_info.PlayMove(m),m);
             _children.add(child);
         }
     }
 
-    public void Minimax(HeuristicFunction fn, int depth) {
-        if (depth == 0) {
+    public void Minimax(HeuristicFunction fn, ExpansionFunction exp, int depth) {
+        if (exp.DepthLimit(depth)) {
             _values = fn.Evaluate(_info.Info());
             return;
         }
-        Expand();
+        Expand(exp);
         if (_children == null || _children.size() < 1) {
             _values = fn.Evaluate(_info.Info());
             return;
         }
         for (GameTree child : _children) {
-            child.Minimax(fn, depth-1);
+            child.Minimax(fn, exp, depth+1);
         }
         GameTree max = _children.get(0);
         for (int i = 1; i < _children.size(); i++) {
@@ -57,8 +58,8 @@ public class GameTree {
         return null;
     }
 
-    public Move BestMove(HeuristicFunction fn, int depth) {
-        Minimax(fn, depth);
+    public Move BestMove(HeuristicFunction fn, ExpansionFunction exp) {
+        Minimax(fn, exp, 0);
         return bestMove();
     }
 }

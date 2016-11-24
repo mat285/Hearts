@@ -64,4 +64,10 @@ public class SealedGameInfo {
     public Set<Card> RemainingCards() { return _remaining; }
 
     public int[] CardDistribution() { return _cardDistribution; }
+
+    public SealedGameInfo Clone() {
+        Set<Card> hand = new HashSet<>(_hand);
+        Set<Card> remaining = new HashSet<>(_remaining);
+        return new SealedGameInfo(CurrentTrick(), RoundScore(), GameScores(),IsHeartsBroken(), RoundNumber(),IsStartOfRound(),hand, remaining, CardDistribution());
+    }
 }

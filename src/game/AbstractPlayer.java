@@ -2,6 +2,8 @@ package game;
 
 
 import java.util.*;
+
+import ai.AbstractAIPlayer;
 import card.*;
 
 public abstract class AbstractPlayer implements IPlayer {
@@ -10,13 +12,8 @@ public abstract class AbstractPlayer implements IPlayer {
     private String _name;
 
     private static final String[] _names = {"Michael", "Elaine", "Chase", "Alex"};
-    private static int _index = 0;
 
-    public AbstractPlayer() {
-        this(_names[_index % _names.length]);
-        _index++;
-        _index = _index % _names.length;
-    }
+    public AbstractPlayer(){}
 
     public AbstractPlayer(String name) {
         _name = name;
@@ -24,6 +21,7 @@ public abstract class AbstractPlayer implements IPlayer {
 
     public @Override void Initialize(int id) {
         _id = id;
+        _name = _names[_id];
     }
 
     public int ID() {
