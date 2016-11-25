@@ -1,9 +1,7 @@
 package ai;
 
-import card.*;
 import game.*;
 import player.RuleBasedPlayer;
-import java.util.*;
 
 public class SecondAIPlayer extends AbstractAIPlayer implements IPlayer {
 
@@ -39,7 +37,7 @@ public class SecondAIPlayer extends AbstractAIPlayer implements IPlayer {
 
             @Override
             public boolean DepthLimit(int depth) {
-                return depth > 8;
+                return depth > 12;
             }
         };
     }

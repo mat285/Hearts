@@ -25,14 +25,14 @@ public class GameTest {
         System.out.println("Ranking: " + g.Step());
 
         System.out.println("Total execution time: " + (System.currentTimeMillis() - startTime)/1000.0 + "s");
-        System.exit(0);
+        //System.exit(0);
         List<Double> places = new ArrayList<>();
 
         for (int i = 0; i < 4; i++) {
             places.add(0.0);
         }
 
-        int trials = 1000;
+        int trials = 20;
 
         for (int i = 0; i < trials; i++) {
             g.NewGame();
