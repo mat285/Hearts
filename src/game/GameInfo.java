@@ -1,6 +1,8 @@
 package game;
 
 import card.*;
+import sun.security.x509.IPAddressName;
+
 import java.util.*;
 
 public final class GameInfo {
@@ -56,10 +58,17 @@ public final class GameInfo {
     /**
      * Calls the play move on the current player, validates and then executes the move
      */
-    protected void NextPlayerPlay() {
+    public void NextPlayerPlay() {
         Move move = CurrentPlayer().Play(Seal(CurrentPlayer()));
         if (!GameUtils.ValidateMove(move, Seal(CurrentPlayer()))) move = GameUtils.RandomMove(Seal(CurrentPlayer()));
         ExecuteMove(move, CurrentPlayer());
+        NextPlayer();
+    }
+
+    /**
+     * Sets the current player to the next player
+     */
+    public void NextPlayer() {
         _currentPlayer = (_currentPlayer+1) % _players.length;
     }
 
@@ -68,7 +77,7 @@ public final class GameInfo {
      * @param move The move to play
      * @param player The player making the move
      */
-    protected void ExecuteMove(Move move, IPlayer player) {
+    public void ExecuteMove(Move move, IPlayer player) {
         RemoveCardFromPlayersHand(move.Card(), player);
         _currentTrick.Add(move.Card());
         if (move.Card().Suit == Suit.HEARTS) BreakHearts();
@@ -78,7 +87,7 @@ public final class GameInfo {
     /**
      * Initializes the next trick and scores the winner of the current trick
      */
-    protected void NextTrick() {
+    public void NextTrick() {
         Card high = _currentTrick.Highest();
         IPlayer winner = _plays.get(high);
         int newScore = _roundScore.get(winner) + _currentTrick.Points();
@@ -160,8 +169,14 @@ public final class GameInfo {
      * @return The currently playing player
      */
     public IPlayer CurrentPlayer() {
-        return _players[_currentPlayer];
+        return _players[CurrentPlayerNumber()];
     }
+
+    /**
+     * Gets the number of the player whose turn it is;
+     * @return The number of the current player
+     */
+    public int CurrentPlayerNumber() { return _currentPlayer; }
 
     /**
      * Gets the player that started the current trick
@@ -278,7 +293,7 @@ public final class GameInfo {
         IPlayer pj = _players[j];
         _playerHands.get(pi).removeAll(ci.Cards());
         _playerHands.get(pj).addAll(ci.Cards());
-        pj.ReceiveCards(cj,ci);
+        pj.ReceiveCards(cj, ci);
     }
 
     /**
@@ -370,6 +385,10 @@ public final class GameInfo {
         return _currentTrick.IsEmpty() && _playerHands.get(CurrentPlayer()).size() == GameUtils.SIZE_OF_HANDS;
     }
 
+    /**
+     * Gets the scores for the current round
+     * @return int[] containing the scores of each player
+     */
     public int[] GetRoundScores() {
         int[] scores = new int[_players.length];
         for (int i = 0; i < _players.length; i++) {
@@ -378,6 +397,10 @@ public final class GameInfo {
         return scores;
     }
 
+    /**
+     * Gets the scores for the current round
+     * @return int[] containing the current game scores
+     */
     public int[] GetGameScores() {
         int[] scores = new int[_players.length];
         for (int i = 0; i < _players.length; i++) {
@@ -386,10 +409,27 @@ public final class GameInfo {
         return scores;
     }
 
+    /**
+     * Seals this GameInfo off in order to give players only the information they need
+     * @param player the player this SealedGameInfo goes too
+     * @return A SealedGameInfo for this player
+     */
     public SealedGameInfo Seal(IPlayer player) {
-        return new SealedGameInfo(CurrentTrick(),GetRoundScores(), GetGameScores(), IsHeartsBroken(), RoundNumber(), isStartOfRound(), new HashSet<>(_playerHands.get(player)), RemainingCards());
+        return new SealedGameInfo(CurrentTrick(),
+                GetRoundScores(),
+                GetGameScores(),
+                IsHeartsBroken(),
+                RoundNumber(),
+                isStartOfRound(),
+                new HashSet<>(_playerHands.get(player)),
+                RemainingCards(),
+                DistributionOfCards());
     }
 
+    /**
+     * Gets the remaining cards in this hand
+     * @return the cards remaining in the game
+     */
     public Set<Card> RemainingCards() {
         Set<Card> remaining = new HashSet<>();
         for (IPlayer p : _players) {
@@ -398,12 +438,129 @@ public final class GameInfo {
         return remaining;
     }
 
+    /**
+     * Gets the distribution of cards in the game
+     * @return array containing the size of the hands of the players
+     */
+    public int[] DistributionOfCards() {
+        int[] d = new int[_players.length];
+        for (int i = 0; i < _players.length; i++) {
+            d[i] = _playerHands.get(_players[i]).size();
+        }
+        return d;
+    }
+
+    /**
+     * Copies the GameInfo object for use
+     * @return a deep copy of this GameInfo object
+     */
+    public GameInfo Clone() {
+        GameInfo g = new GameInfo(_players);
+        g._currentPlayer = _currentPlayer;
+        g._heartsBroken = _heartsBroken;
+        g._currentTrick = CurrentTrick();
+        g._roundScore = _roundScore;
+        g._passDirection = PassDirection();
+        g._playerHands = cloneHands();
+        g._roundScore = cloneScores(_roundScore);
+        g._scores = cloneScores(_scores);
+        g._plays = clonePlays();
+        return g;
+    }
+
+    /**
+     * Copies the hands of the players
+     * @return the cloned hands of the players
+     */
+    private Map<IPlayer,Set<Card>> cloneHands() {
+        Map<IPlayer, Set<Card>> hands = new HashMap<>();
+        for (Map.Entry<IPlayer,Set<Card>> entry : _playerHands.entrySet()) {
+            Set<Card> h = new HashSet<>(entry.getValue());
+            hands.put(entry.getKey(), h);
+        }
+        return hands;
+    }
+
+    /**
+     * Clones the map of scores
+     * @param scs the score map
+     * @return the copied map
+     */
+    private Map<IPlayer,Integer> cloneScores(Map<IPlayer,Integer> scs) {
+        Map<IPlayer,Integer> map = new HashMap<>();
+        for (Map.Entry<IPlayer, Integer> entry : scs.entrySet()) {
+            map.put(entry.getKey(), entry.getValue());
+        }
+        return map;
+    }
+
+    private Map<Card, IPlayer> clonePlays() {
+        Map<Card, IPlayer> map = new HashMap<>();
+        for (Map.Entry<Card, IPlayer> entry : _plays.entrySet()) {
+            map.put(entry.getKey(), entry.getValue());
+        }
+        return map;
+    }
+
+    /**
+     * Sets up a new GameInfo from the SealedGameInfo by distributing the remaining cards randomly amongst the players
+     * other than the current player
+     * @param info The sealed game info to parse into a game info
+     * @param players the players to set into the game
+     * @param currentPlayer the current requesting player
+     * @return a new GameInfo with the cards unknown to the player distributed randomly
+     */
+    public static GameInfo DistributeRandomly(SealedGameInfo info, IPlayer[] players, int currentPlayer) {
+        GameInfo g = new GameInfo(players); //Create a game info for the players
+        g._currentTrick = info.CurrentTrick(); // Set the current trick
+        g._heartsBroken = info.IsHeartsBroken(); // Set whether hearts is broken
+        g._roundNumber = info.RoundNumber(); // Set the round number
+        g._currentPlayer = currentPlayer; // Set current player
+
+        // Do weird stuff to figure out which player played what card
+        g._plays = new HashMap<>();
+        List<Card> trick = info.CurrentTrick().AllCards();
+        for (int i = 0; i < trick.size(); i++) {
+           g._plays.put(trick.get(i), players[(((currentPlayer-i-1) % players.length) + players.length) % players.length]); //No idea if this works
+        }
+        // Set the round and game scores
+        g._roundScore = new HashMap<>();
+        int[] rs = info.RoundScore();
+        int[] gs = info.GameScores();
+        for (int i = 0; i < players.length; i++) {
+            g._scores.put(players[i], gs[i]);
+            g._roundScore.put(players[i], rs[i]);
+        }
+        // Distribute the remaining cards randomly among the other players
+        Set<Card> remaining = info.RemainingCards();
+        remaining.removeAll(info.GetHand());
+        List<Card> cards = new ArrayList<>(remaining);
+        Collections.shuffle(cards);
+        int[] distribution = info.CardDistribution();
+        for (int i = 0; i < players.length; i++) {
+            if (i == currentPlayer) g._playerHands.put(players[i], info.GetHand());
+            else g._playerHands.put(players[i],new HashSet<Card>());
+        }
+        int index = 0;
+        for (int i = 0; i < distribution.length; i++) {
+            if (i != currentPlayer) {
+                for (int j = 0; j < distribution[i]; j++) {
+                    g._playerHands.get(players[i]).add(cards.get(index+j));
+                }
+                index += distribution[i];
+            }
+        }
+        return g;
+    }
+
     public void SanityCheck() {
         Set<Card> hand0 = _playerHands.get(_players[0]);
         Set<Card> hand1 = _playerHands.get(_players[1]);
         Set<Card> hand2 = _playerHands.get(_players[2]);
         Set<Card> hand3 = _playerHands.get(_players[3]);
-        if (hand0.size() != hand1.size() || hand1.size() != hand2.size() || hand2.size() != hand3.size()) throw new RuntimeException();
+        if (hand0.size() != hand1.size() || hand1.size() != hand2.size() || hand2.size() != hand3.size()) {
+            throw new RuntimeException();
+        }
     }
 
     public void PrintCardPass(CardPassMove[] moves) {
