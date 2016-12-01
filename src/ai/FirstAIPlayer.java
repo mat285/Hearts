@@ -5,6 +5,18 @@ import player.*;
 
 public class FirstAIPlayer extends AbstractAIPlayer implements IPlayer {
 
+    private int _searchDepth;
+    private int _numSimulations;
+
+    public FirstAIPlayer(int searchDepth, int numSimulations) {
+        _searchDepth = searchDepth;
+        _numSimulations = numSimulations;
+    }
+
+    public FirstAIPlayer() {
+        this(MonteCarlo.DEFAULT_SEARCH_DEPTH, MonteCarlo.DEFAULT_NUMBER_SIMULATIONS);
+    }
+
     @Override
     public HeuristicFunction GetHeuristic(SealedGameInfo info) {
         return new HeuristicFunction() {
@@ -22,12 +34,12 @@ public class FirstAIPlayer extends AbstractAIPlayer implements IPlayer {
 
     @Override
     public ExpansionFunction GetExpansionFunction(SealedGameInfo info) {
-        return DepthLimitedExpansionFunction(MonteCarlo.DEFAULT_SEARCH_DEPTH);
+        return DepthLimitedExpansionFunction(_searchDepth);
     }
 
     @Override
     public int NumberOfSimulations(SealedGameInfo info) {
-        return MonteCarlo.DEFAULT_NUMBER_SIMULATIONS;
+        return _numSimulations;
     }
 
     @Override

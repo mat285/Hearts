@@ -32,7 +32,7 @@ public class GameTest {
             places.add(0.0);
         }
 
-        int trials = 20;
+        int trials = 1000;
 
         for (int i = 0; i < trials; i++) {
             g.NewGame();
@@ -62,10 +62,10 @@ public class GameTest {
     public static IPlayer[] getPlayers() {
         IPlayer[] players = new IPlayer[4];
         for (int i = 0; i < players.length; i++) {
-            if (i == 0) players[i] = new FirstAIPlayer();
-            else if (i == 1) players[i] = new SecondAIPlayer();
-            else if (i == 2) players[i] = new RuleBasedPlayer();
-            else players[i] = new RandomPlayer();
+            if (i == 0) players[i] = new SecondAIPlayer();
+            //else if (i == 1) players[i] = new SecondAIPlayer();
+            //else if (i == 2) players[i] = new RuleBasedPlayer();
+            else players[i] = new RuleBasedPlayer();
         }
         return players;
     }
