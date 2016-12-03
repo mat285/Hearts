@@ -123,4 +123,13 @@ public class Game {
         g._state = state;
         return g;
     }
+
+    public static Game StartFromMove(GameInfo info, Move move){
+        Game g = StartFromState(info, GameState.PLAYER_TURN);
+        info.NextPlayerPlay(move);
+        if (info.IsTrickDone()) g._state = GameState.END_TRICK;
+        return g;
+    }
 }
+
+

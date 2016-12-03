@@ -65,6 +65,12 @@ public final class GameInfo {
         NextPlayer();
     }
 
+    public void NextPlayerPlay(Move move){
+        if (!GameUtils.ValidateMove(move, Seal(CurrentPlayer()))) move = GameUtils.RandomMove(Seal(CurrentPlayer()));
+        ExecuteMove(move, CurrentPlayer());
+        NextPlayer();
+    }
+
     /**
      * Sets the current player to the next player
      */
@@ -83,6 +89,7 @@ public final class GameInfo {
         if (move.Card().Suit == Suit.HEARTS) BreakHearts();
         _plays.put(move.Card(), player);
     }
+
 
     /**
      * Initializes the next trick and scores the winner of the current trick

@@ -33,7 +33,7 @@ public class MonteCarlo {
             map.put(m,map.get(m)+1);
             if (max == null || map.get(max) < map.get(m)) max = m;
         }
-        System.out.println(map.get(max));
+        //System.out.println(map.get(max));
         return max;
     }
 
