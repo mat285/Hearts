@@ -1,7 +1,10 @@
 package gui;
 
 import javax.swing.*;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
+import java.awt.*;
 import java.util.List;
 import java.util.Vector;
 
@@ -16,6 +19,9 @@ public class ScorePanel extends JPanel{
     private JTable _table;
     private Vector<String> _colNames;
     private Vector<Vector> _rowData;
+    private DefaultTableModel _model;
+    private static final Font DEFAULT_FONT = new Font("Serif", Font.BOLD, 40);
+
 
     public ScorePanel(String[] names){
         _colNames = new Vector<>();
@@ -26,10 +32,17 @@ public class ScorePanel extends JPanel{
         }
 
         _rowData = new Vector<>();
+        _model = new DefaultTableModel(_rowData, _colNames);
 
-        _table = new JTable(_rowData, _colNames);
-        add(new JScrollPane(_table));
+        _table = new JTable(_model);
+        JScrollPane pane = new JScrollPane(_table);
+        pane.setPreferredSize(new Dimension(1000,1000));
+        add(pane);
         setOpaque(true);
+
+        _table.getTableHeader().setFont(DEFAULT_FONT);
+        _table.setFont(DEFAULT_FONT);
+        _table.setRowHeight(40);
     }
 
     public <T> void AddRoundScores(T round, int[] scores){
@@ -39,28 +52,16 @@ public class ScorePanel extends JPanel{
             row.add(score);
         }
         _rowData.add(row);
+        _model.addRow(row);
+        _model.fireTableDataChanged();
+
         revalidate();
         repaint();
     }
 
     public void ClearScores(){
         _rowData = new Vector<>();
+        revalidate();
+        repaint();
     }
-
-    @Override
-    public String toString(){
-        String s = "";
-        for(String h : _colNames){
-            s += h + "\t";
-        }
-        for(Vector row : _rowData){
-            s += "\n";
-            for(Object r : row){
-                s += r + "\t";
-            }
-        }
-        return s;
-    }
-
-
 }

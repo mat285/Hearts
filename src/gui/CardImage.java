@@ -5,8 +5,6 @@ import card.Card;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -27,13 +25,10 @@ public class CardImage extends JPanel implements Cloneable{
     private BufferedImage _original;
     private BufferedImage _image;
     private JLabel _icon;
-    private static final int minHeight = 100;
-    private static final int maxHeight = 300;
     private static double aspectRatio;
 
     private CardImage(Card card) throws IOException {
         super();
-        //setMinimumSize(new Dimension(100,200));
         setLayout(new BorderLayout());
 
         _card = card;
@@ -49,7 +44,7 @@ public class CardImage extends JPanel implements Cloneable{
 
         int height = 250;
         int width = (int) (height*aspectRatio);
-        _image = new BufferedImage(width, height, _original.getType());
+        _image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2D = _image.createGraphics();
         g2D.drawImage(_original, 0, 0, width, height, null);
         g2D.dispose();
@@ -58,33 +53,10 @@ public class CardImage extends JPanel implements Cloneable{
         add(_icon);
 
         setBounds(0,0,width, height);
-
+        _icon.setOpaque(false);
+        setOpaque(false);
     }
 
-    @Override
-    public void setSize(Dimension d) {
-        super.setSize(d);
-
-        int h1 = (int) d.getHeight();
-        int w1 = (int) (h1 * aspectRatio);
-
-        int w2 = (int) d.getWidth();
-        int h2 = (int) (w2 * 1 / aspectRatio);
-
-        int width = w1;
-        int height = h1;
-        _image = new BufferedImage(width, height, _original.getType());
-        Graphics2D g2D = _image.createGraphics();
-        g2D.drawImage(_original, 0, 0, width, height, null);
-        g2D.dispose();
-
-        _icon.setIcon(new ImageIcon(_image));
-
-        setBounds(0,0,width, height);
-        repaint();
-        revalidate();
-
-    }
 
     public static CardImage Card(Card card) throws IOException, CloneNotSupportedException {
         if(_emptyCard == null){ _emptyCard = new CardImage(null);}
@@ -93,22 +65,6 @@ public class CardImage extends JPanel implements Cloneable{
 
         _images.putIfAbsent(card, new CardImage(card));
         return _images.get(card);
-
-    }
-
-    public static CardImage Card(Card card, Dimension d) throws IOException, CloneNotSupportedException {
-        if(_emptyCard == null){ _emptyCard = new CardImage(null);}
-
-        if(card == null){
-            CardImage c = (CardImage) _emptyCard.clone();
-            c.setSize(d);
-            return c;
-        }
-
-        _images.putIfAbsent(card, new CardImage(card));
-        CardImage c = _images.get(card);
-        c.setSize(d);
-        return c;
 
     }
 

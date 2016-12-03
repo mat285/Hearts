@@ -1,19 +1,13 @@
 package gui;
 
-import ai.AIPlayer;
 import game.IPlayer;
 import main.Resolver;
 import player.Players;
-import player.RandomPlayer;
-import player.RuleBasedPlayer;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.*;
-import java.util.List;
-import javax.swing.GroupLayout.*;
 
 
 /**
@@ -34,7 +28,7 @@ public class ChoosePlayerFrame extends JFrame{
         _gui = gui;
         _contentPane = new JPanel();
 
-        _contentPane.setLayout(new BoxLayout(_contentPane   , BoxLayout.Y_AXIS));
+        _contentPane.setLayout(new BoxLayout(_contentPane, BoxLayout.Y_AXIS));
         JPanel panel = new JPanel();
         GridLayout layout = new GridLayout(4,4);
         panel.setLayout(layout);
@@ -58,6 +52,9 @@ public class ChoosePlayerFrame extends JFrame{
         JPanel buttonPanel = new JPanel();
         JButton ok = new JButton("Ok");
         JButton cancel = new JButton("Cancel");
+
+        ok.setFont(DEFAULT_FONT);
+        cancel.setFont(DEFAULT_FONT);
 
         ok.addActionListener(new ActionListener() {
             @Override
@@ -117,7 +114,6 @@ public class ChoosePlayerFrame extends JFrame{
     }
 
     public void createAndShowGui(){
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setPreferredSize(new Dimension(1000,500));
         setContentPane(_contentPane);
         pack();

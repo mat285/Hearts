@@ -2,15 +2,8 @@ package gui;
 
 import card.Card;
 import card.Deck;
-import game.*;
-
 import javax.swing.*;
-import javax.swing.border.Border;
 import java.awt.*;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,15 +18,11 @@ public class PlayerPanel extends JPanel {
     private static final Dimension HORI_DIMENSION = new Dimension(1000,250);
     private static final Font DEFAULT_FONT = new Font("Serif", Font.BOLD, 40);
 
-
-
     public PlayerPanel(String name, int id, int orientation){
         assert(id > 0 && id < 4);
         _id = id;
         _name = new JLabel(name);
         _score = new JLabel("0");
-
-
 
         _hand = new HandPanel(orientation);
 
@@ -46,6 +35,8 @@ public class PlayerPanel extends JPanel {
 
         _name.setFont(DEFAULT_FONT);
         _score.setFont(DEFAULT_FONT);
+        //_name.setForeground(Color.WHITE);
+        //_score.setForeground(Color.WHITE);
         setOpaque(false);
         add(_name);
         add(_score);
@@ -94,7 +85,6 @@ public class PlayerPanel extends JPanel {
                 _origin.y += OFFSET;
             }
 
-            setBorder(BorderFactory.createLineBorder(Color.ORANGE,5));
             setLayout(null);
             setOpaque(false);
         }

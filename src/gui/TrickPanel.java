@@ -1,17 +1,8 @@
 package gui;
 
-import card.Card;
-import card.Suit;
 import card.Trick;
-import card.Value;
-
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * TBD
@@ -29,8 +20,8 @@ public class TrickPanel extends JPanel{
         _cards = new CardImage[4];
         setOpaque(false);
         setLayout(new GridBagLayout());
-        setBorder(BorderFactory.createLineBorder(Color.CYAN));
     }
+
 
     public void Update(Trick trick, int start) throws Exception {
         removeAll();
@@ -62,6 +53,4 @@ public class TrickPanel extends JPanel{
         c.gridy = y;
         add(card, c);
     }
-
-
 }

@@ -4,15 +4,13 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.List;
 
 public class ControlBar extends JPanel {
     private HeartsFrame _gui;
     private Timer _timer;
+    private static final Font DEFAULT_FONT = new Font("Serif", Font.BOLD, 30);
 
     public ControlBar(HeartsFrame gui){
-        setBorder(BorderFactory.createLineBorder(Color.BLUE, 4));
         _gui = gui;
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 
@@ -20,6 +18,11 @@ public class ControlBar extends JPanel {
         JButton newGameButton = new JButton("New Game");
         JButton startButton = new JButton("Start");
         JButton stopButton = new JButton("Pause");
+
+        changePlayersButton.setFont(DEFAULT_FONT);
+        newGameButton.setFont(DEFAULT_FONT);
+        startButton.setFont(DEFAULT_FONT);
+        stopButton.setFont(DEFAULT_FONT);
 
         newGameButton.addActionListener(new ActionListener() {
             @Override
@@ -75,6 +78,5 @@ public class ControlBar extends JPanel {
         add(newGameButton);
         add(startButton);
         add(stopButton);
-
     }
 }

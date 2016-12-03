@@ -25,14 +25,7 @@ public class HeartsFrame extends JFrame {
     public HeartsFrame(){
         super("Hearts");
         try{
-            setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            setPreferredSize(new Dimension(2000,2000));
-            setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
             init();
-            pack();
-            setVisible(true);
-            setResizable(false);
-            setBackground(Color.GREEN);
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -67,8 +60,8 @@ public class HeartsFrame extends JFrame {
         _gamePanel.add(_playerPanels[1], BorderLayout.WEST);
         _gamePanel.add(_playerPanels[2], BorderLayout.NORTH);
         _gamePanel.add(_playerPanels[3], BorderLayout.EAST);
-        //_gamePanel.setOpaque(false);
         _gamePanel.setBackground(new Color(15,117,51));
+        _scorePanel.setBackground(new Color(15,117,51));
         _currentboard = _gamePanel;
         add(_currentboard);
         add(_controls);
@@ -86,12 +79,6 @@ public class HeartsFrame extends JFrame {
         }
         if(players.length != 4) throw new Exception("Invalid number of players");
         _players = players;
-
-/*        if(_playerPanels != null){
-            for(int i = 0; i < _players.length; i++){
-                _playerPanels[i].SetName(_players[i].getClass().getSimpleName());
-            }
-        }*/
     }
 
     public void SwitchMode(Mode mode){
@@ -109,7 +96,7 @@ public class HeartsFrame extends JFrame {
     }
 
     public Timer GetGameTimer() throws Exception {
-        Timer timer = new Timer(500, new ActionListener() {
+        Timer timer = new Timer(100, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e){
                 if(_game == null){
@@ -152,10 +139,12 @@ public class HeartsFrame extends JFrame {
                             _game.Step();
                             _scorePanel.AddRoundScores(info.RoundNumber(), info.GetRoundScores());
                             SwitchMode(Mode.SCORE);
+                            _scorePanel.toString();
                             break;
                         case GAME_OVER:
                             _scorePanel.AddRoundScores("Total", info.GetGameScores());
                             SwitchMode(Mode.SCORE);
+                            ((Timer) e.getSource()).stop();
                             break;
                     }
                 }catch (Exception exp){
@@ -178,14 +167,20 @@ public class HeartsFrame extends JFrame {
         _trickPanel.Update(info.CurrentTrick(), 0);
     }
 
-
-    public static void main(String[] args) throws Exception {
-        HeartsFrame frame = new HeartsFrame();
-        /*
-        ChoosePlayerFrame panel = new ChoosePlayerFrame(frame);
-        frame.setContentPane(panel);
-        frame.pack();
-*/
+    public void createAndShowGui(){
+        try{
+            setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            setPreferredSize(new Dimension(2000,2000));
+            setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
+            setBackground(Color.GREEN);
+            pack();
+            setVisible(true);
+            setResizable(false);
+            NewGame();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
     }
+
 }

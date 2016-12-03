@@ -10,7 +10,7 @@ import ai.AIPlayer;
  * Time: 6:30 PM
  */
 public class Players {
-    public static final Class[] PLAYER_TYPES = {RandomPlayer.class, RuleBasedPlayer.class, TerminalPlayer.class, AIPlayer.class};
+    public static final Class[] PLAYER_TYPES = {RandomPlayer.class, RuleBasedPlayer.class, AIPlayer.class};
 
     public static boolean KnownType(Class type){
         for(Class c : PLAYER_TYPES){
