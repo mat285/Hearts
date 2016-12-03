@@ -14,7 +14,6 @@ import java.util.Vector;
  */
 public class ScorePanel extends JPanel{
     private JTable _table;
-    private int _roundNum = 1;
     private Vector<String> _colNames;
     private Vector<Vector> _rowData;
 

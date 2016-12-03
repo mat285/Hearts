@@ -8,7 +8,7 @@ package gui;
  * Time: 6:50 PM
  */
 public enum Mode {
-    HOME,
+    CHOOSEPLAYER,
     GAME,
     SCORE;
 }

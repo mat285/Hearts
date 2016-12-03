@@ -7,6 +7,8 @@ import game.*;
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -18,9 +20,11 @@ public class PlayerPanel extends JPanel {
     private HandPanel _hand;
     private JLabel _name;
     private JLabel _score;
-    private static final Dimension VERT_DIMENSION = new Dimension(300,1000);
-    private static final Dimension HORI_DIMENSION = new Dimension(1000,300);
-    private static final Font DEFAULT_FONT = new Font("Serif", Font.BOLD, 20);
+
+    private static final Dimension VERT_DIMENSION = new Dimension(250,1000);
+    private static final Dimension HORI_DIMENSION = new Dimension(1000,250);
+    private static final Font DEFAULT_FONT = new Font("Serif", Font.BOLD, 40);
+
 
 
     public PlayerPanel(String name, int id, int orientation){
@@ -52,6 +56,7 @@ public class PlayerPanel extends JPanel {
     public int Id(){return _id;}
 
     public String Name(){return _name.getText();}
+
     public void SetName(String name){_name.setText(name);}
 
     public void UpdateHand(List<Card> hand) throws Exception {
@@ -63,11 +68,6 @@ public class PlayerPanel extends JPanel {
         repaint();
     }
 
-    public void DeleteCard(Card card) throws Exception{
-        assert _hand.contains(card);
-        _hand.DeleteCard(card);
-
-    }
 
     public void UpdateScore(int score) throws Exception{
         _score.setText(score + "");
@@ -77,6 +77,7 @@ public class PlayerPanel extends JPanel {
         private int _orientation;
         private List<CardImage> _cards;
         private Point _origin;
+        private static final int OFFSET = 75;
 
         private HandPanel(int orientation){
             super();
@@ -85,14 +86,12 @@ public class PlayerPanel extends JPanel {
             _origin = this.getLocation();
 
             if(orientation == BoxLayout.X_AXIS){
-                _origin.x += 50;
+                _origin.x += OFFSET;
             }else{
-                _origin.y += 50;
+                _origin.y += OFFSET;
             }
 
-
-            setBorder(BorderFactory.createLineBorder(Color.black));
-            setLayout(new BoxLayout(this, orientation));
+            setBorder(BorderFactory.createLineBorder(Color.ORANGE,5));
             setLayout(null);
         }
 
@@ -104,53 +103,17 @@ public class PlayerPanel extends JPanel {
             Point start = new Point(_origin);
             for(int i = 0; i < hand.size(); i++){
                 CardImage card = CardImage.Card(hand.get(i));
-                card.setBounds(start.x, start.y, card.getWidth(), card.getHeight()+10);
-                //card.setBorder(BorderFactory.createLineBorder(Color.red, 10));
+                card.setBounds(start.x, start.y, card.getWidth(), card.getHeight());
                 _cards.add(card);
                 add(card, new Integer(i));
 
-                Rectangle r = card.getBounds();
-                System.out.println(card + " " + r);
-
-                if(_orientation == BoxLayout.X_AXIS){start.x += 75;}
-                else{start.y += 75;}
+                if(_orientation == BoxLayout.X_AXIS){start.x += OFFSET;}
+                else{start.y += OFFSET;}
 
             }
             revalidate();
             repaint();
         }
-
-        private void AddCard(Card card) throws Exception {
-            CardImage image = CardImage.Card(card);
-            _cards.add(image);
-            add(image);
-
-            revalidate();
-            repaint();
-        }
-
-        public void SwapCards(Card remove, Card replace) throws Exception {
-            int index = _cards.indexOf(CardImage.Card(remove));
-            _cards.remove(index);
-            _cards.add(index, CardImage.Card(replace));
-            revalidate();
-            repaint();
-
-        }
-
-        public void DeleteCard(Card card) throws Exception {
-            CardImage image = CardImage.Card(card);
-            _cards.remove(image);
-            remove(image);
-
-            revalidate();
-            repaint();
-        }
-
-        private boolean contains(Card card){
-            return _cards.contains(card);
-        }
-
     }
 
 }

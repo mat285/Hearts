@@ -7,6 +7,8 @@ import card.Value;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -48,10 +50,10 @@ public class TrickPanel extends JPanel{
         add(_cards[2], 1, 0);
         add(_cards[3], 2, 1);
 
-        setPreferredSize(getPreferredSize());
         revalidate();
         repaint();
     }
+
 
     private void add(CardImage card, int x, int y){
         GridBagConstraints c = new GridBagConstraints();
