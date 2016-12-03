@@ -3,7 +3,7 @@ package game;
 import card.*;
 import java.util.*;
 
-public class SealedGameInfo {
+public class SealedGameInfo implements Cloneable{
 
     private Trick _currentTrick;
     private int[] _roundScores;
@@ -64,4 +64,53 @@ public class SealedGameInfo {
     public Set<Card> RemainingCards() { return _remaining; }
 
     public int[] CardDistribution() { return _cardDistribution; }
+
+    public @Override boolean equals(Object o){
+        SealedGameInfo info = (SealedGameInfo) o;
+        return o instanceof SealedGameInfo
+                && info._currentTrick.equals(_currentTrick)
+                && info._heartsBroken == _heartsBroken
+                && info._isStartOfRound == _isStartOfRound
+                && info._hand.equals(_hand)
+                && info._remaining.equals(_remaining)
+                && info._roundNumber == _roundNumber
+                && Arrays.equals(info._roundScores, _roundScores)
+                && Arrays.equals(info._scores, _scores)
+                && Arrays.equals(info._cardDistribution, _cardDistribution);
+    }
+
+    public @Override int hashCode(){
+        int result = 1;
+
+        result = result*37 + _currentTrick.hashCode();
+        result = result*37 + (_heartsBroken ? 0 : 1);
+        result = result*37 + (_isStartOfRound ? 0 : 1);
+        result = result*37 + _hand.hashCode();
+        result = result*37 + _remaining.hashCode();
+        result = result*37 + _roundNumber;
+        for(int i : _roundScores){
+            result = result*37 + i;
+        }
+        for(int i : _scores){
+            result = result*37 + i;
+        }
+        for(int i : _cardDistribution){
+            result = result*37 + i;
+        }
+
+        return result;
+    }
+
+    public SealedGameInfo Clone(){
+        Set<Card> clonedHand = new HashSet<>();
+        Set<Card> clonedRemaining = new HashSet<>();
+
+        clonedHand.addAll(_hand);
+        clonedRemaining.addAll(_remaining);
+
+        return new SealedGameInfo(_currentTrick.Clone(), _roundScores.clone(),
+                _scores.clone(), _heartsBroken, _roundNumber, _isStartOfRound,
+                clonedHand, clonedRemaining, _cardDistribution.clone());
+
+    }
 }

@@ -107,4 +107,10 @@ public class Trick {
         }
         return t;
     }
+
+    public @Override boolean equals(Object o){
+        Trick t = (Trick) o;
+        return o instanceof Trick && t._first == _first
+                && t._second == _second && t._third == _third && t._fourth == _fourth;
+    }
 }

@@ -22,7 +22,7 @@ public class GameTest {
             if (g.State() == GameState.END_ROUND) g.Info().PrintDebugInfo();
         }
         System.out.println("Ranking: " + g.Step());
-        System.exit(0);
+        //System.exit(0);
         List<Double> places = new ArrayList<>();
 
         for (int i = 0; i < 4; i++) {
