@@ -62,7 +62,9 @@ public class ControlBar extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 try {
                     if(_timer != null) _timer.stop();
-                    _gui.SwitchMode(Mode.CHOOSEPLAYER);
+                    //_gui.setEnabled(false);
+                    ChoosePlayerFrame frame = new ChoosePlayerFrame(_gui);
+                    frame.createAndShowGui();
                 } catch (Exception e1) {
                     e1.printStackTrace();
                 }

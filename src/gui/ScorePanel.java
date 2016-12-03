@@ -29,6 +29,7 @@ public class ScorePanel extends JPanel{
 
         _table = new JTable(_rowData, _colNames);
         add(new JScrollPane(_table));
+        setOpaque(true);
     }
 
     public <T> void AddRoundScores(T round, int[] scores){

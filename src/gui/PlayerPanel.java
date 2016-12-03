@@ -33,6 +33,8 @@ public class PlayerPanel extends JPanel {
         _name = new JLabel(name);
         _score = new JLabel("0");
 
+
+
         _hand = new HandPanel(orientation);
 
         setLayout(new BoxLayout(this, orientation));
@@ -44,6 +46,7 @@ public class PlayerPanel extends JPanel {
 
         _name.setFont(DEFAULT_FONT);
         _score.setFont(DEFAULT_FONT);
+        setOpaque(false);
         add(_name);
         add(_score);
     }
@@ -93,6 +96,7 @@ public class PlayerPanel extends JPanel {
 
             setBorder(BorderFactory.createLineBorder(Color.ORANGE,5));
             setLayout(null);
+            setOpaque(false);
         }
 
         private void update(List<Card> hand) throws Exception {

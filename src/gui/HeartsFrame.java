@@ -17,7 +17,6 @@ public class HeartsFrame extends JFrame {
     private ScorePanel _scorePanel;
     private ControlBar _controls;
     private JPanel _gamePanel;
-    private ChoosePlayerPanel _choosePlayerPanel;
     private JPanel _currentboard;
     private JMenuBar _menu;
 
@@ -33,6 +32,7 @@ public class HeartsFrame extends JFrame {
             pack();
             setVisible(true);
             setResizable(false);
+            setBackground(Color.GREEN);
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -61,14 +61,14 @@ public class HeartsFrame extends JFrame {
         SetPlayers(null);
         _trickPanel = new TrickPanel();
         _scorePanel = new ScorePanel(names);
-        _choosePlayerPanel = new ChoosePlayerPanel(this);
 
         _gamePanel.add(_trickPanel, BorderLayout.CENTER);
         _gamePanel.add(_playerPanels[0], BorderLayout.SOUTH);
         _gamePanel.add(_playerPanels[1], BorderLayout.WEST);
         _gamePanel.add(_playerPanels[2], BorderLayout.NORTH);
         _gamePanel.add(_playerPanels[3], BorderLayout.EAST);
-
+        //_gamePanel.setOpaque(false);
+        _gamePanel.setBackground(new Color(15,117,51));
         _currentboard = _gamePanel;
         add(_currentboard);
         add(_controls);
@@ -97,9 +97,6 @@ public class HeartsFrame extends JFrame {
     public void SwitchMode(Mode mode){
         remove(_currentboard);
         switch (mode){
-            case CHOOSEPLAYER:
-                _currentboard = _choosePlayerPanel;
-                break;
             case GAME:
                 _currentboard = _gamePanel;
                 break;
@@ -184,8 +181,8 @@ public class HeartsFrame extends JFrame {
 
     public static void main(String[] args) throws Exception {
         HeartsFrame frame = new HeartsFrame();
-/*
-        ChoosePlayerPanel panel = new ChoosePlayerPanel(frame);
+        /*
+        ChoosePlayerFrame panel = new ChoosePlayerFrame(frame);
         frame.setContentPane(panel);
         frame.pack();
 */

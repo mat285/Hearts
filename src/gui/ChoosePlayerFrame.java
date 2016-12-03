@@ -23,15 +23,18 @@ import javax.swing.GroupLayout.*;
  * Date: 11/17/2016
  * Time: 6:44 PM
  */
-public class ChoosePlayerPanel extends JPanel{
+public class ChoosePlayerFrame extends JFrame{
     private HeartsFrame _gui;
     private JComboBox[] _selected = new JComboBox[4];
     private static final Font DEFAULT_FONT = new Font("Serif", Font.BOLD, 40);
+    private JPanel _contentPane;
 
 
-    public ChoosePlayerPanel(HeartsFrame gui){
+    public ChoosePlayerFrame(HeartsFrame gui){
         _gui = gui;
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        _contentPane = new JPanel();
+
+        _contentPane.setLayout(new BoxLayout(_contentPane   , BoxLayout.Y_AXIS));
         JPanel panel = new JPanel();
         GridLayout layout = new GridLayout(4,4);
         panel.setLayout(layout);
@@ -59,20 +62,23 @@ public class ChoosePlayerPanel extends JPanel{
         ok.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                dispose();
+                _gui.setEnabled(true);
                 updatePlayers();
             }
         });
         cancel.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                dispose();
+                _gui.setEnabled(true);
             }
         });
         buttonPanel.add(cancel);
         buttonPanel.add(ok);
 
-        add(panel);
-        add(buttonPanel);
+        _contentPane.add(panel);
+        _contentPane.add(buttonPanel);
     }
 
     private void updatePlayers(){
@@ -108,5 +114,14 @@ public class ChoosePlayerPanel extends JPanel{
         private void setType(Class type){_type = type;}
 
         public @Override String toString(){return _desc;}
+    }
+
+    public void createAndShowGui(){
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setPreferredSize(new Dimension(1000,500));
+        setContentPane(_contentPane);
+        pack();
+        setVisible(true);
+        setResizable(false);
     }
 }

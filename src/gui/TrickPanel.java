@@ -27,6 +27,7 @@ public class TrickPanel extends JPanel{
     public TrickPanel(){
         super();
         _cards = new CardImage[4];
+        setOpaque(false);
         setLayout(new GridBagLayout());
         setBorder(BorderFactory.createLineBorder(Color.CYAN));
     }
