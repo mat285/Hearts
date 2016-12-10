@@ -20,7 +20,7 @@ import java.util.*;
 public class ChoosePlayerFrame extends JFrame{
     private HeartsFrame _gui;
     private JComboBox[] _selected = new JComboBox[4];
-    private static final Font DEFAULT_FONT = new Font("Serif", Font.BOLD, 40);
+    private static final Font DEFAULT_FONT = new Font("Calibri", Font.BOLD, 40);
     private JPanel _contentPane;
 
 
@@ -75,6 +75,7 @@ public class ChoosePlayerFrame extends JFrame{
         buttonPanel.add(ok);
 
         _contentPane.add(panel);
+        _contentPane.add(Box.createRigidArea(new Dimension(0,10)));
         _contentPane.add(buttonPanel);
     }
 

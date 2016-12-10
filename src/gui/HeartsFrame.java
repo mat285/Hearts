@@ -9,6 +9,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Arrays;
 
 public class HeartsFrame extends JFrame {
     private PlayerPanel[] _playerPanels;
@@ -94,76 +95,91 @@ public class HeartsFrame extends JFrame {
         repaint();
     }
 
-    public Timer GetGameTimer() throws Exception {
-        Timer timer = new Timer(100, new ActionListener() {
+    public void Step(Timer timer){
+        if(_game == null){
+            _game = new Game(_players);
+        }
+        GameInfo info = _game.Info();
+
+        try {
+            switch (_game.State()) {
+                case START_ROUND:
+                    SwitchMode(Mode.GAME);
+                    _game.Step();
+                    for (PlayerPanel panel : _playerPanels) {
+                        panel.UpdateHand(info.HandOfPlayer(_players[panel.Id()]));
+                        panel.UpdateScore(0);
+                    }
+                    _trickPanel.Update(info.CurrentTrick(), 0);
+                    _trickPanel.HideHeartsBroken();
+                    break;
+                case PASS_CARDS:
+                    _game.Step();
+                    for (PlayerPanel panel : _playerPanels) {
+                        panel.UpdateHand(info.HandOfPlayer(_players[panel.Id()]));
+                    }
+                    break;
+                case PLAYER_TURN:
+                    _game.Step();
+                    for (PlayerPanel panel : _playerPanels) {
+                        panel.UpdateHand(info.HandOfPlayer(_players[panel.Id()]));
+                    }
+                    _trickPanel.Update(info.CurrentTrick(), info.PlayerStartingTrick());
+
+                    if(info.IsHeartsBroken()) _trickPanel.DisplayHeartsBroken();
+
+                    break;
+                case END_TRICK:
+                    _game.Step();
+                    _trickPanel.Update(info.CurrentTrick(), 0);
+                    for (int i = 0; i < _players.length; i++) {
+                        _playerPanels[i].UpdateScore(info.GetRoundScores()[i]);
+                    }
+                    if(timer != null) Thread.sleep(2000);
+                    break;
+                case END_ROUND:
+                    _game.Step();
+                    _scorePanel.AddRoundScores(info.RoundNumber(), info.GetRoundScores());
+                    SwitchMode(Mode.SCORE);
+                    if(timer != null) timer.stop();
+                    break;
+                case GAME_OVER:
+                    _scorePanel.AddRoundScores("Total", info.GetGameScores());
+                    SwitchMode(Mode.SCORE);
+                    if(timer != null) timer.stop();
+                    _game = null;
+                    break;
+            }
+            //info.PrintDebugInfo();
+        }catch (Exception exp){
+            exp.printStackTrace();
+        }
+    }
+
+    public Timer GetGameTimer(){
+        Timer timer = new Timer(500, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e){
-                if(_game == null){
-                    _game = new Game(_players);
-                }
-                GameInfo info = _game.Info();
-                try {
-                    switch (_game.State()) {
-                        case START_ROUND:
-                            SwitchMode(Mode.GAME);
-                            _game.Step();
-                            for (PlayerPanel panel : _playerPanels) {
-                                panel.UpdateHand(info.HandOfPlayer(_players[panel.Id()]));
-                                panel.UpdateScore(0);
-                            }
-                            _trickPanel.Update(info.CurrentTrick(), 0);
-                            break;
-                        case PASS_CARDS:
-                            _game.Step();
-                            for (PlayerPanel panel : _playerPanels) {
-                                panel.UpdateHand(info.HandOfPlayer(_players[panel.Id()]));
-                            }
-                            break;
-                        case PLAYER_TURN:
-                            _game.Step();
-                            for (PlayerPanel panel : _playerPanels) {
-                                panel.UpdateHand(info.HandOfPlayer(_players[panel.Id()]));
-                            }
-                            _trickPanel.Update(info.CurrentTrick(), info.PlayerStartingTrick());
-
-                            break;
-                        case END_TRICK:
-                            _game.Step();
-                            _trickPanel.Update(info.CurrentTrick(), 0);
-                            for (int i = 0; i < _players.length; i++) {
-                                _playerPanels[i].UpdateScore(info.GetRoundScores()[i]);
-                            }
-                            break;
-                        case END_ROUND:
-                            _game.Step();
-                            _scorePanel.AddRoundScores(info.RoundNumber(), info.GetRoundScores());
-                            SwitchMode(Mode.SCORE);
-                            _scorePanel.toString();
-                            break;
-                        case GAME_OVER:
-                            _scorePanel.AddRoundScores("Total", info.GetGameScores());
-                            SwitchMode(Mode.SCORE);
-                            ((Timer) e.getSource()).stop();
-                            break;
-                    }
-                }catch (Exception exp){
-                    exp.printStackTrace();
-                }
+                Step((Timer) e.getSource());
             }
         });
         return timer;
     }
 
-    public void NewGame() throws Exception {
-        _game = new Game(_players);
-        GameInfo info = _game.Info();
-        _scorePanel.ClearScores();
-        SwitchMode(Mode.GAME);
-        _game.Step();
-        for (PlayerPanel panel : _playerPanels) {
-            panel.UpdateHand(info.HandOfPlayer(_players[panel.Id()]));
+    public void NewGame(){
+        try{
+            _game = new Game(_players);
+            GameInfo info = _game.Info();
+            _scorePanel.ClearScores();
+            SwitchMode(Mode.GAME);
+            _game.Step();
+            for (PlayerPanel panel : _playerPanels) {
+                panel.UpdateHand(info.HandOfPlayer(_players[panel.Id()]));
+            }
+            _trickPanel.Update(info.CurrentTrick(), 0);
+        }catch(Exception e){
+            e.printStackTrace();
         }
-        _trickPanel.Update(info.CurrentTrick(), 0);
     }
 
     public void createAndShowGui(){

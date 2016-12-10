@@ -20,7 +20,7 @@ public class ScorePanel extends JPanel{
     private Vector<String> _colNames;
     private Vector<Vector> _rowData;
     private DefaultTableModel _model;
-    private static final Font DEFAULT_FONT = new Font("Serif", Font.BOLD, 40);
+    private static final Font DEFAULT_FONT = new Font("Calibri", Font.BOLD, 40);
 
 
     public ScorePanel(String[] names){

@@ -3,6 +3,7 @@ package gui;
 import card.Card;
 import card.Deck;
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,35 +12,30 @@ public class PlayerPanel extends JPanel {
     private final String[] DEFAULT_NAMES = new String[]{"South","West","North","East"};
     private int _id;
     private HandPanel _hand;
-    private JLabel _name;
-    private JLabel _score;
+    private Label _label;
 
     private static final Dimension VERT_DIMENSION = new Dimension(250,1000);
     private static final Dimension HORI_DIMENSION = new Dimension(1000,250);
-    private static final Font DEFAULT_FONT = new Font("Serif", Font.BOLD, 40);
+    private static final Font DEFAULT_FONT = new Font("Calibri", Font.BOLD, 40);
 
     public PlayerPanel(String name, int id, int orientation){
         assert(id > 0 && id < 4);
         _id = id;
-        _name = new JLabel(name);
-        _score = new JLabel("0");
+        _label = new Label(name, orientation);
 
         _hand = new HandPanel(orientation);
 
         setLayout(new BoxLayout(this, orientation));
+        Component filler = Box.createRigidArea(new Dimension(15,15));
         if(orientation == BoxLayout.X_AXIS){
             setPreferredSize(HORI_DIMENSION);
         }else{
             setPreferredSize(VERT_DIMENSION);
         }
 
-        _name.setFont(DEFAULT_FONT);
-        _score.setFont(DEFAULT_FONT);
-        _name.setForeground(Color.WHITE);
-        _score.setForeground(Color.WHITE);
+
         setOpaque(false);
-        add(_name);
-        add(_score);
+        add(_label);
     }
 
     public PlayerPanel(int id, int orientation){
@@ -49,9 +45,9 @@ public class PlayerPanel extends JPanel {
 
     public int Id(){return _id;}
 
-    public String Name(){return _name.getText();}
+    public String Name(){return _label.name();}
 
-    public void SetName(String name){_name.setText(name);}
+    public void SetName(String name){_label.set_name(name);}
 
     public void UpdateHand(List<Card> hand) throws Exception {
         assert _hand != null;
@@ -64,7 +60,43 @@ public class PlayerPanel extends JPanel {
 
 
     public void UpdateScore(int score) throws Exception{
-        _score.setText(score + "");
+        _label.set_score(score);
+    }
+
+    private class Label extends JPanel{
+        private JLabel _name;
+        private JLabel _score;
+        private Dimension dimension = new Dimension(100,100);
+
+        private Label(String name, int orientation){
+            _name = new JLabel(name);
+            _score = new JLabel("0");
+            _name.setFont(DEFAULT_FONT);
+            _score.setFont(DEFAULT_FONT);
+            setLayout(new BoxLayout(this, orientation));
+            setOpaque(false);
+            //setBackground(Color.white);
+            //setBorder(BorderFactory.createLineBorder(Color.BLACK, 3));
+
+            _name.setForeground(Color.WHITE);
+            _score.setForeground(Color.WHITE);
+            add(_name);
+            add(Box.createRigidArea(new Dimension(15,15)));
+            add(_score);
+        }
+
+        private void set_score(int score){
+            _score.setText(score + "");
+        }
+
+        private String name(){
+            return _name.getText();
+        }
+
+        private void set_name(String name){
+            _name.setText(name);
+        }
+
     }
 
     private class HandPanel extends JLayeredPane{
@@ -80,9 +112,9 @@ public class PlayerPanel extends JPanel {
             _origin = this.getLocation();
 
             if(orientation == BoxLayout.X_AXIS){
-                _origin.x += OFFSET;
+                _origin.x += 50;
             }else{
-                _origin.y += OFFSET;
+                _origin.y += 50;
             }
 
             setLayout(null);

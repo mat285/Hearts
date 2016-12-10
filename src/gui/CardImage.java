@@ -19,6 +19,7 @@ import java.util.Map;
  * Time: 6:19 PM
  */
 public class CardImage extends JPanel implements Cloneable{
+    public static final int HEIGHT = 250;
     private static Map<Card, CardImage> _images = new HashMap<>();
     private static CardImage _emptyCard;
     private Card _card;
@@ -27,6 +28,10 @@ public class CardImage extends JPanel implements Cloneable{
     private JLabel _icon;
     private static double aspectRatio;
 
+    /**
+     * Creates a new Cardimage from the given card
+     * @param card
+     * */
     private CardImage(Card card) throws IOException {
         super();
         setLayout(new BorderLayout());
@@ -42,21 +47,19 @@ public class CardImage extends JPanel implements Cloneable{
         _original = ImageIO.read(file);
         aspectRatio = (double) _original.getWidth() / _original.getHeight();
 
-        int height = 250;
-        int width = (int) (height*aspectRatio);
-        _image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        int width = (int) (HEIGHT*aspectRatio);
+        _image = new BufferedImage(width, HEIGHT, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2D = _image.createGraphics();
-        g2D.drawImage(_original, 0, 0, width, height, null);
+        g2D.drawImage(_original, 0, 0, width, HEIGHT, null);
         g2D.dispose();
 
         _icon = new JLabel(new ImageIcon(_image));
         add(_icon);
 
-        setBounds(0,0,width, height);
+        setBounds(0,0,width, HEIGHT);
         _icon.setOpaque(false);
         setOpaque(false);
     }
-
 
     public static CardImage Card(Card card) throws IOException, CloneNotSupportedException {
         if(_emptyCard == null){ _emptyCard = new CardImage(null);}
