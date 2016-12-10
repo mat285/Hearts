@@ -71,10 +71,9 @@ public class HeartsFrame extends JFrame {
         if(players == null){
             //default settings
             _players = new IPlayer[4];
-            _players[0] = new AIPlayer();
-            _players[1] = new RuleBasedPlayer();
-            _players[2] = new RandomPlayer();
-            _players[3] = new RandomPlayer();
+            for(int i = 0; i < 4; i++){
+                _players[i] = new RandomPlayer();
+            }
             return;
         }
         if(players.length != 4) throw new Exception("Invalid number of players");
@@ -181,6 +180,11 @@ public class HeartsFrame extends JFrame {
             e.printStackTrace();
         }
 
+    }
+
+    public static void main(String[] args){
+        HeartsFrame frame = new HeartsFrame();
+        frame.createAndShowGui();
     }
 
 }

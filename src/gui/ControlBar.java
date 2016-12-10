@@ -16,7 +16,7 @@ public class ControlBar extends JPanel {
 
         JButton changePlayersButton = new JButton("Change Players");
         JButton newGameButton = new JButton("New Game");
-        JButton startButton = new JButton("Start");
+        JButton startButton = new JButton("Play");
         JButton stopButton = new JButton("Pause");
 
         changePlayersButton.setFont(DEFAULT_FONT);

@@ -35,8 +35,8 @@ public class PlayerPanel extends JPanel {
 
         _name.setFont(DEFAULT_FONT);
         _score.setFont(DEFAULT_FONT);
-        //_name.setForeground(Color.WHITE);
-        //_score.setForeground(Color.WHITE);
+        _name.setForeground(Color.WHITE);
+        _score.setForeground(Color.WHITE);
         setOpaque(false);
         add(_name);
         add(_score);
