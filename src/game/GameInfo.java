@@ -393,6 +393,22 @@ public final class GameInfo {
     }
 
     /**
+     * Returns the number of the player who won the trick. Returns -1 if the trick
+     * is not complete.
+     * @return the number of the player who won the trick
+     * */
+    public int TrickWinner(){
+        if(!_currentTrick.IsComplete()) return -1;
+        Card highest = _currentTrick.Highest();
+        IPlayer player = _plays.get(highest);
+        for(int i = 0; i < _players.length; i++){
+            if(_players[i] == player) return i;
+        }
+        return -1;
+    }
+
+
+    /**
      * Gets the scores for the current round
      * @return int[] containing the scores of each player
      */

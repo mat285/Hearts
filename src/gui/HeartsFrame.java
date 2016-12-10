@@ -123,6 +123,7 @@ public class HeartsFrame extends JFrame {
                     _game.Step();
                     for (PlayerPanel panel : _playerPanels) {
                         panel.UpdateHand(info.HandOfPlayer(_players[panel.Id()]));
+                        panel.Unhighlight();
                     }
                     _trickPanel.Update(info.CurrentTrick(), info.PlayerStartingTrick());
 
@@ -130,11 +131,15 @@ public class HeartsFrame extends JFrame {
 
                     break;
                 case END_TRICK:
+                    int winner = info.TrickWinner();
+                    _playerPanels[winner].Highlight();
+
                     _game.Step();
                     _trickPanel.Update(info.CurrentTrick(), 0);
                     for (int i = 0; i < _players.length; i++) {
                         _playerPanels[i].UpdateScore(info.GetRoundScores()[i]);
                     }
+
                     if(timer != null) Thread.sleep(2000);
                     break;
                 case END_ROUND:

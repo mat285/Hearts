@@ -5,6 +5,8 @@ import card.Deck;
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,6 +51,10 @@ public class PlayerPanel extends JPanel {
 
     public void SetName(String name){_label.set_name(name);}
 
+    public void Highlight(){_label.setFontColor(Color.RED);}
+
+    public void Unhighlight(){_label.setFontColor(Color.WHITE);}
+
     public void UpdateHand(List<Card> hand) throws Exception {
         assert _hand != null;
         remove(_hand);
@@ -78,8 +84,7 @@ public class PlayerPanel extends JPanel {
             //setBackground(Color.white);
             //setBorder(BorderFactory.createLineBorder(Color.BLACK, 3));
 
-            _name.setForeground(Color.WHITE);
-            _score.setForeground(Color.WHITE);
+            setFontColor(Color.WHITE);
             add(_name);
             add(Box.createRigidArea(new Dimension(15,15)));
             add(_score);
@@ -95,6 +100,13 @@ public class PlayerPanel extends JPanel {
 
         private void set_name(String name){
             _name.setText(name);
+        }
+
+        private void setFontColor(Color c){
+            _name.setForeground(c);
+            _score.setForeground(c);
+            revalidate();
+            repaint();
         }
 
     }
