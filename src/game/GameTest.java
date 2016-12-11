@@ -1,9 +1,9 @@
 package game;
 
-import ai.AIPlayer;
+import ai.FirstAIPlayer;
+import ai.SecondAIPlayer;
 import player.RandomPlayer;
 import player.RuleBasedPlayer;
-import player.TerminalPlayer;
 import test.Assert;
 import java.util.*;
 import card.*;
@@ -11,6 +11,7 @@ import card.*;
 public class GameTest {
 
     public static void Test() {
+        long startTime = System.currentTimeMillis();
         IPlayer[] players = getPlayers();
         Game g = new Game(players);
         Assert.Equal(g.State(), GameState.START_ROUND);
@@ -22,6 +23,7 @@ public class GameTest {
             if (g.State() == GameState.END_ROUND) g.Info().PrintDebugInfo();
         }
         System.out.println("Ranking: " + g.Step());
+        System.out.println("Total execution time: " + (System.currentTimeMillis() - startTime)/1000.0 + "s");
         //System.exit(0);
         List<Double> places = new ArrayList<>();
 
@@ -29,18 +31,19 @@ public class GameTest {
             places.add(0.0);
         }
 
-        int trials = 10;
+        int trials = 1000;
+
         for (int i = 0; i < trials; i++) {
             g.NewGame();
             List<ScoredPlayer> rankings = g.RunGame();
-            for (int j = 0; j < rankings.size(); j++) {
-                if (rankings.get(j).Player() == players[0]) places.set(j, places.get(j) + 1.0);
+            for (int j = 0; j < players.length; j++) {
+                if (rankings.get(0).Player() == players[j]) places.set(j, places.get(j) + 1.0);
             }
         }
         for (int i = 0; i < places.size(); i++) {
             places.set(i, places.get(i) / trials);
         }
-        System.out.println("Rule based performance: " + places);
+        System.out.println("Performance: (AI 1), (AI 2), (Rule), (Rand)\n" + places);
     }
 
     public static void TestHighestOfSuit() {
@@ -58,9 +61,10 @@ public class GameTest {
     public static IPlayer[] getPlayers() {
         IPlayer[] players = new IPlayer[4];
         for (int i = 0; i < players.length; i++) {
-            if (i == 0) players[i] = new AIPlayer();
-            else if (i == 1) players[i] = new RuleBasedPlayer();
-            else players[i] = new RandomPlayer();
+            if (i == 0) players[i] = new SecondAIPlayer();
+            //else if (i == 1) players[i] = new SecondAIPlayer();
+            //else if (i == 2) players[i] = new RuleBasedPlayer();
+            else players[i] = new RuleBasedPlayer();
         }
         return players;
     }

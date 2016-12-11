@@ -66,15 +66,6 @@ public class RuleBasedPlayer extends AbstractPlayer implements IPlayer {
         return avoidTrick(info);
     }
 
-//    public Move Play(SealedGameInfo info) {
-//        Move m = play(info);
-//        System.out.println("Hand: " + info.GetHand());
-//        System.out.println("Trick: " + info.CurrentTrick().AllCards());
-//        System.out.println("Play: " + m.Card());
-//        System.out.println(GameUtils.ValidateMove(m, info));
-//        return m;
-//    }
-
     private Move playFirstMove(SealedGameInfo info) {
         if (info.GetHand().contains(Cards.TWO_OF_CLUBS)) return new Move(Cards.TWO_OF_CLUBS);
         Card highClub = GameUtils.HighestOfSuit(info.GetHand(), Suit.CLUBS);
