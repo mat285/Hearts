@@ -23,7 +23,6 @@ public class GameTest {
             if (g.State() == GameState.END_ROUND) g.Info().PrintDebugInfo();
         }
         System.out.println("Ranking: " + g.Step());
-
         System.out.println("Total execution time: " + (System.currentTimeMillis() - startTime)/1000.0 + "s");
         //System.exit(0);
         List<Double> places = new ArrayList<>();
