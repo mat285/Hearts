@@ -1,6 +1,6 @@
 package gui;
 
-import ai.AIPlayer;
+import ai.*;
 import game.*;
 import player.RandomPlayer;
 import player.RuleBasedPlayer;
@@ -178,8 +178,10 @@ public class HeartsFrame extends JFrame {
             _scorePanel.ClearScores();
             SwitchMode(Mode.GAME);
             _game.Step();
+            _trickPanel.HideHeartsBroken();
             for (PlayerPanel panel : _playerPanels) {
                 panel.UpdateHand(info.HandOfPlayer(_players[panel.Id()]));
+                panel.Unhighlight();
             }
             _trickPanel.Update(info.CurrentTrick(), 0);
         }catch(Exception e){

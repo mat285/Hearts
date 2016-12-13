@@ -1,6 +1,8 @@
-package player;
+package main;
 
-import ai.AIPlayer;
+import ai.*;
+import player.RandomPlayer;
+import player.RuleBasedPlayer;
 
 /**
  * TBD
@@ -10,7 +12,7 @@ import ai.AIPlayer;
  * Time: 6:30 PM
  */
 public class Players {
-    public static final Class[] PLAYER_TYPES = {RandomPlayer.class, RuleBasedPlayer.class, AIPlayer.class};
+    public static final Class[] PLAYER_TYPES = {RandomPlayer.class, RuleBasedPlayer.class, FirstAIPlayer.class, SecondAIPlayer.class, ThirdAIPlayer.class};
 
     public static boolean KnownType(Class type){
         for(Class c : PLAYER_TYPES){

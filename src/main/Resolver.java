@@ -1,7 +1,6 @@
 package main;
 
 import game.IPlayer;
-import player.Players;
 
 /**
  * TBD

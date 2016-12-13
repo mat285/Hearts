@@ -2,7 +2,7 @@ package gui;
 
 import game.IPlayer;
 import main.Resolver;
-import player.Players;
+import main.Players;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
