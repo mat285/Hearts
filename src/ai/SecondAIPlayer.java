@@ -38,6 +38,11 @@ public class SecondAIPlayer extends AbstractAIPlayer implements IPlayer {
         };
     }
 
+    /**
+     * Only expands nodes that are promising
+     * @param info the current sealed game info
+     * @return the expansion function for this round
+     */
     @Override
     public ExpansionFunction GetExpansionFunction(SealedGameInfo info) {
         return new ExpansionFunction() {

@@ -124,6 +124,12 @@ public class Game {
         return g;
     }
 
+    /**
+     * Creates a new game object starting from the given position
+     * @param info the game info
+     * @param move the move to play
+     * @return a new game from the given point
+     */
     public static Game StartFromMove(GameInfo info, Move move){
         Game g = StartFromState(info, GameState.PLAYER_TURN);
         info.NextPlayerPlay(move);
