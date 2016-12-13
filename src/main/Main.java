@@ -2,12 +2,10 @@ package main;
 
 import game.*;
 
+
 public class Main {
-    public static void main(String[] args) {
-        //TerminalGame.RunSinglePlayerGame();
-        long start = System.currentTimeMillis();
+    public static void main(String[] args) throws Exception{
         GameTest.Run();
-        long end = System.currentTimeMillis();
-        System.out.println((end-start)/1000);
+        //SimulationRunner.RunAI2DepthVariations(1,1,1);
     }
 }

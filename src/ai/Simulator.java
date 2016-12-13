@@ -5,13 +5,6 @@ import player.RuleBasedPlayer;
 
 import java.util.*;
 
-/**
- * TBD
- * <p>
- * User: elee
- * Date: 11/25/2016
- * Time: 3:48 PM
- */
 public class Simulator {
     private int _maxMoves;
     private int _playerID;
