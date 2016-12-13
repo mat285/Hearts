@@ -22,4 +22,9 @@ public class ThirdAIPlayer extends AbstractPlayer {
         Simulator s = new Simulator(this.ID());
         return s.GetMove(info);
     }
+
+    @Override
+    public String toString() {
+        return super.toString() + " (3)";
+    }
 }

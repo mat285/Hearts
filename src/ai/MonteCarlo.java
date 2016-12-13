@@ -8,7 +8,7 @@ import java.util.*;
 public class MonteCarlo {
 
     public static final int DEFAULT_SEARCH_DEPTH = 5;
-    public static final int DEFAULT_NUMBER_SIMULATIONS = 22;
+    public static final int DEFAULT_NUMBER_SIMULATIONS = 10;
 
     /**
      * Simulates many games and picks the move that won most of them by distributing the remaining cards randomly and

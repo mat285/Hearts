@@ -17,6 +17,13 @@ public class SecondAIPlayer extends AbstractAIPlayer implements IPlayer {
         this(12, MonteCarlo.DEFAULT_NUMBER_SIMULATIONS);
     }
 
+
+    @Override
+    public Move Play(SealedGameInfo info) {
+        if (info.GetHand().size() > 10 && !info.IsHeartsBroken()) return RulePlayer().Play(info);
+        return super.Play(info);
+    }
+
     public HeuristicFunction GetHeuristic(SealedGameInfo info) {
         return new HeuristicFunction() {
             @Override
