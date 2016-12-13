@@ -192,7 +192,6 @@ public class HeartsFrame extends JFrame {
             setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             setPreferredSize(new Dimension(2000,2000));
             setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
-            setBackground(Color.GREEN);
             pack();
             setVisible(true);
             setResizable(false);
