@@ -8,13 +8,6 @@ import java.awt.*;
 import java.util.List;
 import java.util.Vector;
 
-/**
- * TBD
- * <p>
- * User: elee
- * Date: 11/5/2016
- * Time: 5:55 PM
- */
 public class ScorePanel extends JPanel{
     private JTable _table;
     private Vector<String> _colNames;
