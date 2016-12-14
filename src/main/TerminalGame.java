@@ -6,19 +6,13 @@ import game.IPlayer;
 import player.RandomPlayer;
 import player.RuleBasedPlayer;
 import player.TerminalPlayer;
-import test.Assert;
 
-/**
- * Created by Michael on 11/6/2016.
- */
 public class TerminalGame {
 
     public static void RunSinglePlayerGame() {
         IPlayer[] players = getPlayers();
         Game g = new Game(players);
-        Assert.Equal(g.State(), GameState.START_ROUND);
         g.Step();
-        Assert.Equal(g.State(), GameState.PASS_CARDS);
         while (g.State() != GameState.GAME_OVER) {
             //System.out.println(g.State());
             g.Step();

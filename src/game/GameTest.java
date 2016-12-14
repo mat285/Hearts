@@ -2,7 +2,6 @@ package game;
 
 import ai.*;
 import player.*;
-import test.Assert;
 import java.util.*;
 import card.*;
 
@@ -12,9 +11,7 @@ public class GameTest {
         long startTime = System.currentTimeMillis();
         IPlayer[] players = getPlayers();
         Game g = new Game(players);
-        Assert.Equal(g.State(), GameState.START_ROUND);
         g.Step();
-        Assert.Equal(g.State(), GameState.PASS_CARDS);
         while (g.State() != GameState.GAME_OVER) {
             //System.out.println(g.State());
             g.Step();
@@ -48,7 +45,6 @@ public class GameTest {
         List<Card> hand = new ArrayList<>();
         hand.add(new Card(Suit.CLUBS, Value.QUEEN));
         hand.add(new Card(Suit.CLUBS, Value.FOUR));
-        Assert.Equal(GameUtils.HighestOfSuit(hand, Suit.CLUBS), hand.get(0));
     }
 
     public static void Run() {
