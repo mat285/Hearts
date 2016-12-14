@@ -43,6 +43,7 @@ public class HeartsFrame extends JFrame {
         PlayerPanel.SetDimension(length, length / 8);
         _menu = new JMenuBar();
         add(_menu);
+        System.out.println(Toolkit.getDefaultToolkit().getScreenResolution());
 
         _gamePanel = new JPanel();
         _controls = new ControlBar(this);
