@@ -39,7 +39,8 @@ public class CardPassSimulator {
                 best = move;
             }
         }
-        return best;
+        if (max > 2.5*NUM_TRIALS) return best;
+        return null;
     }
 
     private static IPlayer[] getPlayers(int currentPlayer, final CardPassMove move) {
