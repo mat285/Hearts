@@ -1,6 +1,5 @@
 package gui;
 
-import ai.*;
 import game.*;
 import player.*;
 import javax.swing.*;
@@ -21,6 +20,7 @@ public class HeartsFrame extends JFrame {
     private JMenu _options;
     private JMenuItem _changePlayers;
     private JMenuItem _newGame;
+    private JMenuItem _runTrials;
 
     private int length;
     private int _width;
@@ -92,8 +92,12 @@ public class HeartsFrame extends JFrame {
         _newGame = new JMenuItem("New Game");
         _newGame.addActionListener(_controls.NewGame());
 
+        _runTrials = new JMenuItem("Run Trials");
+        _runTrials.addActionListener(_controls.RunHeadless());
+
         _options.add(_changePlayers);
         _options.add(_newGame);
+        _options.add(_runTrials);
         _menu.add(_options);
 
         setJMenuBar(_menu);
@@ -203,6 +207,10 @@ public class HeartsFrame extends JFrame {
             }
         });
         return timer;
+    }
+
+    public IPlayer[] GetPlayers() {
+        return _players;
     }
 
     public void NewGame(){
