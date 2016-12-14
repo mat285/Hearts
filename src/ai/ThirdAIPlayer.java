@@ -6,6 +6,7 @@ import player.RuleBasedPlayer;
 public class ThirdAIPlayer extends AbstractPlayer {
     private double _c;
     private int _numSims;
+    private MonteCarloSimulator _s;
 
     private RuleBasedPlayer _rule;
 
@@ -18,8 +19,8 @@ public class ThirdAIPlayer extends AbstractPlayer {
         _rule = new RuleBasedPlayer();
         _c = c;
         _numSims = numSims;
+        _s = new MonteCarloSimulator(this.ID(), _numSims, _c);
     }
-
 
     @Override
     public CardPassMove PassCards(SealedGameInfo info) {
@@ -28,8 +29,7 @@ public class ThirdAIPlayer extends AbstractPlayer {
 
     @Override
     public Move Play(SealedGameInfo info) {
-        MonteCarloSimulator s = new MonteCarloSimulator(this.ID(), _numSims, _c);
-        return s.GetMove(info);
+        return _s.GetMove(info);
     }
 
     @Override

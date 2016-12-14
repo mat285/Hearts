@@ -71,4 +71,14 @@ public class ControlBar extends JPanel {
             }
         };
     }
+
+    public ActionListener RunHeadless() {
+        return new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                HeadlessFrame frame = new HeadlessFrame(_gui);
+                frame.createAndShowGui();
+            }
+        };
+    }
 }
