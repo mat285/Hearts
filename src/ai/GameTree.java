@@ -20,6 +20,10 @@ public class GameTree {
         _move = move;
     }
 
+    /**
+     * Expands the desired children into game tree nodes
+     * @param exp the expansion function to determine expansion
+     */
     public void Expand(ExpansionFunction exp) {
         List<Move> moves = GameUtils.GetAllValidMoves(_info.Info());
         _children = new ArrayList<>();
@@ -30,6 +34,12 @@ public class GameTree {
         }
     }
 
+    /**
+     * Run the minimax algorithm on this game tree producing values for all nodes
+     * @param fn the heuristic evaluation function for leaf nodes
+     * @param exp the expansion function to determine node expansion
+     * @param depth the current depth of the search
+     */
     public void Minimax(HeuristicFunction fn, ExpansionFunction exp, int depth) {
         if (exp.DepthLimit(depth)) {
             _values = fn.Evaluate(_info.Info());
@@ -53,6 +63,10 @@ public class GameTree {
         _values = max._values;
     }
 
+    /**
+     * Gets the best move from the minimax values computed already
+     * @return the best move to make
+     */
     private Move bestMove() {
         if (_children == null) return null;
         Collections.shuffle(_children);
@@ -62,6 +76,12 @@ public class GameTree {
         return null;
     }
 
+    /**
+     * Runs minimax in parallel and returns the best move
+     * @param fn the heuristic evaluation function
+     * @param exp the node expansion function
+     * @return the best move found
+     */
     public Move BestMove(HeuristicFunction fn, ExpansionFunction exp) {
         GameTreeExplorer e = new GameTreeExplorer(this, fn, exp, 0);//Minimax(fn, exp, 0);
         try {
@@ -74,6 +94,8 @@ public class GameTree {
         resetThreadCount();
         return bestMove();
     }
+
+    /* Parallel game tree exploring functions*/
 
     private static boolean shouldFork() {
         try {

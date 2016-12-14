@@ -13,6 +13,11 @@ public class GameTreeInfo {
         return _info.Seal(_info.CurrentPlayer());
     }
 
+    /**
+     * Simulates playing the move by creating a new game tree info
+     * @param m the move to play
+     * @return a new game tree info with m having been played
+     */
     public GameTreeInfo PlayMove(Move m) {
         GameInfo g = _info.Clone();
         g.ExecuteMove(m,_info.CurrentPlayer());
