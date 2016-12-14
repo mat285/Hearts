@@ -264,6 +264,7 @@ public class HeartsFrame extends JFrame {
             for (PlayerPanel panel : _playerPanels) {
                 panel.UpdateHand(info.HandOfPlayer(_players[panel.Id()]));
                 panel.Unhighlight();
+                panel.UpdateScore(0);
             }
             _trickPanel.Update(info.CurrentTrick(), 0);
         }catch(Exception e){
