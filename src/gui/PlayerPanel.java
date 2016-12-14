@@ -29,7 +29,7 @@ public class PlayerPanel extends JPanel {
         if(orientation == BoxLayout.X_AXIS){
             setPreferredSize(new Dimension(_width, _height));
         }else{
-            setPreferredSize(new Dimension(_height, _width));
+            setPreferredSize(new Dimension( (_height*2), _width));
         }
 
 
