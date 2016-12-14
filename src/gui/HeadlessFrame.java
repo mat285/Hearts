@@ -38,10 +38,12 @@ public class HeadlessFrame extends JFrame {
                     if (n > 1000 || n < 1) {
                         JOptionPane.showMessageDialog(_gui, "Please select a number between 1 and 1000");
                     }
+                    JOptionPane.showMessageDialog(_gui, "Game Simulations will run in the background");
                     dispose();
                     _gui.dispose();
                     String fileName = _fileField.getText();
                     runTrials(_gui.GetPlayers(),n, fileName != "" ? fileName : "hearts_results.txt");
+                    JOptionPane.showMessageDialog(_gui, "Game Simulations Done! Output to " + fileName);
                 } catch (Exception a) {
                     JOptionPane.showMessageDialog(_gui, "Please enter a number");
                 }
@@ -85,7 +87,7 @@ public class HeadlessFrame extends JFrame {
             PrintWriter pw = new PrintWriter(filename);
             pw.println("Number of trials: " + n);
             for (int i = 0; i < players.length-1; i++) {
-                pw.print(players[i].getClass().getName() + ", ");
+                pw.print(players[i].getClass().getSimpleName() + ", ");
             }
             pw.print(players[players.length-1].getClass().getSimpleName());
             pw.println();
