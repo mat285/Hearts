@@ -3,6 +3,8 @@ package ai;
 import game.*;
 import player.*;
 
+import java.util.List;
+
 public abstract class AbstractAIPlayer extends AbstractPlayer implements IPlayer {
 
     private RuleBasedPlayer _rule;
@@ -21,6 +23,8 @@ public abstract class AbstractAIPlayer extends AbstractPlayer implements IPlayer
 
     @Override
     public Move Play(SealedGameInfo info) {
+        List<Move> valid = GameUtils.GetAllValidMoves(info);
+        if (valid.size() == 1) return valid.get(0);
         Move m = GameTree.Simulate(info, ID(),GetHeuristic(info), GetExpansionFunction(info), NumberOfSimulations(info));
         return m;
     }
