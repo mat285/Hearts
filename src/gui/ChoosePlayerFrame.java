@@ -35,6 +35,7 @@ public class ChoosePlayerFrame extends JFrame{
             _selected[i] = new JComboBox(types);
             _selected[i].setSize(label.getSize());
             _selected[i].setFont(DEFAULT_FONT);
+            label.setForeground(Color.WHITE);
 
             label.setFont(DEFAULT_FONT);
             panel.add(label);
@@ -42,6 +43,8 @@ public class ChoosePlayerFrame extends JFrame{
         }
 
         JPanel buttonPanel = new JPanel();
+        buttonPanel.setBackground(HeartsFrame.BACKGROUND);
+
         JButton ok = new JButton("Ok");
         JButton cancel = new JButton("Cancel");
 
@@ -65,6 +68,8 @@ public class ChoosePlayerFrame extends JFrame{
         });
         buttonPanel.add(cancel);
         buttonPanel.add(ok);
+
+        panel.setBackground(HeartsFrame.BACKGROUND);
 
         _contentPane.add(panel);
         _contentPane.add(Box.createRigidArea(new Dimension(0,10)));
@@ -108,6 +113,7 @@ public class ChoosePlayerFrame extends JFrame{
 
     public void createAndShowGui(){
         setPreferredSize(new Dimension(1000,500));
+        _contentPane.setBackground(HeartsFrame.BACKGROUND);
         setContentPane(_contentPane);
         pack();
         setVisible(true);

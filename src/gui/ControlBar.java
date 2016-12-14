@@ -25,7 +25,7 @@ public class ControlBar extends JPanel {
         startButton.addActionListener(StartGame());
         stopButton.addActionListener(StopGame());
         stepButton.addActionListener(StepGame());
-        
+
         add(startButton);
         add(stepButton);
         add(stopButton);

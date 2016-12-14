@@ -11,6 +11,9 @@ import java.awt.event.ActionListener;
 import java.io.File;
 
 public class HeartsFrame extends JFrame {
+
+    public static final Color BACKGROUND = new Color(15,117,51);
+
     private PlayerPanel[] _playerPanels;
     private IPlayer[] _players;
     private TrickPanel _trickPanel;
@@ -76,8 +79,8 @@ public class HeartsFrame extends JFrame {
         _gamePanel.add(_playerPanels[1], BorderLayout.WEST);
         _gamePanel.add(_playerPanels[2], BorderLayout.NORTH);
         _gamePanel.add(_playerPanels[3], BorderLayout.EAST);
-        _gamePanel.setBackground(new Color(15,117,51));
-        _scorePanel.setBackground(new Color(15,117,51));
+        _gamePanel.setBackground(BACKGROUND);
+        _scorePanel.setBackground(BACKGROUND);
         _currentBoard = _gamePanel;
         add(_currentBoard);
         add(_controls);
