@@ -27,10 +27,17 @@ public class HeartsFrame extends JFrame {
     private JMenuItem _changePlayers;
     private JMenuItem _newGame;
     private JMenuItem _runTrials;
+    private JMenu _speed;
+    private JRadioButtonMenuItem _halfSpeed;
+    private JRadioButtonMenuItem _regSpeed;
+    private JRadioButtonMenuItem _twiceSpeed;
 
     private int length;
     private int _width;
     private int _height;
+
+    private double _speedMult = 1.0;
+    private int _gameSpeed = 420;
 
     private Game _game;
 
@@ -104,7 +111,28 @@ public class HeartsFrame extends JFrame {
         _options.add(_changePlayers);
         _options.add(_newGame);
         _options.add(_runTrials);
+
+        _speed = new JMenu("Speed");
+        _halfSpeed = new JRadioButtonMenuItem("0.5x");
+        _regSpeed = new JRadioButtonMenuItem("1.0x");
+        _twiceSpeed = new JRadioButtonMenuItem("2.0x");
+
+        ButtonGroup b = new ButtonGroup();
+        b.add(_halfSpeed);
+        b.add(_regSpeed);
+        b.add(_twiceSpeed);
+        _regSpeed.setSelected(true);
+
+        _halfSpeed.addActionListener(getSpeedListener(2.0));
+        _regSpeed.addActionListener(getSpeedListener(1.0));
+        _twiceSpeed.addActionListener(getSpeedListener(0.5));
+
+        _speed.add(_halfSpeed);
+        _speed.add(_regSpeed);
+        _speed.add(_twiceSpeed);
+
         _menu.add(_options);
+        _menu.add(_speed);
 
         setJMenuBar(_menu);
     }
@@ -206,7 +234,7 @@ public class HeartsFrame extends JFrame {
     }
 
     public Timer GetGameTimer(){
-        Timer timer = new Timer(500, new ActionListener() {
+        Timer timer = new Timer((int) (_gameSpeed * _speedMult), new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e){
                 Step((Timer) e.getSource());
@@ -257,6 +285,16 @@ public class HeartsFrame extends JFrame {
             e.printStackTrace();
         }
 
+    }
+
+    private ActionListener getSpeedListener(final double speedMult) {
+        return new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                _speedMult = speedMult;
+                _controls.ResetTimer((int) (_speedMult*_gameSpeed));
+            }
+        };
     }
 
     public static void main(String[] args){
