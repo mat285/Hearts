@@ -232,6 +232,12 @@ public class HeartsFrame extends JFrame {
 
     public void createAndShowGui(){
         try{
+            for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
             setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             setPreferredSize(new Dimension((int) (length * 1.5), length));
             setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));

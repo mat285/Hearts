@@ -22,31 +22,10 @@ public class ControlBar extends JPanel {
         stepButton.setFont(DEFAULT_FONT);
         stopButton.setFont(DEFAULT_FONT);
 
-        startButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(_timer == null){
-                    _timer = _gui.GetGameTimer();
-                }
-                _timer.start();
-            }
-        });
-        stopButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(_timer == null) return;
-                _timer.stop();
-
-            }
-        });
-
-        stepButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (_timer != null) _timer.stop();
-                _gui.Step(null);
-            }
-        });
+        startButton.addActionListener(StartGame());
+        stopButton.addActionListener(StopGame());
+        stepButton.addActionListener(StepGame());
+        
         add(startButton);
         add(stepButton);
         add(stopButton);
@@ -78,6 +57,39 @@ public class ControlBar extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 HeadlessFrame frame = new HeadlessFrame(_gui);
                 frame.createAndShowGui();
+            }
+        };
+    }
+
+    public ActionListener StartGame() {
+        return new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(_timer == null){
+                    _timer = _gui.GetGameTimer();
+                }
+                _timer.start();
+            }
+        };
+    }
+
+    public ActionListener StopGame() {
+        return new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(_timer == null) return;
+                _timer.stop();
+
+            }
+        };
+    }
+
+    public ActionListener StepGame() {
+        return new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (_timer != null) _timer.stop();
+                _gui.Step(null);
             }
         };
     }
