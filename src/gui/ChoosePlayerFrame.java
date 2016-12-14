@@ -111,7 +111,6 @@ public class ChoosePlayerFrame extends JFrame{
     }
 
     public void createAndShowGui(){
-        setPreferredSize(new Dimension(1000,500));
         _contentPane.setBackground(HeartsFrame.BACKGROUND);
         setContentPane(_contentPane);
         pack();

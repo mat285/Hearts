@@ -23,7 +23,6 @@ public class PlayerPanel extends JPanel {
         _hand = new HandPanel(orientation);
 
         setLayout(new BoxLayout(this, orientation));
-        Component filler = Box.createRigidArea(new Dimension(15,15));
         if(orientation == BoxLayout.X_AXIS){
             setPreferredSize(new Dimension(_width, _height));
         }else{

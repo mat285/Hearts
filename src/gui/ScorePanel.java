@@ -27,7 +27,7 @@ public class ScorePanel extends JPanel{
 
         _table = new JTable(_model);
         JScrollPane pane = new JScrollPane(_table);
-        pane.setPreferredSize(new Dimension(1000,1000));
+        //pane.setPreferredSize(new Dimension(1000,1000));
         add(pane);
         setOpaque(true);
 

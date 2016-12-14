@@ -33,7 +33,6 @@ public class HeartsFrame extends JFrame {
     private JRadioButtonMenuItem _twiceSpeed;
     private JRadioButtonMenuItem _fourSpeed;
 
-    private int length;
     private int _width;
     private int _height;
 
@@ -41,8 +40,6 @@ public class HeartsFrame extends JFrame {
     private int _gameSpeed = 400;
 
     private Game _game;
-
-
 
     public HeartsFrame(){
         super("Hearts");
@@ -58,9 +55,10 @@ public class HeartsFrame extends JFrame {
 
         _height = (int) (resolution.getHeight() * 0.8);
         _width = (int) (_height * 1.5);
+        if(_width > resolution.getWidth()){_width = (int) (resolution.getWidth());}
 
         CardImage.SetHeight(_height / 8);
-        PlayerPanel.SetDimension(_width, _height / 8);
+        PlayerPanel.SetDimension(_width * 2, _height / 8);
         _menu = new JMenuBar();
         add(_menu);
 
