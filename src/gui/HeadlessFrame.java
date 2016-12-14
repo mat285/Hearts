@@ -43,7 +43,8 @@ public class HeadlessFrame extends JFrame {
                     _gui.dispose();
                     String fileName = _fileField.getText();
                     runTrials(_gui.GetPlayers(),n, fileName != "" ? fileName : "hearts_results.txt");
-                    JOptionPane.showMessageDialog(_gui,"Game Simulations Done! Output to " + fileName);
+                    JOptionPane.showMessageDialog(_gui, "Game Simulations Done! Output to " + fileName);
+                    System.exit(0);
                 } catch (Exception a) {
                     JOptionPane.showMessageDialog(_gui, "Please enter a number");
                 }
