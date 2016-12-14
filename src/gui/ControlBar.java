@@ -8,7 +8,6 @@ import java.awt.event.ActionListener;
 public class ControlBar extends JPanel {
     private HeartsFrame _gui;
     private Timer _timer;
-    private static final Font DEFAULT_FONT = new Font("Calibri", Font.BOLD, 40);
 
     public ControlBar(HeartsFrame gui){
         _gui = gui;
@@ -18,9 +17,9 @@ public class ControlBar extends JPanel {
         JButton stepButton = new JButton("Step");
         JButton stopButton = new JButton("Pause");
 
-        startButton.setFont(DEFAULT_FONT);
-        stepButton.setFont(DEFAULT_FONT);
-        stopButton.setFont(DEFAULT_FONT);
+        startButton.setFont(HeartsFrame.DEFAULT_FONT);
+        stepButton.setFont(HeartsFrame.DEFAULT_FONT);
+        stopButton.setFont(HeartsFrame.DEFAULT_FONT);
 
         startButton.addActionListener(new ActionListener() {
             @Override

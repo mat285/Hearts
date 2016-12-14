@@ -12,7 +12,6 @@ import java.util.*;
 public class ChoosePlayerFrame extends JFrame{
     private HeartsFrame _gui;
     private JComboBox[] _selected = new JComboBox[4];
-    private static final Font DEFAULT_FONT = new Font("Calibri", Font.BOLD, 40);
     private JPanel _contentPane;
 
 
@@ -34,9 +33,9 @@ public class ChoosePlayerFrame extends JFrame{
             JLabel label = new JLabel("Player " + (i+1));
             _selected[i] = new JComboBox(types);
             _selected[i].setSize(label.getSize());
-            _selected[i].setFont(DEFAULT_FONT);
+            _selected[i].setFont(HeartsFrame.DEFAULT_FONT);
 
-            label.setFont(DEFAULT_FONT);
+            label.setFont(HeartsFrame.DEFAULT_FONT);
             panel.add(label);
             panel.add(_selected[i]);
         }
@@ -45,8 +44,8 @@ public class ChoosePlayerFrame extends JFrame{
         JButton ok = new JButton("Ok");
         JButton cancel = new JButton("Cancel");
 
-        ok.setFont(DEFAULT_FONT);
-        cancel.setFont(DEFAULT_FONT);
+        ok.setFont(HeartsFrame.DEFAULT_FONT);
+        cancel.setFont(HeartsFrame.DEFAULT_FONT);
 
         ok.addActionListener(new ActionListener() {
             @Override

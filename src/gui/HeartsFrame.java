@@ -11,6 +11,8 @@ import java.awt.event.ActionListener;
 import java.io.File;
 
 public class HeartsFrame extends JFrame {
+    public static final Font DEFAULT_FONT = new Font("Calibri", Font.BOLD, 30);
+
     private PlayerPanel[] _playerPanels;
     private IPlayer[] _players;
     private TrickPanel _trickPanel;
@@ -30,6 +32,7 @@ public class HeartsFrame extends JFrame {
     private int _height;
 
     private Game _game;
+
 
 
     public HeartsFrame(){

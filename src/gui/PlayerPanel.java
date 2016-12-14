@@ -15,8 +15,6 @@ public class PlayerPanel extends JPanel {
     private static int _height;
     private static int _width;
 
-    private static final Font DEFAULT_FONT = new Font("Calibri", Font.BOLD, 40);
-
     public PlayerPanel(String name, int id, int orientation){
         assert(id > 0 && id < 4);
         _id = id;
@@ -83,9 +81,9 @@ public class PlayerPanel extends JPanel {
             _name = new JLabel(name);
             _score = new JLabel("0");
             _type = new JLabel();
-            _name.setFont(DEFAULT_FONT);
-            _score.setFont(DEFAULT_FONT);
-            _type.setFont(DEFAULT_FONT);
+            _name.setFont(HeartsFrame.DEFAULT_FONT);
+            _score.setFont(HeartsFrame.DEFAULT_FONT);
+            _type.setFont(HeartsFrame.DEFAULT_FONT);
             setLayout(new BoxLayout(this, orientation));
             setOpaque(false);
 
