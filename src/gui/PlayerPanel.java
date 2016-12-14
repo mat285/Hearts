@@ -49,7 +49,9 @@ public class PlayerPanel extends JPanel {
 
     public String Name(){return _label.name();}
 
-    public void SetName(String name){_label.set_name(name);}
+    public void SetName(String name){_label.set_name(name); }
+
+    public void UpdateType(String type) { _label.set_type(type); }
 
     public void Highlight(){_label.setFontColor(Color.RED);}
 
@@ -72,20 +74,23 @@ public class PlayerPanel extends JPanel {
     private class Label extends JPanel{
         private JLabel _name;
         private JLabel _score;
+        private JLabel _type;
         private Dimension dimension = new Dimension(100,100);
 
         private Label(String name, int orientation){
             _name = new JLabel(name);
             _score = new JLabel("0");
+            _type = new JLabel();
             _name.setFont(DEFAULT_FONT);
             _score.setFont(DEFAULT_FONT);
+            _type.setFont(DEFAULT_FONT);
             setLayout(new BoxLayout(this, orientation));
             setOpaque(false);
-            //setBackground(Color.white);
-            //setBorder(BorderFactory.createLineBorder(Color.BLACK, 3));
 
             setFontColor(Color.WHITE);
             add(_name);
+            add(Box.createRigidArea(new Dimension(15,15)));
+            add(_type);
             add(Box.createRigidArea(new Dimension(15,15)));
             add(_score);
         }
@@ -102,13 +107,16 @@ public class PlayerPanel extends JPanel {
             _name.setText(name);
         }
 
+        private void set_type(String type) {
+            _type.setText(type);
+        }
+
         private void setFontColor(Color c){
             _name.setForeground(c);
             _score.setForeground(c);
             revalidate();
             repaint();
         }
-
     }
 
     private class HandPanel extends JLayeredPane{

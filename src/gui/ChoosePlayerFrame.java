@@ -9,14 +9,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.*;
 
-
-/**
- * TBD
- * <p>
- * User: elee
- * Date: 11/17/2016
- * Time: 6:44 PM
- */
 public class ChoosePlayerFrame extends JFrame{
     private HeartsFrame _gui;
     private JComboBox[] _selected = new JComboBox[4];

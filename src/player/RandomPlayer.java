@@ -16,6 +16,6 @@ public class RandomPlayer extends AbstractPlayer implements IPlayer{
 
     @Override
     public String toString() {
-        return super.toString() + " (Rand)";
+        return "Random";
     }
 }

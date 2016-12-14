@@ -438,7 +438,8 @@ public final class GameInfo {
      * @return A SealedGameInfo for this player
      */
     public SealedGameInfo Seal(IPlayer player) {
-        return new SealedGameInfo(CurrentTrick(),
+        return new SealedGameInfo(CurrentPlayerNumber(),
+                CurrentTrick(),
                 GetRoundScores(),
                 GetGameScores(),
                 IsHeartsBroken(),

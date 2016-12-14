@@ -7,7 +7,7 @@ import java.util.concurrent.Semaphore;
 
 public class GameTree {
 
-    public static final int DEFAULT_SEARCH_DEPTH = 5;
+    public static final int DEFAULT_SEARCH_DEPTH = 6;
     public static final int DEFAULT_NUMBER_SIMULATIONS = 10;
 
     private List<GameTree> _children;

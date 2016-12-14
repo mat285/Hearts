@@ -5,6 +5,7 @@ import java.util.*;
 
 public class SealedGameInfo implements Cloneable{
 
+    private int _currentPlayer;
     private Trick _currentTrick;
     private int[] _roundScores;
     private int[] _scores;
@@ -15,7 +16,8 @@ public class SealedGameInfo implements Cloneable{
     private Set<Card> _remaining;
     private int[] _cardDistribution;
 
-    public SealedGameInfo(Trick currentTrick, int[] roundScores, int[] scores, boolean heartsBroken, int roundNumber, boolean isStartofRound, Set<Card> hand, Set<Card> remaining, int[] cardDistribution) {
+    public SealedGameInfo(int currentPlayer, Trick currentTrick, int[] roundScores, int[] scores, boolean heartsBroken, int roundNumber, boolean isStartofRound, Set<Card> hand, Set<Card> remaining, int[] cardDistribution) {
+        _currentPlayer = currentPlayer;
         _currentTrick = currentTrick;
         _roundScores = roundScores;
         _scores = scores;
@@ -30,6 +32,8 @@ public class SealedGameInfo implements Cloneable{
     public Card LastCardPlayed() {
         return _currentTrick.LastCardAdded();
     }
+
+    public int CurrentPlayer() { return _currentPlayer; }
 
     public Trick CurrentTrick() {
         return _currentTrick.Clone();
@@ -108,7 +112,7 @@ public class SealedGameInfo implements Cloneable{
         clonedHand.addAll(_hand);
         clonedRemaining.addAll(_remaining);
 
-        return new SealedGameInfo(_currentTrick.Clone(), _roundScores.clone(),
+        return new SealedGameInfo(_currentPlayer, _currentTrick.Clone(), _roundScores.clone(),
                 _scores.clone(), _heartsBroken, _roundNumber, _isStartOfRound,
                 clonedHand, clonedRemaining, _cardDistribution.clone());
 

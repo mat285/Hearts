@@ -128,6 +128,6 @@ public class RuleBasedPlayer extends AbstractPlayer implements IPlayer {
 
     @Override
     public String toString() {
-        return super.toString() + " (Rule)";
+        return "Rule";
     }
 }

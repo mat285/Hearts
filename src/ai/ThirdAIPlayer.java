@@ -34,6 +34,6 @@ public class ThirdAIPlayer extends AbstractPlayer {
 
     @Override
     public String toString() {
-        return super.toString() + " (AI) (3)";
+        return "Third AI";
     }
 }

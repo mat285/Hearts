@@ -14,24 +14,14 @@ public class ControlBar extends JPanel {
         _gui = gui;
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 
-        JButton changePlayersButton = new JButton("Change Players");
-        JButton newGameButton = new JButton("New Game");
         JButton startButton = new JButton("Play");
         JButton stepButton = new JButton("Step");
         JButton stopButton = new JButton("Pause");
 
-        changePlayersButton.setFont(DEFAULT_FONT);
-        newGameButton.setFont(DEFAULT_FONT);
         startButton.setFont(DEFAULT_FONT);
         stepButton.setFont(DEFAULT_FONT);
         stopButton.setFont(DEFAULT_FONT);
 
-        newGameButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                _gui.NewGame();
-            }
-        });
         startButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -49,26 +39,36 @@ public class ControlBar extends JPanel {
 
             }
         });
-        changePlayersButton.addActionListener(new ActionListener() {
+
+        stepButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (_timer != null) _timer.stop();
+                _gui.Step(null);
+            }
+        });
+        add(startButton);
+        add(stepButton);
+        add(stopButton);
+    }
+
+    public ActionListener ChangePlayers() {
+        return new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(_timer != null) _timer.stop();
                 ChoosePlayerFrame frame = new ChoosePlayerFrame(_gui);
                 frame.createAndShowGui();
             }
-        });
-        stepButton.addActionListener(new ActionListener() {
+        };
+    }
+
+    public ActionListener NewGame() {
+        return new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(_timer != null) _timer.stop();
-                _gui.Step(null);
+                _gui.NewGame();
             }
-        });
-
-        add(changePlayersButton);
-        add(newGameButton);
-        add(startButton);
-        add(stepButton);
-        add(stopButton);
+        };
     }
 }

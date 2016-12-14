@@ -73,6 +73,6 @@ public class SecondAIPlayer extends AbstractAIPlayer implements IPlayer {
 
     @Override
     public String toString() {
-        return super.toString() + " (2)";
+        return "Second AI";
     }
 }

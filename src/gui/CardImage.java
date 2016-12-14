@@ -11,13 +11,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * TBD
- * <p>
- * User: elee
- * Date: 11/3/2016
- * Time: 6:19 PM
- */
 public class CardImage extends JPanel implements Cloneable{
     public static final int HEIGHT = 250;
     private static Map<Card, CardImage> _images = new HashMap<>();
