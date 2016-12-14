@@ -29,6 +29,14 @@ public class ControlBar extends JPanel {
         add(stopButton);
     }
 
+    public void ResetTimer(int time) {
+        if (_timer == null) return;
+        boolean running = _timer.isRunning();
+        _timer.stop();
+        _timer.setDelay(time);
+        if (running) _timer.start();
+    }
+
     public ActionListener ChangePlayers() {
         return new ActionListener() {
             @Override
