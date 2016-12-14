@@ -12,7 +12,7 @@ public class SimulationRunner {
     public static void RunAI3ConstantVariations(double startC, double endC, int trials){
         for (double i = startC; i <= endC; i += 0.5){
             System.out.println("C = " + i);
-            RunAI3RandomSimulations(i, Simulator.DEFAULT_NUM_SIMS, trials);
+            RunAI3RandomSimulations(i, MonteCarloSimulator.DEFAULT_NUM_SIMS, trials);
             System.out.println();
         }
     }
@@ -20,7 +20,7 @@ public class SimulationRunner {
     public static void RunAI3SimulationVariations(int startNum, int endNum, int trials){
         for (int i = startNum; i <= endNum; i+=100){
             System.out.println("Num simulations: " + i);
-            RunAI3RandomSimulations(Simulator.DEFAULT_C, i, trials);
+            RunAI3RandomSimulations(MonteCarloSimulator.DEFAULT_C, i, trials);
             System.out.println();
         }
     }
@@ -38,7 +38,7 @@ public class SimulationRunner {
     public static void RunAI2DepthVariations(int startDepth, int endDepth, int trials) {
         for (int i = startDepth; i <= endDepth; i++) {
             System.out.println("Search depth " + i);
-            RunAI2RandomSimulation(i, MonteCarlo.DEFAULT_NUMBER_SIMULATIONS, trials);
+            RunAI2RandomSimulation(i, GameTree.DEFAULT_NUMBER_SIMULATIONS, trials);
             System.out.println();
         }
     }
@@ -46,7 +46,7 @@ public class SimulationRunner {
     public static void RunAI2SimulationVariations(int startNum, int endNum, int trials) {
         for (int i = startNum; i <= endNum; i+=5) {
             System.out.println("Num trials " + i);
-            RunAI2RandomSimulation(MonteCarlo.DEFAULT_SEARCH_DEPTH, startNum, endNum);
+            RunAI2RandomSimulation(GameTree.DEFAULT_SEARCH_DEPTH, startNum, endNum);
             System.out.println();
         }
     }
@@ -64,7 +64,7 @@ public class SimulationRunner {
     public static void RunAI1DepthVariations(int startDepth, int endDepth, int trials) {
         for (int i = startDepth; i <= endDepth; i++) {
             System.out.println("Search depth " + i);
-            RunAI1RandomSimulation(i, MonteCarlo.DEFAULT_NUMBER_SIMULATIONS, trials);
+            RunAI1RandomSimulation(i, GameTree.DEFAULT_NUMBER_SIMULATIONS, trials);
             System.out.println();
         }
     }
@@ -72,7 +72,7 @@ public class SimulationRunner {
     public static void RunAI1SimulationVariations(int startNum, int endNum, int trials) {
         for (int i = startNum; i <= endNum; i+=5) {
             System.out.println("Num trials " + i);
-            RunAI1RandomSimulation(MonteCarlo.DEFAULT_SEARCH_DEPTH, startNum, endNum);
+            RunAI1RandomSimulation(GameTree.DEFAULT_SEARCH_DEPTH, startNum, endNum);
             System.out.println();
         }
     }

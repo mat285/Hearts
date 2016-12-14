@@ -2,14 +2,11 @@ package gui;
 
 import ai.*;
 import game.*;
-import player.RandomPlayer;
-import player.RuleBasedPlayer;
-
+import player.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Arrays;
 
 public class HeartsFrame extends JFrame {
     private PlayerPanel[] _playerPanels;
@@ -18,8 +15,12 @@ public class HeartsFrame extends JFrame {
     private ScorePanel _scorePanel;
     private ControlBar _controls;
     private JPanel _gamePanel;
-    private JPanel _currentboard;
+    private JPanel _currentBoard;
+
     private JMenuBar _menu;
+    private JMenu _options;
+    private JMenuItem _changePlayers;
+    private JMenuItem _newGame;
 
     private int length;
 
@@ -48,7 +49,6 @@ public class HeartsFrame extends JFrame {
 
         _gamePanel.setLayout(new BorderLayout());
 
-
         _playerPanels = new PlayerPanel[4];
 
         String[] names = new String[4];
@@ -70,34 +70,56 @@ public class HeartsFrame extends JFrame {
         _gamePanel.add(_playerPanels[3], BorderLayout.EAST);
         _gamePanel.setBackground(new Color(15,117,51));
         _scorePanel.setBackground(new Color(15,117,51));
-        _currentboard = _gamePanel;
-        add(_currentboard);
+        _currentBoard = _gamePanel;
+        add(_currentBoard);
         add(_controls);
+        initMenuBar();
+    }
+
+    private void initMenuBar() {
+        _menu = new JMenuBar();
+
+        _options = new JMenu("Options");
+
+        _changePlayers = new JMenuItem("Change Players");
+        _changePlayers.addActionListener(_controls.ChangePlayers());
+
+        _newGame = new JMenuItem("New Game");
+        _newGame.addActionListener(_controls.NewGame());
+
+        _options.add(_changePlayers);
+        _options.add(_newGame);
+        _menu.add(_options);
+
+        setJMenuBar(_menu);
     }
 
     public void SetPlayers(IPlayer[] players) throws Exception {
         if(players == null){
             //default settings
-            _players = new IPlayer[4];
+            players = new IPlayer[4];
             for(int i = 0; i < 4; i++){
-                _players[i] = new RandomPlayer();
+                players[i] = new RandomPlayer();
             }
-            return;
         }
         if(players.length != 4) throw new Exception("Invalid number of players");
         _players = players;
+
+        for (int i = 0; i < _players.length; i++) {
+            _playerPanels[i].SetName(_players[i].toString());
+        }
     }
 
     public void SwitchMode(Mode mode){
-        remove(_currentboard);
+        remove(_currentBoard);
         switch (mode){
             case GAME:
-                _currentboard = _gamePanel;
+                _currentBoard = _gamePanel;
                 break;
             case SCORE:
-                _currentboard = _scorePanel;
+                _currentBoard = _scorePanel;
         }
-        add(_currentboard, 0);
+        add(_currentBoard, 0);
         revalidate();
         repaint();
     }

@@ -14,7 +14,7 @@ public class FirstAIPlayer extends AbstractAIPlayer implements IPlayer {
     }
 
     public FirstAIPlayer() {
-        this(MonteCarlo.DEFAULT_SEARCH_DEPTH, MonteCarlo.DEFAULT_NUMBER_SIMULATIONS);
+        this(GameTree.DEFAULT_SEARCH_DEPTH, GameTree.DEFAULT_NUMBER_SIMULATIONS);
     }
 
     @Override
@@ -25,7 +25,7 @@ public class FirstAIPlayer extends AbstractAIPlayer implements IPlayer {
                 MinimaxVector v = new MinimaxVector();
                 int[] r = info.RoundScore();
                 for (int i = 0; i < v.Scores.length; i++) {
-                    v.Scores[i] = - r[i];
+                    v.Scores[i] = -r[i];
                 }
                 return v;
             }
@@ -44,6 +44,6 @@ public class FirstAIPlayer extends AbstractAIPlayer implements IPlayer {
 
     @Override
     public String toString() {
-        return super.toString() + " (1)";
+        return "First AI";
     }
 }

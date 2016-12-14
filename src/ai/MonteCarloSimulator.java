@@ -5,7 +5,7 @@ import player.RuleBasedPlayer;
 
 import java.util.*;
 
-public class Simulator {
+public class MonteCarloSimulator {
     public static final double DEFAULT_C = 2.0;
     public static final int DEFAULT_NUM_SIMS = 300;
 
@@ -14,13 +14,13 @@ public class Simulator {
     private int _playerID;
     private IPlayer _player;
 
-    public Simulator(int playerID, int numSims, double c){
+    public MonteCarloSimulator(int playerID, int numSims, double c){
         _playerID = playerID;
         _numSims = numSims;
         _c = c;
     }
 
-    public Simulator(int playerID){
+    public MonteCarloSimulator(int playerID){
         this(playerID, 300, 2.0);
     }
 
