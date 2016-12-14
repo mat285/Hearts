@@ -21,7 +21,10 @@ public class HeartsFrame extends JFrame {
     private JPanel _currentboard;
     private JMenuBar _menu;
 
+    private int length;
+
     private Game _game;
+
 
     public HeartsFrame(){
         super("Hearts");
@@ -33,6 +36,10 @@ public class HeartsFrame extends JFrame {
     }
 
     private void init() throws Exception{
+        Dimension resolution = Toolkit.getDefaultToolkit().getScreenSize();
+        length = (int) (resolution.getHeight() * 0.8);
+        CardImage.SetHeight(length / 8);
+        PlayerPanel.SetDimension(length, length / 8);
         _menu = new JMenuBar();
         add(_menu);
 
@@ -192,7 +199,7 @@ public class HeartsFrame extends JFrame {
     public void createAndShowGui(){
         try{
             setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            setPreferredSize(new Dimension(2000,2000));
+            setPreferredSize(new Dimension(length,length));
             setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
             pack();
             setVisible(true);
