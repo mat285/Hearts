@@ -4,13 +4,22 @@ import game.*;
 import player.RuleBasedPlayer;
 
 public class ThirdAIPlayer extends AbstractPlayer {
+    private double _c;
+    private int _numSims;
 
     private RuleBasedPlayer _rule;
 
     public ThirdAIPlayer() {
+        this(Simulator.DEFAULT_C, Simulator.DEFAULT_NUM_SIMS);
+    }
+
+    public ThirdAIPlayer(double c, int numSims) {
         super();
         _rule = new RuleBasedPlayer();
+        _c = c;
+        _numSims = numSims;
     }
+
 
     @Override
     public CardPassMove PassCards(SealedGameInfo info) {
@@ -19,7 +28,7 @@ public class ThirdAIPlayer extends AbstractPlayer {
 
     @Override
     public Move Play(SealedGameInfo info) {
-        Simulator s = new Simulator(this.ID());
+        Simulator s = new Simulator(this.ID(), _numSims, _c);
         return s.GetMove(info);
     }
 

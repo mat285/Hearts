@@ -54,7 +54,6 @@ public class TrickPanel extends JPanel{
         _heartBrokenLabel.setVisible(false);
         revalidate();
         repaint();
-        System.out.println("Hiding hearts");
     }
 
     public void Update(Trick trick, int start) throws Exception {
