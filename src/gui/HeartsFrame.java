@@ -2,10 +2,13 @@ package gui;
 
 import game.*;
 import player.*;
+
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 public class HeartsFrame extends JFrame {
     private PlayerPanel[] _playerPanels;
@@ -230,8 +233,9 @@ public class HeartsFrame extends JFrame {
     public void createAndShowGui(){
         try{
             setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            setPreferredSize(new Dimension(length,length));
+            setPreferredSize(new Dimension((int) (length * 1.5), length));
             setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
+            setIconImage(ImageIO.read(new File("src/assets/misc/heart.png")));
             pack();
             setVisible(true);
             setResizable(false);
