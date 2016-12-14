@@ -15,8 +15,9 @@ public class SealedGameInfo implements Cloneable{
     private Set<Card> _hand;
     private Set<Card> _remaining;
     private int[] _cardDistribution;
+    private Direction _passDirection;
 
-    public SealedGameInfo(int currentPlayer, Trick currentTrick, int[] roundScores, int[] scores, boolean heartsBroken, int roundNumber, boolean isStartofRound, Set<Card> hand, Set<Card> remaining, int[] cardDistribution) {
+    public SealedGameInfo(int currentPlayer, Trick currentTrick, int[] roundScores, int[] scores, boolean heartsBroken, int roundNumber, boolean isStartofRound, Set<Card> hand, Set<Card> remaining, int[] cardDistribution, Direction passDirection) {
         _currentPlayer = currentPlayer;
         _currentTrick = currentTrick;
         _roundScores = roundScores;
@@ -27,11 +28,14 @@ public class SealedGameInfo implements Cloneable{
         _hand = hand;
         _remaining = remaining;
         _cardDistribution = cardDistribution;
+        _passDirection = passDirection;
     }
 
     public Card LastCardPlayed() {
         return _currentTrick.LastCardAdded();
     }
+
+    public Direction PassDirection() { return _passDirection; }
 
     public int CurrentPlayer() { return _currentPlayer; }
 
@@ -114,7 +118,7 @@ public class SealedGameInfo implements Cloneable{
 
         return new SealedGameInfo(_currentPlayer, _currentTrick.Clone(), _roundScores.clone(),
                 _scores.clone(), _heartsBroken, _roundNumber, _isStartOfRound,
-                clonedHand, clonedRemaining, _cardDistribution.clone());
+                clonedHand, clonedRemaining, _cardDistribution.clone(), _passDirection);
 
     }
 }

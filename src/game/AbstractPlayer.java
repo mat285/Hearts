@@ -13,13 +13,15 @@ public abstract class AbstractPlayer implements IPlayer {
 
     private static final String[] _names = {"Michael", "Elaine", "Chase", "Alex"};
 
-    public AbstractPlayer(){}
+    public AbstractPlayer(){_hand = new ArrayList<>();}
 
     public AbstractPlayer(String name) {
         _name = name;
+        _hand = new ArrayList<>();
     }
 
     public @Override void Initialize(int id) {
+        _hand = new ArrayList<>();
         _id = id;
         _name = _names[_id];
     }

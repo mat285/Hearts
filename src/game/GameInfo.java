@@ -447,7 +447,8 @@ public final class GameInfo {
                 isStartOfRound(),
                 new HashSet<>(_playerHands.get(player)),
                 RemainingCards(),
-                DistributionOfCards());
+                DistributionOfCards(),
+                PassDirection());
     }
 
     /**
@@ -540,6 +541,7 @@ public final class GameInfo {
         g._heartsBroken = info.IsHeartsBroken(); // Set whether hearts is broken
         g._roundNumber = info.RoundNumber(); // Set the round number
         g._currentPlayer = currentPlayer; // Set current player
+        g._passDirection = info.PassDirection(); // Set pass direction
 
         // Do weird stuff to figure out which player played what card
         g._plays = new HashMap<>();

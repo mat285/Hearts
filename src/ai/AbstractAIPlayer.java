@@ -18,6 +18,8 @@ public abstract class AbstractAIPlayer extends AbstractPlayer implements IPlayer
 
     @Override
     public CardPassMove PassCards(SealedGameInfo info) {
+        CardPassMove move = CardPassSimulator.GetMove(info);
+        if (move != null) return move;
         return _rule.PassCards(info);
     }
 

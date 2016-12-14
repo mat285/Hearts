@@ -59,15 +59,18 @@ public class GameTest {
     public static IPlayer[] getPlayers() {
         IPlayer[] players = new IPlayer[4];
         for (int i = 0; i < players.length; i++) {
-/*            if (i == 0) players[i] = new FirstAIPlayer();
-            else if (i == 1) players[i] = new SecondAIPlayer();*/
-            //else if (i == 1) players[i] = new SecondAIPlayer();
+            if (i == 0) players[i] = new AbstractPlayer() {
+                private RuleBasedPlayer r = new RuleBasedPlayer();
+                @Override
+                public CardPassMove PassCards(SealedGameInfo info) {
+                    return CardPassSimulator.GetMove(info);
+                }
 
-            if (i == 0) players[i] = new FirstAIPlayer();
-            //else if (i == 1) players[i] = new ThirdAIPlayer();
-
-            //else if (i == 1) players[i] = new SecondAIPlayer();
-            //else if (i == 2) players[i] = new RuleBasedPlayer();
+                @Override
+                public Move Play(SealedGameInfo state) {
+                    return GameUtils.RandomMove(state);
+                }
+            };
             else players[i] = new RandomPlayer();
         }
         return players;
