@@ -189,8 +189,12 @@ public final class GameInfo {
      * Gets the player that started the current trick
      * @return The player starting the current trick
      */
-    public IPlayer PlayerStartingTrick() {
-        return _currentTrick.IsEmpty() ? CurrentPlayer() : _plays.get(_currentTrick.First());
+    public int PlayerStartingTrick() {
+        IPlayer player =  _currentTrick.IsEmpty() ? CurrentPlayer() : _plays.get(_currentTrick.First());
+        for(int i = 0; i < _players.length; i++){
+            if(_players[i] == player) return i;
+        }
+        return -1;
     }
 
     /**
@@ -233,6 +237,8 @@ public final class GameInfo {
     public Card LastCardPlayed() {
         return _currentTrick.LastCardAdded();
     }
+
+
 
     /**
      * Sets HeartsBroken to True
@@ -385,6 +391,22 @@ public final class GameInfo {
     private boolean isStartOfRound() {
         return _currentTrick.IsEmpty() && _playerHands.get(CurrentPlayer()).size() == GameUtils.SIZE_OF_HANDS;
     }
+
+    /**
+     * Returns the number of the player who won the trick. Returns -1 if the trick
+     * is not complete.
+     * @return the number of the player who won the trick
+     * */
+    public int TrickWinner(){
+        if(!_currentTrick.IsComplete()) return -1;
+        Card highest = _currentTrick.Highest();
+        IPlayer player = _plays.get(highest);
+        for(int i = 0; i < _players.length; i++){
+            if(_players[i] == player) return i;
+        }
+        return -1;
+    }
+
 
     /**
      * Gets the scores for the current round

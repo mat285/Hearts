@@ -6,19 +6,22 @@ import player.RuleBasedPlayer;
 import java.util.*;
 
 public class Simulator {
-    private int _maxMoves;
+    public static final double DEFAULT_C = 2.0;
+    public static final int DEFAULT_NUM_SIMS = 300;
+
+    private double _c = 2.0;
+    private int _numSims = 300;
     private int _playerID;
     private IPlayer _player;
-    private double _c = 2.0;
 
-    public Simulator(int playerID, int maxMoves){
+    public Simulator(int playerID, int numSims, double c){
         _playerID = playerID;
-        _maxMoves = maxMoves;
-
+        _numSims = numSims;
+        _c = c;
     }
 
     public Simulator(int playerID){
-        this(playerID, 300);
+        this(playerID, 300, 2.0);
     }
 
     private IPlayer[] players(){
@@ -88,7 +91,7 @@ public class Simulator {
     private void runSimulation(State root, Map<State, Integer> plays, Map<State, Integer> wins){
         //System.out.println("*******Round " + root.GameInfo().RoundNumber()+"***********");
 
-        for(int i = 1; i <= _maxMoves; i++){
+        for(int i = 1; i <= _numSims; i++){
             State current = root;
             Set<State> visited = new HashSet<>();
 
@@ -107,7 +110,7 @@ public class Simulator {
                 /*if(plays.keySet().containsAll(children)){
                     double max = Double.MIN_VALUE;
                     for(State state : children){
-                        double value = wins.get(state) / (double) plays.get(state) + _c * Math.sqrt(Math.log(i) / plays.get(state));
+                        double value = wins.get(state) / (double) plays.get(state) + C * Math.sqrt(Math.log(i) / plays.get(state));
                         if(value > max){
                             max = value;
                             current = state;

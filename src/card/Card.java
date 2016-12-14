@@ -33,7 +33,7 @@ public final class Card implements Comparable<Card> {
     }
 
     public @Override String toString() {
-        return Value.name() + " of " + Suit.name();
+        return Value.name() + "_of_" + Suit.name();
     }
 
     public @Override int compareTo(Card c) {
