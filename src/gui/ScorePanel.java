@@ -20,8 +20,6 @@ public class ScorePanel extends JPanel{
     private Vector<String> _colNames;
     private Vector<Vector> _rowData;
     private DefaultTableModel _model;
-    private static final Font DEFAULT_FONT = new Font("Calibri", Font.BOLD, 40);
-
 
     public ScorePanel(String[] names){
         _colNames = new Vector<>();
@@ -40,8 +38,8 @@ public class ScorePanel extends JPanel{
         add(pane);
         setOpaque(true);
 
-        _table.getTableHeader().setFont(DEFAULT_FONT);
-        _table.setFont(DEFAULT_FONT);
+        _table.getTableHeader().setFont(HeartsFrame.DEFAULT_FONT);
+        _table.setFont(HeartsFrame.DEFAULT_FONT);
         _table.setRowHeight(40);
     }
 

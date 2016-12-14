@@ -11,7 +11,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 
 public class HeartsFrame extends JFrame {
-
+    public static final Font DEFAULT_FONT = new Font("Calibri", Font.BOLD, 30);
     public static final Color BACKGROUND = new Color(15,117,51);
 
     private PlayerPanel[] _playerPanels;
@@ -40,6 +40,7 @@ public class HeartsFrame extends JFrame {
     private int _gameSpeed = 420;
 
     private Game _game;
+
 
 
     public HeartsFrame(){
