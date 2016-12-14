@@ -14,7 +14,7 @@ public class SecondAIPlayer extends AbstractAIPlayer implements IPlayer {
     }
 
     public SecondAIPlayer() {
-        this(12, MonteCarlo.DEFAULT_NUMBER_SIMULATIONS);
+        this(12, GameTree.DEFAULT_NUMBER_SIMULATIONS);
     }
 
 

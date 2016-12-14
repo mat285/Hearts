@@ -10,7 +10,7 @@ public class ThirdAIPlayer extends AbstractPlayer {
     private RuleBasedPlayer _rule;
 
     public ThirdAIPlayer() {
-        this(Simulator.DEFAULT_C, Simulator.DEFAULT_NUM_SIMS);
+        this(MonteCarloSimulator.DEFAULT_C, MonteCarloSimulator.DEFAULT_NUM_SIMS);
     }
 
     public ThirdAIPlayer(double c, int numSims) {
@@ -28,12 +28,12 @@ public class ThirdAIPlayer extends AbstractPlayer {
 
     @Override
     public Move Play(SealedGameInfo info) {
-        Simulator s = new Simulator(this.ID(), _numSims, _c);
+        MonteCarloSimulator s = new MonteCarloSimulator(this.ID(), _numSims, _c);
         return s.GetMove(info);
     }
 
     @Override
     public String toString() {
-        return super.toString() + " (3)";
+        return super.toString() + " (AI) (3)";
     }
 }

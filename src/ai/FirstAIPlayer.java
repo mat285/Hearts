@@ -14,7 +14,7 @@ public class FirstAIPlayer extends AbstractAIPlayer implements IPlayer {
     }
 
     public FirstAIPlayer() {
-        this(MonteCarlo.DEFAULT_SEARCH_DEPTH, MonteCarlo.DEFAULT_NUMBER_SIMULATIONS);
+        this(GameTree.DEFAULT_SEARCH_DEPTH, GameTree.DEFAULT_NUMBER_SIMULATIONS);
     }
 
     @Override

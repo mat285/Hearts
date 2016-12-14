@@ -21,7 +21,7 @@ public abstract class AbstractAIPlayer extends AbstractPlayer implements IPlayer
 
     @Override
     public Move Play(SealedGameInfo info) {
-        Move m = MonteCarlo.Simulate(info, ID(),GetHeuristic(info), GetExpansionFunction(info), NumberOfSimulations(info));
+        Move m = GameTree.Simulate(info, ID(),GetHeuristic(info), GetExpansionFunction(info), NumberOfSimulations(info));
         return m;
     }
     /**
