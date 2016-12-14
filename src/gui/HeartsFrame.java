@@ -12,6 +12,7 @@ import java.io.File;
 
 public class HeartsFrame extends JFrame {
     public static final Font DEFAULT_FONT = new Font("Calibri", Font.BOLD, 30);
+    public static final Color BACKGROUND = new Color(15,117,51);
 
     private PlayerPanel[] _playerPanels;
     private IPlayer[] _players;
@@ -79,8 +80,8 @@ public class HeartsFrame extends JFrame {
         _gamePanel.add(_playerPanels[1], BorderLayout.WEST);
         _gamePanel.add(_playerPanels[2], BorderLayout.NORTH);
         _gamePanel.add(_playerPanels[3], BorderLayout.EAST);
-        _gamePanel.setBackground(new Color(15,117,51));
-        _scorePanel.setBackground(new Color(15,117,51));
+        _gamePanel.setBackground(BACKGROUND);
+        _scorePanel.setBackground(BACKGROUND);
         _currentBoard = _gamePanel;
         add(_currentBoard);
         add(_controls);
@@ -239,6 +240,12 @@ public class HeartsFrame extends JFrame {
 
     public void createAndShowGui(){
         try{
+            for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
             setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             setPreferredSize(new Dimension(_width, _height));
             setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
