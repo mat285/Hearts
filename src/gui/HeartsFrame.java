@@ -2,12 +2,18 @@ package gui;
 
 import game.*;
 import player.*;
+
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 public class HeartsFrame extends JFrame {
+    public static final Font DEFAULT_FONT = new Font("Calibri", Font.BOLD, 30);
+    public static final Color BACKGROUND = new Color(15,117,51);
+
     private PlayerPanel[] _playerPanels;
     private IPlayer[] _players;
     private TrickPanel _trickPanel;
@@ -21,6 +27,17 @@ public class HeartsFrame extends JFrame {
     private JMenuItem _changePlayers;
     private JMenuItem _newGame;
     private JMenuItem _runTrials;
+    private JMenu _speed;
+    private JRadioButtonMenuItem _halfSpeed;
+    private JRadioButtonMenuItem _regSpeed;
+    private JRadioButtonMenuItem _twiceSpeed;
+    private JRadioButtonMenuItem _fourSpeed;
+
+    private int _width;
+    private int _height;
+
+    private double _speedMult = 1.0;
+    private int _gameSpeed = 400;
 
     private Game _game;
 
@@ -34,6 +51,17 @@ public class HeartsFrame extends JFrame {
     }
 
     private void init() throws Exception{
+        Dimension resolution = Toolkit.getDefaultToolkit().getScreenSize();
+
+        _height = (int) (resolution.getHeight() * 0.8);
+        _width = (int) (_height * 1.5);
+        if(_width > resolution.getWidth()){_width = (int) (resolution.getWidth());}
+
+        CardImage.SetHeight(_height / 8);
+        PlayerPanel.SetDimension(_width * 2, _height / 8);
+        _menu = new JMenuBar();
+        add(_menu);
+
         _gamePanel = new JPanel();
         _controls = new ControlBar(this);
 
@@ -58,8 +86,10 @@ public class HeartsFrame extends JFrame {
         _gamePanel.add(_playerPanels[1], BorderLayout.WEST);
         _gamePanel.add(_playerPanels[2], BorderLayout.NORTH);
         _gamePanel.add(_playerPanels[3], BorderLayout.EAST);
-        _gamePanel.setBackground(new Color(15,117,51));
-        _scorePanel.setBackground(new Color(15,117,51));
+        _gamePanel.setBackground(BACKGROUND);
+        _scorePanel.setBackground(BACKGROUND);
+        _controls.setBackground(BACKGROUND.darker());
+
         _currentBoard = _gamePanel;
         add(_currentBoard);
         add(_controls);
@@ -83,7 +113,32 @@ public class HeartsFrame extends JFrame {
         _options.add(_changePlayers);
         _options.add(_newGame);
         _options.add(_runTrials);
+
+        _speed = new JMenu("Speed");
+        _halfSpeed = new JRadioButtonMenuItem("0.5x");
+        _regSpeed = new JRadioButtonMenuItem("1.0x");
+        _twiceSpeed = new JRadioButtonMenuItem("2.0x");
+        _fourSpeed = new JRadioButtonMenuItem("4.0x");
+
+        ButtonGroup b = new ButtonGroup();
+        b.add(_halfSpeed);
+        b.add(_regSpeed);
+        b.add(_twiceSpeed);
+        b.add(_fourSpeed);
+        _regSpeed.setSelected(true);
+
+        _halfSpeed.addActionListener(getSpeedListener(2.0));
+        _regSpeed.addActionListener(getSpeedListener(1.0));
+        _twiceSpeed.addActionListener(getSpeedListener(0.5));
+        _fourSpeed.addActionListener(getSpeedListener(0.25));
+
+        _speed.add(_halfSpeed);
+        _speed.add(_regSpeed);
+        _speed.add(_twiceSpeed);
+        _speed.add(_fourSpeed);
+
         _menu.add(_options);
+        _menu.add(_speed);
 
         setJMenuBar(_menu);
     }
@@ -163,7 +218,7 @@ public class HeartsFrame extends JFrame {
                         _playerPanels[i].UpdateScore(info.GetRoundScores()[i]);
                     }
 
-                    if(timer != null) Thread.sleep(2000);
+                    if(timer != null) Thread.sleep((int) (1000 * _speedMult));
                     break;
                 case END_ROUND:
                     _game.Step();
@@ -185,7 +240,7 @@ public class HeartsFrame extends JFrame {
     }
 
     public Timer GetGameTimer(){
-        Timer timer = new Timer(500, new ActionListener() {
+        Timer timer = new Timer((int) (_gameSpeed * _speedMult), new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e){
                 Step((Timer) e.getSource());
@@ -218,9 +273,16 @@ public class HeartsFrame extends JFrame {
 
     public void createAndShowGui(){
         try{
+            for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
             setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            setPreferredSize(new Dimension(2000,2000));
+            setPreferredSize(new Dimension(_width, _height));
             setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
+            setIconImage(ImageIO.read(new File("src/assets/misc/heart.png")));
             pack();
             setVisible(true);
             setResizable(false);
@@ -229,6 +291,16 @@ public class HeartsFrame extends JFrame {
             e.printStackTrace();
         }
 
+    }
+
+    private ActionListener getSpeedListener(final double speedMult) {
+        return new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                _speedMult = speedMult;
+                _controls.ResetTimer((int) (_speedMult*_gameSpeed));
+            }
+        };
     }
 
     public static void main(String[] args){

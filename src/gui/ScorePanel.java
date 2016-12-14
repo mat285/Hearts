@@ -8,20 +8,11 @@ import java.awt.*;
 import java.util.List;
 import java.util.Vector;
 
-/**
- * TBD
- * <p>
- * User: elee
- * Date: 11/5/2016
- * Time: 5:55 PM
- */
 public class ScorePanel extends JPanel{
     private JTable _table;
     private Vector<String> _colNames;
     private Vector<Vector> _rowData;
     private DefaultTableModel _model;
-    private static final Font DEFAULT_FONT = new Font("Calibri", Font.BOLD, 40);
-
 
     public ScorePanel(String[] names){
         _colNames = new Vector<>();
@@ -36,12 +27,12 @@ public class ScorePanel extends JPanel{
 
         _table = new JTable(_model);
         JScrollPane pane = new JScrollPane(_table);
-        pane.setPreferredSize(new Dimension(1000,1000));
+        //pane.setPreferredSize(new Dimension(1000,1000));
         add(pane);
         setOpaque(true);
 
-        _table.getTableHeader().setFont(DEFAULT_FONT);
-        _table.setFont(DEFAULT_FONT);
+        _table.getTableHeader().setFont(HeartsFrame.DEFAULT_FONT);
+        _table.setFont(HeartsFrame.DEFAULT_FONT);
         _table.setRowHeight(40);
     }
 

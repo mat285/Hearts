@@ -34,7 +34,7 @@ public class TrickPanel extends JPanel{
         try{
             if(_heartBrokenImage == null){
                 BufferedImage image = ImageIO.read(new File("src/assets/misc/hearts_broken.png"));
-                int h = CardImage.HEIGHT/2;
+                int h = CardImage.Height /2;
                 int w = image.getWidth() * h / image.getHeight();
                 _heartBrokenImage = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
                 Graphics2D g2D = _heartBrokenImage.createGraphics();

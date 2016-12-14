@@ -12,14 +12,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class CardImage extends JPanel implements Cloneable{
-    public static final int HEIGHT = 250;
+    public static int Height;
+    public static double aspectRatio;
     private static Map<Card, CardImage> _images = new HashMap<>();
     private static CardImage _emptyCard;
     private Card _card;
     private BufferedImage _original;
     private BufferedImage _image;
     private JLabel _icon;
-    private static double aspectRatio;
 
     /**
      * Creates a new Cardimage from the given card
@@ -40,16 +40,16 @@ public class CardImage extends JPanel implements Cloneable{
         _original = ImageIO.read(file);
         aspectRatio = (double) _original.getWidth() / _original.getHeight();
 
-        int width = (int) (HEIGHT*aspectRatio);
-        _image = new BufferedImage(width, HEIGHT, BufferedImage.TYPE_INT_ARGB);
+        int width = (int) (Height *aspectRatio);
+        _image = new BufferedImage(width, Height, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2D = _image.createGraphics();
-        g2D.drawImage(_original, 0, 0, width, HEIGHT, null);
+        g2D.drawImage(_original, 0, 0, width, Height, null);
         g2D.dispose();
 
         _icon = new JLabel(new ImageIcon(_image));
         add(_icon);
 
-        setBounds(0,0,width, HEIGHT);
+        setBounds(0,0,width, Height);
         _icon.setOpaque(false);
         setOpaque(false);
     }
@@ -64,9 +64,27 @@ public class CardImage extends JPanel implements Cloneable{
 
     }
 
+
+
     public String toString(){
         if(_card == null) return "blank";
         return _card.toString();
+    }
+
+    public static void SetHeight(int h){
+        Height = h;
+    }
+
+    public static int GetWidth(){
+        if(aspectRatio == 0.0){
+            try{
+                BufferedImage i = ImageIO.read(new File("src/assets/cards/blank.png"));
+                aspectRatio = (double) i.getWidth() / i.getHeight();
+            }catch(IOException e){
+                e.printStackTrace();
+            }
+        }
+        return (int) (Height * aspectRatio);
     }
 
 
