@@ -1,6 +1,7 @@
 package gui;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -9,6 +10,7 @@ public class ControlBar extends JPanel {
     private Timer _timer;
 
     public ControlBar(HeartsFrame gui){
+        super();
         _gui = gui;
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 

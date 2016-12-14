@@ -92,7 +92,9 @@ public class PlayerPanel extends JPanel {
             add(_type);
             add(Box.createRigidArea(new Dimension(15,15)));
             add(_score);
+            add(Box.createRigidArea(new Dimension(15,15)));
         }
+
 
         private void set_score(int score){
             _score.setText(score + "");
@@ -129,12 +131,12 @@ public class PlayerPanel extends JPanel {
             _orientation = orientation;
             _cards = new ArrayList<>();
             _origin = this.getLocation();
-
+/*
             if(orientation == BoxLayout.X_AXIS){
                 _origin.x += 50;
             }else{
                 _origin.y += 50;
-            }
+            }*/
 
             _offset = (int) (CardImage.GetWidth() * 0.4);
 

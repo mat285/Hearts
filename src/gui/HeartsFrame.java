@@ -87,6 +87,8 @@ public class HeartsFrame extends JFrame {
         _gamePanel.add(_playerPanels[3], BorderLayout.EAST);
         _gamePanel.setBackground(BACKGROUND);
         _scorePanel.setBackground(BACKGROUND);
+        _controls.setBackground(BACKGROUND.darker());
+
         _currentBoard = _gamePanel;
         add(_currentBoard);
         add(_controls);
