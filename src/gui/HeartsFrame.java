@@ -31,12 +31,13 @@ public class HeartsFrame extends JFrame {
     private JRadioButtonMenuItem _halfSpeed;
     private JRadioButtonMenuItem _regSpeed;
     private JRadioButtonMenuItem _twiceSpeed;
+    private JRadioButtonMenuItem _fourSpeed;
 
     private int _width;
     private int _height;
 
     private double _speedMult = 1.0;
-    private int _gameSpeed = 420;
+    private int _gameSpeed = 400;
 
     private Game _game;
 
@@ -117,20 +118,24 @@ public class HeartsFrame extends JFrame {
         _halfSpeed = new JRadioButtonMenuItem("0.5x");
         _regSpeed = new JRadioButtonMenuItem("1.0x");
         _twiceSpeed = new JRadioButtonMenuItem("2.0x");
+        _fourSpeed = new JRadioButtonMenuItem("4.0x");
 
         ButtonGroup b = new ButtonGroup();
         b.add(_halfSpeed);
         b.add(_regSpeed);
         b.add(_twiceSpeed);
+        b.add(_fourSpeed);
         _regSpeed.setSelected(true);
 
         _halfSpeed.addActionListener(getSpeedListener(2.0));
         _regSpeed.addActionListener(getSpeedListener(1.0));
         _twiceSpeed.addActionListener(getSpeedListener(0.5));
+        _fourSpeed.addActionListener(getSpeedListener(0.25));
 
         _speed.add(_halfSpeed);
         _speed.add(_regSpeed);
         _speed.add(_twiceSpeed);
+        _speed.add(_fourSpeed);
 
         _menu.add(_options);
         _menu.add(_speed);
@@ -213,7 +218,7 @@ public class HeartsFrame extends JFrame {
                         _playerPanels[i].UpdateScore(info.GetRoundScores()[i]);
                     }
 
-                    if(timer != null) Thread.sleep(2000);
+                    if(timer != null) Thread.sleep((int) (1000 * _speedMult));
                     break;
                 case END_ROUND:
                     _game.Step();
