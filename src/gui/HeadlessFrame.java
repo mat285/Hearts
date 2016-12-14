@@ -38,7 +38,7 @@ public class HeadlessFrame extends JFrame {
                     if (n > 1000 || n < 1) {
                         JOptionPane.showMessageDialog(_gui, "Please select a number between 1 and 1000");
                     }
-                    JOptionPane.showMessageDialog(_gui, "Game Simulations will run in the background");
+                    JOptionPane.showMessageDialog(_gui,"Game Simulations will run in the background");
                     dispose();
                     _gui.dispose();
                     String fileName = _fileField.getText();
