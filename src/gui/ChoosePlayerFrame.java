@@ -3,10 +3,13 @@ package gui;
 import game.IPlayer;
 import main.Resolver;
 import main.Players;
+
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.util.*;
 
 public class ChoosePlayerFrame extends JFrame{
@@ -111,6 +114,7 @@ public class ChoosePlayerFrame extends JFrame{
     }
 
     public void createAndShowGui(){
+        try {setIconImage(ImageIO.read(new File("src/assets/misc/heart.png")));} catch (Exception e) {}
         _contentPane.setBackground(HeartsFrame.BACKGROUND);
         setContentPane(_contentPane);
         pack();

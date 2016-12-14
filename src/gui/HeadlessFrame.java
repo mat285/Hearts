@@ -4,9 +4,11 @@ import game.Game;
 import game.IPlayer;
 import game.ScoredPlayer;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
 import java.io.PrintWriter;
 import java.util.*;
 
@@ -20,16 +22,23 @@ public class HeadlessFrame extends JFrame {
     private JButton _cancel;
     private HeartsFrame _gui;
 
+    private static Font _font = new Font("Calibri",Font.BOLD, 20);
+
     public HeadlessFrame(HeartsFrame gui) {
         _gui = gui;
         _panel = new JPanel();
         _trialsLabel = new JLabel("Number of Trials: ");
+        _trialsLabel.setForeground(Color.WHITE);
+        _trialsLabel.setFont(_font);
         _trialsField = new JTextField(3);
 
         _fileLabel = new JLabel("Filename: ");
+        _fileLabel.setForeground(Color.WHITE);
+        _fileLabel.setFont(_font);
         _fileField = new JTextField(15);
 
-        _run = new JButton("Run trials");
+        _run = new JButton("Run Trials");
+        _run.setFont(_font);
         _run.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -67,6 +76,7 @@ public class HeadlessFrame extends JFrame {
         _panel.add(_trialsLabel);
         _panel.add(_trialsField);
         _panel.add(_run);
+        _panel.setBackground(HeartsFrame.BACKGROUND);
         add(_panel);
     }
 
@@ -100,7 +110,11 @@ public class HeadlessFrame extends JFrame {
     }
 
     public void createAndShowGui(){
-        setPreferredSize(new Dimension(600, 60));
+        try {
+            setIconImage(ImageIO.read(new File("src/assets/misc/heart.png")));
+        } catch (Exception e) {}
+        setBackground(HeartsFrame.BACKGROUND);
+        setPreferredSize(new Dimension(800, 60));
         pack();
         setVisible(true);
         setResizable(false);
