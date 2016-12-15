@@ -1,6 +1,7 @@
 package main;
 
 import ai.*;
+import gui.GUIPlayer;
 import player.RandomPlayer;
 import player.RuleBasedPlayer;
 
@@ -12,7 +13,7 @@ import player.RuleBasedPlayer;
  * Time: 6:30 PM
  */
 public class Players {
-    public static final Class[] PLAYER_TYPES = {RandomPlayer.class, RuleBasedPlayer.class, FirstAIPlayer.class, SecondAIPlayer.class, ThirdAIPlayer.class};
+    public static final Class[] PLAYER_TYPES = {RandomPlayer.class, RuleBasedPlayer.class, FirstAIPlayer.class, SecondAIPlayer.class, ThirdAIPlayer.class, GUIPlayer.class};
 
     public static boolean KnownType(Class type){
         for(Class c : PLAYER_TYPES){

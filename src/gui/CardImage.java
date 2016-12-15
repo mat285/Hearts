@@ -5,6 +5,8 @@ import card.Card;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -54,6 +56,8 @@ public class CardImage extends JPanel implements Cloneable{
         setOpaque(false);
     }
 
+    public Card GetCard() { return _card; }
+
     public static CardImage Card(Card card) throws IOException, CloneNotSupportedException {
         if(_emptyCard == null){ _emptyCard = new CardImage(null);}
 
@@ -61,10 +65,7 @@ public class CardImage extends JPanel implements Cloneable{
 
         _images.putIfAbsent(card, new CardImage(card));
         return _images.get(card);
-
     }
-
-
 
     public String toString(){
         if(_card == null) return "blank";

@@ -14,6 +14,8 @@ public class HeartsFrame extends JFrame {
     public static final Font DEFAULT_FONT = new Font("Calibri", Font.BOLD, 30);
     public static final Color BACKGROUND = new Color(15,117,51);
 
+    public static final String[] LOCATIONS = {BorderLayout.SOUTH, BorderLayout.WEST, BorderLayout.NORTH, BorderLayout.WEST};
+
     private PlayerPanel[] _playerPanels;
     private IPlayer[] _players;
     private TrickPanel _trickPanel;
@@ -155,7 +157,15 @@ public class HeartsFrame extends JFrame {
         _players = players;
 
         for (int i = 0; i < _players.length; i++) {
-            _playerPanels[i].SetName(_players[i].toString());
+            if (_players[i] instanceof GUIPlayer) {
+                Pipe p = new Pipe();
+                _playerPanels[i].WireUpUser(p);
+                ((GUIPlayer) _players[i]).SetPipe(p);
+            }
+            else {
+                _playerPanels[i].WireDownUser();
+            }
+            _playerPanels[i].SetName(_players[i].getClass().getSimpleName());
         }
     }
 

@@ -4,6 +4,7 @@ import card.Card;
 import card.Deck;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +15,8 @@ public class PlayerPanel extends JPanel {
     private Label _label;
     private static int _height;
     private static int _width;
+
+    private Pipe _pipe;
 
     public PlayerPanel(String name, int id, int orientation){
         assert(id > 0 && id < 4);
@@ -28,7 +31,6 @@ public class PlayerPanel extends JPanel {
         }else{
             setPreferredSize(new Dimension( (_height*2), _width));
         }
-
 
         setOpaque(false);
         add(_label);
@@ -60,7 +62,6 @@ public class PlayerPanel extends JPanel {
         repaint();
     }
 
-
     public void UpdateScore(int score) throws Exception{
         _label.set_score(score);
     }
@@ -70,11 +71,45 @@ public class PlayerPanel extends JPanel {
         _height = height;
     }
 
+    public void AddCardFunction(CardListener listener) {
+        _hand.AddListener(listener);
+    }
+
+    protected interface CardListener {
+        public void OnClick(Card c);
+    }
+
+    private class NullCardListener implements CardListener {
+        @Override
+        public void OnClick(Card c) {
+
+        }
+    }
+
+    protected class CardClicker extends MouseAdapter {
+
+        private CardListener _callback;
+        private CardImage _image;
+
+        public CardClicker(CardImage image) {
+            _image = image;
+            _callback = new NullCardListener();
+        }
+
+        public void SetCardListener(CardListener callback) {
+            _callback = callback;
+        }
+
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            _callback.OnClick(_image.GetCard());
+        }
+    }
+
     private class Label extends JPanel{
         private JLabel _name;
         private JLabel _score;
         private JLabel _type;
-
 
         private Label(String name, int orientation){
             _name = new JLabel(name);
@@ -94,7 +129,6 @@ public class PlayerPanel extends JPanel {
             add(_score);
             add(Box.createRigidArea(new Dimension(15,15)));
         }
-
 
         private void set_score(int score){
             _score.setText(score + "");
@@ -123,6 +157,7 @@ public class PlayerPanel extends JPanel {
     private class HandPanel extends JLayeredPane{
         private int _orientation;
         private List<CardImage> _cards;
+        private List<CardClicker> _clickers;
         private Point _origin;
         private int _offset;
 
@@ -130,13 +165,8 @@ public class PlayerPanel extends JPanel {
             super();
             _orientation = orientation;
             _cards = new ArrayList<>();
+            _clickers = new ArrayList<>();
             _origin = this.getLocation();
-/*
-            if(orientation == BoxLayout.X_AXIS){
-                _origin.x += 50;
-            }else{
-                _origin.y += 50;
-            }*/
 
             _offset = (int) (CardImage.GetWidth() * 0.4);
 
@@ -146,14 +176,18 @@ public class PlayerPanel extends JPanel {
 
         private void update(List<Card> hand) throws Exception {
             _cards.clear();
+            _clickers.clear();
             removeAll();
             Deck.Sort(hand);
 
             Point start = new Point(_origin);
             for(int i = 0; i < hand.size(); i++){
-                CardImage card = CardImage.Card(hand.get(i));
+                final CardImage card = CardImage.Card(hand.get(i));
+                CardClicker clicker = new CardClicker(card);
+                card.addMouseListener(clicker);
                 card.setBounds(start.x, start.y, card.getWidth(), card.getHeight());
                 _cards.add(card);
+                _clickers.add(clicker);
                 add(card, new Integer(i));
 
                 if(_orientation == BoxLayout.X_AXIS){start.x += _offset;}
@@ -163,6 +197,30 @@ public class PlayerPanel extends JPanel {
             revalidate();
             repaint();
         }
+
+        public void AddListener(CardListener listener) {
+            for (CardClicker c : _clickers) {
+                c.SetCardListener(listener);
+            }
+        }
     }
 
+    public void WireUpUser(Pipe pipe) {
+        _pipe = pipe;
+        AddCardFunction(new UserCardInput());
+    }
+
+    protected class UserCardInput implements CardListener {
+
+        @Override
+        public void OnClick(Card c) {
+            if (_pipe == null) return;
+            _pipe.Flush();
+            _pipe.Set(c);
+        }
+    }
+
+    public void WireDownUser() {
+        _pipe = null;
+    }
 }
